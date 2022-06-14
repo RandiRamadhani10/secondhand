@@ -1,3 +1,4 @@
 import Login from './Login';
+import Daftar from './Daftar';
 
-export {Login};
+export {Login, Daftar};
