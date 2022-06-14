@@ -1,12 +1,24 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  StatusBar,
+  TouchableOpacity,
+} from 'react-native';
+
+import {moderateScale} from 'react-native-size-matters';
 
 import {useForm, Controller} from 'react-hook-form';
-import {BaseInput} from '../components';
+import {BaseButton, BaseInput, Gap} from '../components';
+import {Colors} from '../utils/Colors';
+import {ICArrowLeft} from '../assets';
+import {Fonts} from '../utils';
 
-// import {yupResolver} from '@hookform/resolvers/yup';
+import {yupResolver} from '@hookform/resolvers/yup';
 
-// import * as yup from 'yup';
+import * as yup from 'yup';
 
 const Login = () => {
   const {
@@ -28,38 +40,96 @@ const Login = () => {
     })
     .required();
 
-  const onSubmit = data => console.log(data);
+  // const onSubmit = data => console.log(data)
+
+  const onSubmit = data => {
+    console.log(data);
+  };
 
   return (
-    <View>
-      <Controller
-        control={control}
-        rules={{required: true}}
-        render={({field: {onChange, onBlur, value}}) => (
-          <BaseInput
-            label="Email"
-            type="text"
-            placeholder="Enter your email here"
-            onChangeText={onChange}
-            onBlur={onBlur}
-            value={value}
-          />
-          <BaseInput
-            label="Email"
-            type="text"
-            placeholder="Enter your email here"
-            onChangeText={onChange}
-            onBlur={onBlur}
-            value={value}
-          />
-        )}
-        name="email"
-      />
-      {errors.email && <Text>{errors.email.message}</Text>}
-    </View>
+    <SafeAreaView style={styles.screen}>
+      <StatusBar backgroundColor={Colors.WHITE} />
+      <View>
+        <ICArrowLeft />
+        <Gap height={40} />
+        <Text style={styles.header}>Masuk</Text>
+        <Gap height={24} />
+        <Controller
+          control={control}
+          rules={{required: true}}
+          render={({field: {onChange, onBlur, value}}) => (
+            <BaseInput
+              label="Email"
+              type="text"
+              placeholder="Contoh: johndee@gmail.com"
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+            />
+          )}
+          name="email"
+        />
+        {errors.email && <Text>{errors.email.message}</Text>}
+        <Controller
+          control={control}
+          rules={{required: true}}
+          render={({field: {onChange, onBlur, value}}) => (
+            <BaseInput
+              label="Password"
+              type="password"
+              placeholder="Masukkan Password"
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+            />
+          )}
+          name="password"
+        />
+        {errors.password && <Text>{errors.password.message}</Text>}
+        <Gap height={16} />
+        <BaseButton title="Masuk" onPress={handleSubmit(onSubmit)} />
+      </View>
+      <View style={styles.registerContainer}>
+        <View style={styles.registerWrapper}>
+          <Text style={styles.registerSub}>Belum punya Akun? </Text>
+          <TouchableOpacity activeOpacity={0.7} onPress={() => {}}>
+            <Text style={styles.registerCTA}>Daftar disini</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </SafeAreaView>
   );
 };
 
 export default Login;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: Colors.BACKGROUND,
+    padding: moderateScale(20),
+  },
+  header: {
+    fontFamily: Fonts.PRIMARY.BOLD,
+    fontSize: moderateScale(24),
+    color: Colors.TEXT,
+  },
+  registerContainer: {
+    flex: moderateScale(1),
+    justifyContent: 'flex-end',
+  },
+  registerWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  registerSub: {
+    fontFamily: Fonts.PRIMARY.REGULAR,
+    fontSize: moderateScale(14),
+    color: Colors.TEXT,
+  },
+  registerCTA: {
+    fontFamily: Fonts.PRIMARY.BOLD,
+    fontSize: moderateScale(14),
+    color: Colors.PRIMARY,
+  },
+});
