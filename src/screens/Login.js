@@ -44,6 +44,14 @@ const Login = () => {
             onBlur={onBlur}
             value={value}
           />
+          <BaseInput
+            label="Email"
+            type="text"
+            placeholder="Enter your email here"
+            onChangeText={onChange}
+            onBlur={onBlur}
+            value={value}
+          />
         )}
         name="email"
       />
