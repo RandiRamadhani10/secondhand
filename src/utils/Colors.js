@@ -32,4 +32,6 @@ export const Colors = {
   PRIMARY: mainColors.primary.darkBlue05,
   DISABLE: mainColors.neutral.neutral02,
   WHITE: mainColors.neutral.neutral01,
+  SUCCESS: mainColors.alert.success,
+  ERROR: mainColors.alert.danger,
 };
