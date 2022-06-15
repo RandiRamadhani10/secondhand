@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   StatusBar,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 
 import {moderateScale} from 'react-native-size-matters';
@@ -16,34 +17,55 @@ import {Colors} from '../utils/Colors';
 import {ICArrowLeft} from '../assets';
 import {Fonts} from '../utils';
 
+import apiClient from '../services/api';
+
 import {yupResolver} from '@hookform/resolvers/yup';
+
+import {useDispatch} from 'react-redux';
 
 import * as yup from 'yup';
 
+import {showSuccess, showError} from '../utils/showMessages';
+
+import {setUser} from '../store/usersSlice';
+
 const Login = ({navigation}) => {
+  const dispatch = useDispatch();
+
+  const schema = yup
+    .object()
+    .shape({
+      email: yup.string().email().required('Please input your email'),
+      password: yup.string().min(5).required(),
+    })
+    .required();
+
   const {
     control,
     handleSubmit,
     formState: {errors},
   } = useForm({
+    resolver: yupResolver(schema),
     defaultValues: {
       email: '',
       password: '',
     },
   });
 
-  //   Schema Example for Yup
-  const schema = yup
-    .object({
-      email: yup.string().email().required('Please input your email'),
-      password: yup.string().min(5).required(),
-    })
-    .required();
+  const onSubmit = async data => {
+    try {
+      const response = await apiClient.post('auth/login', data);
 
-  // const onSubmit = data => console.log(data)
+      if (response.data) {
+        dispatch(setUser(response.data));
 
-  const onSubmit = data => {
-    console.log(data);
+        showSuccess({
+          title: 'Login Success',
+        });
+      }
+    } catch (error) {
+      showError({title: 'Oops... terjadi kesalahan'});
+    }
   };
 
   return (
@@ -56,7 +78,6 @@ const Login = ({navigation}) => {
         <Gap height={24} />
         <Controller
           control={control}
-          rules={{required: true}}
           render={({field: {onChange, onBlur, value}}) => (
             <BaseInput
               label="Email"
@@ -69,10 +90,11 @@ const Login = ({navigation}) => {
           )}
           name="email"
         />
-        {errors.email && <Text>{errors.email.message}</Text>}
+        {errors?.email && (
+          <Text style={styles.errors}>{errors.email.message}</Text>
+        )}
         <Controller
           control={control}
-          rules={{required: true}}
           render={({field: {onChange, onBlur, value}}) => (
             <BaseInput
               label="Password"
@@ -85,7 +107,9 @@ const Login = ({navigation}) => {
           )}
           name="password"
         />
-        {errors.password && <Text>{errors.password.message}</Text>}
+        {errors.password && (
+          <Text style={styles.errors}>{errors.password.message}</Text>
+        )}
         <Gap height={16} />
         <BaseButton title="Masuk" onPress={handleSubmit(onSubmit)} />
       </View>
@@ -135,5 +159,11 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.PRIMARY.BOLD,
     fontSize: moderateScale(14),
     color: Colors.PRIMARY,
+  },
+  errors: {
+    fontFamily: Fonts.PRIMARY.REGULAR,
+    fontSize: moderateScale(10),
+    color: Colors.ERROR,
+    paddingBottom: moderateScale(8),
   },
 });

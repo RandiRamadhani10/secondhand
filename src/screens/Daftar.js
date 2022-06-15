@@ -7,30 +7,61 @@ import {
   StatusBar,
   TouchableOpacity,
 } from 'react-native';
-import {Colors, Fonts} from '../utils';
+import {Colors, Fonts, showError, showSuccess} from '../utils';
 
 import {moderateScale} from 'react-native-size-matters';
 import {ICArrowLeft} from '../assets';
 import {BaseButton, BaseInput, Gap} from '../components';
 import {Controller, useForm} from 'react-hook-form';
 
+import {yupResolver} from '@hookform/resolvers/yup';
+
+import * as yup from 'yup';
+import apiClient from '../services/api';
+import {NavigationContainer} from '@react-navigation/native';
+
 const Daftar = ({navigation}) => {
+  const schema = yup
+    .object()
+    .shape({
+      full_name: yup.string().min(5).required('Silahkan isi nama lengkap'),
+      email: yup.string().email().required('Silahkan isi alamat email'),
+      password: yup.string().min(5).required(),
+    })
+    .required();
+
   const {
     control,
     handleSubmit,
     formState: {errors},
   } = useForm({
+    resolver: yupResolver(schema),
     defaultValues: {
+      full_name: '',
       email: '',
       password: '',
     },
   });
 
+  const onSubmit = async data => {
+    try {
+      const response = await apiClient.post('/auth/register', data);
+
+      if (response.data) {
+        showSuccess({title: 'Register Sukses'});
+      }
+    } catch (error) {
+      showError({title: 'Register Gagal'});
+    }
+  };
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar backgroundColor={Colors.WHITE} />
       <View>
-        <ICArrowLeft />
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <ICArrowLeft />
+        </TouchableOpacity>
         <Gap height={40} />
         <Text style={styles.header}>Daftar</Text>
         <Gap height={24} />
@@ -47,8 +78,11 @@ const Daftar = ({navigation}) => {
               value={value}
             />
           )}
-          name="nama"
+          name="full_name"
         />
+        {errors?.full_name && (
+          <Text style={styles.errors}>{errors.full_name.message}</Text>
+        )}
         <Gap height={16} />
         <Controller
           control={control}
@@ -65,6 +99,9 @@ const Daftar = ({navigation}) => {
           )}
           name="email"
         />
+        {errors?.email && (
+          <Text style={styles.errors}>{errors.email.message}</Text>
+        )}
         <Gap height={16} />
         <Controller
           control={control}
@@ -81,8 +118,11 @@ const Daftar = ({navigation}) => {
           )}
           name="password"
         />
+        {errors?.password && (
+          <Text style={styles.errors}>{errors.password.message}</Text>
+        )}
         <Gap height={16} />
-        <BaseButton title="Daftar" onPress={() => {}} />
+        <BaseButton title="Daftar" onPress={handleSubmit(onSubmit)} />
       </View>
       <View style={styles.loginContainer}>
         <View style={styles.loginWrapper}>
@@ -130,5 +170,11 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.PRIMARY.BOLD,
     fontSize: moderateScale(14),
     color: Colors.PRIMARY,
+  },
+  errors: {
+    fontFamily: Fonts.PRIMARY.REGULAR,
+    fontSize: moderateScale(10),
+    color: Colors.ERROR,
+    paddingBottom: moderateScale(8),
   },
 });
