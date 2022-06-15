@@ -1,3 +1,5 @@
 import Login from './Login';
+import Notif from './Notif';
+import Profile from './Profile';
 
-export {Login};
+export {Login, Notif, Profile};
