@@ -11,7 +11,11 @@ const Stack = createNativeStackNavigator();
 const AppRoute = () => {
   return (
     <Stack.Navigator
+<<<<<<< HEAD
+      initialRouteName="Notif"
+=======
       initialRouteName="Login"
+>>>>>>> 33a49e506751fe6904b9c8823a94c11da3b5efa8
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Notif" component={Notif} />
