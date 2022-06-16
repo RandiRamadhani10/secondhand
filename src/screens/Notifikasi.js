@@ -1,14 +1,50 @@
-import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {View, Text, SafeAreaView, StyleSheet} from 'react-native';
+import {BaseNotif, Gap} from '../components';
+import {Colors, Fonts} from '../utils';
+import {moderateScale} from 'react-native-size-matters';
 
-const Notifikasi = () => {
+const Notif = () => {
   return (
-    <View>
-      <Text>Notifikasi</Text>
-    </View>
+    <SafeAreaView style={styles.screen}>
+      <Text style={styles.header}>Notifikasi</Text>
+      <Gap height={24} />
+      <BaseNotif
+        status={'Penawaran Produk'}
+        title={'Jam Tangan Casio'}
+        price={'Rp. 250.000'}
+        bid={'Ditawar Rp. 200.000'}
+        tanggal={'20 Apr, 14.04'}
+      />
+      <Gap height={16} />
+      <View style={styles.divider} />
+      <Gap height={16} />
+      <BaseNotif
+        status={'Penawaran Produk'}
+        title={'Jam Tangan Casio'}
+        price={'Rp. 250.000'}
+        bid={'Ditawar Rp. 200.000'}
+        tanggal={'20 Apr, 14.04'}
+      />
+    </SafeAreaView>
   );
 };
 
-export default Notifikasi;
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: Colors.BACKGROUND,
+    padding: moderateScale(20),
+  },
+  header: {
+    fontFamily: Fonts.PRIMARY.BOLD,
+    fontSize: moderateScale(20),
+    color: Colors.TEXT,
+  },
+  divider: {
+    borderBottomColor: Colors.DISABLE,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+});
 
-const styles = StyleSheet.create({});
+export default Notif;

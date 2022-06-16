@@ -18,12 +18,13 @@ import ICSettings from './ic-settings.svg';
 import ICUserActive from './ic-user-active.svg';
 import ICUser from './ic-user.svg';
 import ICCloseWhite from './ic-close-white.svg';
+import ICDummyProduct from './ic-dummy-product.svg';
+import ICNotifActive from './ic-notif-active.svg';
 
 export {
   ICArrowLeft,
   ICEye,
   ICEyeActive,
-  ICDummyAvatar,
   ICBellActiveWithBadge,
   ICBellActive,
   ICBell,
@@ -40,4 +41,7 @@ export {
   ICUserActive,
   ICUser,
   ICCloseWhite,
+  ICDummyAvatar,
+  ICDummyProduct,
+  ICNotifActive,
 };

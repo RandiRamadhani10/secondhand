@@ -1,11 +1,12 @@
 import React from 'react';
+import propTypes from 'prop-types';
 
 import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {moderateScale} from 'react-native-size-matters';
 
 import {
   ICBell,
-  ICBellActive,
+  ICBellActiveWithBadge,
   ICHome,
   ICHomeActive,
   ICList,
@@ -27,7 +28,7 @@ const TabItem = props => {
       case 'Home':
         return isActive ? <ICHomeActive /> : <ICHome />;
       case 'Notifikasi':
-        return isActive ? <ICBellActive /> : <ICBell />;
+        return isActive ? <ICBellActiveWithBadge /> : <ICBell />;
       case 'Jual':
         return isActive ? <ICPlusActive /> : <ICPlus />;
       case 'DaftarJual':
@@ -92,5 +93,12 @@ const styles = StyleSheet.create({
     color: isActive ? Colors.PRIMARY : Colors.PLACEHOLDER,
   }),
 });
+
+TabItem.propTypes = {
+  title: propTypes.string,
+  isActive: propTypes.bool,
+  onPress: propTypes.func,
+  onLongPress: propTypes.func,
+};
 
 export default TabItem;
