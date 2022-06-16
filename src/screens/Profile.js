@@ -145,10 +145,10 @@ const Profile = () => {
                             }}
                             onSelect={(selectedItem, index) => {
                                 console.log(selectedItem, index);
-                                value = selectedItem;
+                                onChange(selectedItem);
                               }}
                               buttonTextAfterSelection={(selectedItem, index) => {
-                                return selectedItem;
+                                return value = selectedItem;
                               }}
                               rowTextForSelection={(item, index) => {
                                 return item;
