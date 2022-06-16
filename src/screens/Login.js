@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   StatusBar,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 
 import {moderateScale} from 'react-native-size-matters';
@@ -57,11 +56,15 @@ const Login = ({navigation}) => {
       const response = await apiClient.post('auth/login', data);
 
       if (response.data) {
+        const {name} = response.data;
+
         dispatch(setUser(response.data));
 
         showSuccess({
-          title: 'Login Success',
+          title: `Hello ${name}`,
         });
+
+        navigation.navigate('Main', {screen: 'Home'});
       }
     } catch (error) {
       showError({title: 'Oops... terjadi kesalahan'});
@@ -72,7 +75,11 @@ const Login = ({navigation}) => {
     <SafeAreaView style={styles.screen}>
       <StatusBar backgroundColor={Colors.WHITE} />
       <View>
-        <ICArrowLeft />
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => navigation.navigate('Main', {screen: 'Home'})}>
+          <ICArrowLeft />
+        </TouchableOpacity>
         <Gap height={40} />
         <Text style={styles.header}>Masuk</Text>
         <Gap height={24} />
