@@ -5,7 +5,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Login, Notifikasi, Profile, Daftar, Splash} from '../screens';
 
 import BottomTabs from './BottomTabs';
-
 const Stack = createNativeStackNavigator();
 
 const AppRoute = () => {
