@@ -25,7 +25,7 @@ const BottomTab = () => {
       }}>
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Notifikasi" component={Notifikasi} />
-      <Tab.Screen name="TambahBarang" component={TambahBarang} />
+      <Tab.Screen name="Jual" component={TambahBarang} />
       <Tab.Screen name="DaftarJual" component={DaftarJual} />
       <Tab.Screen name="Akun" component={Akun} />
     </Tab.Navigator>

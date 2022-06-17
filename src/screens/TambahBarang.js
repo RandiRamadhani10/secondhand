@@ -7,7 +7,7 @@ import {
   ScrollView,
   StyleSheet,
 } from 'react-native';
-import {Gap, BaseInput, BaseButton} from '../components';
+import {Gap, BaseInput, BaseButton, BaseUploadPhoto} from '../components';
 import SelectDropdown from 'react-native-select-dropdown';
 import {
   ICArrowLeft,
@@ -213,6 +213,8 @@ const TambahBarang = () => {
           {errors?.deskripsi && (
             <Text style={styles.errors}>{errors.deskripsi.message}</Text>
           )}
+          <Gap height={16} />
+          <BaseUploadPhoto label="Foto Produk" />
           <Gap height={24} />
           <BaseButton title="Simpan" onPress={handleSubmit(onSubmit)} />
         </View>

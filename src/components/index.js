@@ -4,5 +4,13 @@ import BottomTabNavigation from './BottomTabNavigation';
 import TabItem from './TabItem';
 import BaseNotif from './BaseNotif';
 import Gap from './Gap';
-
-export {Gap, BaseInput, BaseButton, BottomTabNavigation, TabItem, BaseNotif};
+import BaseUploadPhoto from './BaseUploadPhoto';
+export {
+  Gap,
+  BaseInput,
+  BaseButton,
+  BottomTabNavigation,
+  TabItem,
+  BaseNotif,
+  BaseUploadPhoto,
+};
