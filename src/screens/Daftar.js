@@ -18,7 +18,6 @@ import {yupResolver} from '@hookform/resolvers/yup';
 
 import * as yup from 'yup';
 import apiClient from '../services/api';
-import {NavigationContainer} from '@react-navigation/native';
 
 const Daftar = ({navigation}) => {
   const schema = yup
@@ -49,6 +48,8 @@ const Daftar = ({navigation}) => {
 
       if (response.data) {
         showSuccess({title: 'Register Sukses'});
+
+        navigation.navigate('Login');
       }
     } catch (error) {
       showError({title: 'Register Gagal'});
@@ -59,7 +60,9 @@ const Daftar = ({navigation}) => {
     <SafeAreaView style={styles.screen}>
       <StatusBar backgroundColor={Colors.WHITE} />
       <View>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => navigation.navigate('Main', {screen: 'Home'})}>
           <ICArrowLeft />
         </TouchableOpacity>
         <Gap height={40} />
