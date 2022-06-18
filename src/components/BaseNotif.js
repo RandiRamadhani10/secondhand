@@ -1,19 +1,20 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import {ICDummyProduct, ICNotifActive} from '../assets';
+import {StyleSheet, Text, View, TouchableOpacity, Platform} from 'react-native';
+import {ICNotifActive} from '../assets';
 import {Fonts} from '../utils';
 import Gap from './Gap';
 import {Colors} from '../utils/Colors';
 import {moderateScale} from 'react-native-size-matters';
+import FastImage from 'react-native-fast-image';
 
-const BaseNotif = ({status, title, price, bid, tanggal}) => {
+const BaseNotif = ({status, image, title, price, bid, tanggal}) => {
   return (
     <TouchableOpacity>
       <View style={styles.card}>
         <View>
           <Gap height={5} />
-          <ICDummyProduct />
+          <FastImage source={image} style={styles.image} resizeMode="center" />
         </View>
         <View style={styles.contents}>
           <Text style={styles.statusText}>{status}</Text>
@@ -36,6 +37,11 @@ const styles = StyleSheet.create({
   },
   contents: {
     paddingLeft: moderateScale(16),
+  },
+  image: {
+    borderRadius: moderateScale(12),
+    width: moderateScale(48),
+    height: moderateScale(48),
   },
   status: {
     flex: 1,
@@ -64,6 +70,7 @@ const styles = StyleSheet.create({
 
 BaseNotif.propTypes = {
   status: propTypes.string,
+  image: propTypes.any,
   title: propTypes.string,
   price: propTypes.oneOfType([propTypes.string, propTypes.number]),
   bid: propTypes.string,

@@ -39,8 +39,8 @@ const BaseInput = ({
         value={value}
         placeholder={placeholder}
         onBlur={onBlur}
-        multiline={multiline == undefined ? false : multiline}
-        numberOfLines={numberOfLines == undefined ? 1 : numberOfLines}
+        multiline={multiline === undefined ? false : multiline}
+        numberOfLines={numberOfLines === undefined ? 1 : numberOfLines}
         secureTextEntry={
           type === 'password' ? (showPassword ? true : false) : false
         }
@@ -70,13 +70,14 @@ const styles = StyleSheet.create({
     color: Colors.TEXT,
   },
   formInput: type => ({
+    textAlignVertical: 'top',
     fontFamily: Fonts.PRIMARY.REGULAR,
     fontSize: moderateScale(14),
     color: Colors.TEXT,
     paddingLeft: moderateScale(16),
     paddingRight: type === 'password' ? moderateScale(56) : moderateScale(18),
     paddingVertical: moderateScale(14),
-    borderColor: Colors.PLACEHOLDER,
+    borderColor: Colors.SECONDARY,
     borderWidth: moderateScale(1),
     borderRadius: moderateScale(16),
   }),
