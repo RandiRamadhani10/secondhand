@@ -216,7 +216,10 @@ const TambahBarang = () => {
           <Gap height={16} />
           <BaseUploadPhoto label="Foto Produk" />
           <Gap height={24} />
-          <BaseButton title="Simpan" onPress={handleSubmit(onSubmit)} />
+          <View style={{flexDirection: 'row'}}>
+            <BaseButton title="Terbitkan" onPress={handleSubmit(onSubmit)} />
+            <BaseButton title="Terbitkan" onPress={handleSubmit(onSubmit)} />
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
