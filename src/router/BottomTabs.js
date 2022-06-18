@@ -2,14 +2,7 @@ import React from 'react';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import {
-  Home,
-  Notifikasi,
-  Jual,
-  DaftarJual,
-  Akun,
-  TambahBarang,
-} from '../screens';
+import {Home, Notifikasi, DaftarJual, Akun, TambahBarang} from '../screens';
 
 import {BottomTabNavigation} from '../components';
 

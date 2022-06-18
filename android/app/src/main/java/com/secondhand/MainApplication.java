@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.BV.LinearGradient.LinearGradientPackage;
+import com.swmansion.gesturehandler.RNGestureHandlerPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.horcrux.svg.SvgPackage;

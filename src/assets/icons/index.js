@@ -18,8 +18,11 @@ import ICSettings from './ic-settings.svg';
 import ICUserActive from './ic-user-active.svg';
 import ICUser from './ic-user.svg';
 import ICCloseWhite from './ic-close-white.svg';
-import ICDummyProduct from './ic-dummy-product.svg';
 import ICNotifActive from './ic-notif-active.svg';
+import ICSearch from './ic-search.svg';
+import ICSearchWhite from './ic-search-white.svg';
+import ICChevronDown from './ic-chevron-down.svg';
+import ICChevronUp from './ic-chevron-up.svg';
 
 export {
   ICArrowLeft,
@@ -42,6 +45,9 @@ export {
   ICUser,
   ICCloseWhite,
   ICDummyAvatar,
-  ICDummyProduct,
   ICNotifActive,
+  ICSearch,
+  ICSearchWhite,
+  ICChevronDown,
+  ICChevronUp,
 };

@@ -28,7 +28,7 @@ const BaseButton = props => {
           color={Colors.WHITE}
         />
       )}
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title(style)}>{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -43,12 +43,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     ...style,
   }),
-  title: {
+  title: style => ({
     fontFamily: Fonts.PRIMARY.MEDIUM,
     fontSize: moderateScale(14),
     paddingVertical: moderateScale(14),
-    color: Colors.WHITE,
-  },
+    color: style?.color ? style?.color : Colors.WHITE,
+  }),
   disable: {
     backgroundColor: Colors.DISABLE,
   },
