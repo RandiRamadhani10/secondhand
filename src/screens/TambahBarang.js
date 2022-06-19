@@ -1,112 +1,121 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
   View,
   Text,
   SafeAreaView,
+  Image,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
 } from 'react-native';
-import {Gap, BaseInput, BaseButton} from '../components';
+import {Gap, BaseInput, BaseButton, BaseUploadPhoto} from '../components';
 import SelectDropdown from 'react-native-select-dropdown';
 import {ICArrowLeft, ICChevronDown, ICChevronUp} from '../assets';
-import {Colors} from '../utils/Colors';
-import {Fonts} from '../utils';
+import {Colors, Fonts} from '../utils';
 import {moderateScale} from 'react-native-size-matters';
 import {useForm, Controller} from 'react-hook-form';
-import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
-import CameraButton from '../components/CameraButton';
+import * as yup from 'yup';
 
-const Profile = ({navigation}) => {
+const TambahBarang = () => {
   const schema = yup
-    .object({
-      nama: yup.string().required('Silahkan Isi Nama'),
-      kota: yup.string().required('Silahkan Pilih Kota'),
-      alamat: yup.string().required('Silahkan Isi Alamat'),
-      nohp: yup
-        .number()
-        .typeError('Silahkan isi dengan No Handphone')
-        .required('Silahkan Isi No Handphone'),
+    .object()
+    .shape({
+      namaProduk: yup.string().required('Silahkan Isi Nama Produk'),
+      hargaProduk: yup.string().required('Silahkan Isi Harga Produk'),
+      kategori: yup.string().required('Silahkan Pilih Kategori'),
+      deskripsi: yup.string().required('Silahkan Isi Deskripsi Produk'),
     })
     .required();
-
   const {
     control,
-    handleSubmit,
     setValue,
+    handleSubmit,
     formState: {errors},
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      nama: '',
-      kota: '',
-      alamat: '',
-      nohp: '',
+      namaProduk: '',
+      hargaProduk: '',
+      kategori: '',
+      deskripsi: '',
     },
   });
-
   const onSubmit = data => {
     console.log(data);
   };
 
-  const kota = ['Jakarta', 'Bandung', 'Surabaya', 'Malang', 'Yogyakarta'];
+  const kategori = [
+    'Elektronik',
+    'Fashion',
+    'Hobi',
+    'Kesehatan',
+    'Rumah Tangga',
+  ];
 
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.head}>
         <Gap height={16} />
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => {
-            navigation.navigate('Main', {screen: 'Akun'});
-          }}>
-          <ICArrowLeft />
-        </TouchableOpacity>
-        <Text style={styles.header}>Lengkapi Info Akun</Text>
+        <ICArrowLeft />
+        <Text style={styles.header}>Lengkapi Detail Produk</Text>
         <Gap height={40} />
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Gap height={24} />
         <View>
-          <View style={styles.avatar}>
-            <CameraButton onPress={() => {}} />
-          </View>
-          <Gap height={24} />
+          <Gap height={43} />
           <Controller
             control={control}
             rules={{required: true}}
             render={({field: {onChange, onBlur, value}}) => (
               <BaseInput
-                label="Nama*"
+                label="Nama Produk"
                 type="text"
-                placeholder="Nama"
+                placeholder="Nama Produk"
                 onChangeText={onChange}
                 onBlur={onBlur}
                 value={value}
               />
             )}
-            name="nama"
+            name="namaProduk"
           />
-          {errors.nama && (
-            <Text style={styles.errors}>{errors.nama.message}</Text>
+          {errors?.namaProduk && (
+            <Text style={styles.errors}>{errors.namaProduk.message}</Text>
           )}
           <Gap height={4} />
-          <Text style={styles.label}>Kota*</Text>
+          <Controller
+            control={control}
+            rules={{required: true, validate: val => Number(val)}}
+            render={({field: {onChange, onBlur, value}}) => (
+              <BaseInput
+                label="Harga Produk"
+                type="number"
+                placeholder="Rp 0,00"
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+            name="hargaProduk"
+          />
+          {errors?.hargaProduk && (
+            <Text style={styles.errors}>{errors.hargaProduk.message}</Text>
+          )}
+          <Gap height={16} />
+          <Text style={styles.label}>Kategori</Text>
           <Gap height={4} />
           <Controller
             control={control}
             rules={{required: true}}
             render={({field: {onBlur, value}}) => (
               <SelectDropdown
-                data={kota}
-                defaultButtonText={'Pilih Kota'}
+                data={kategori}
+                defaultButtonText={'Pilih Kategori'}
                 buttonTextStyle={styles.buttonTextStyle}
                 renderDropdownIcon={isOpened => {
                   return isOpened ? <ICChevronUp /> : <ICChevronDown />;
                 }}
                 onSelect={selectedItem => {
-                  setValue('kota', selectedItem);
+                  setValue('kategori', selectedItem);
                 }}
                 buttonTextAfterSelection={selectedItem => {
                   return selectedItem;
@@ -120,11 +129,11 @@ const Profile = ({navigation}) => {
                 value={value}
               />
             )}
-            name="kota"
+            name="kategori"
           />
           <Gap height={16} />
-          {errors.kota && (
-            <Text style={styles.errors}>{errors.kota.message}</Text>
+          {errors?.kategori && (
+            <Text style={styles.errors}>{errors.kategori.message}</Text>
           )}
           <Gap height={16} />
           <Controller
@@ -132,40 +141,36 @@ const Profile = ({navigation}) => {
             rules={{required: true}}
             render={({field: {onChange, onBlur, value}}) => (
               <BaseInput
-                label="Alamat*"
+                label="Deskripsi"
                 type="text"
-                placeholder="Contoh Jalan Ikan Hiu 33"
+                placeholder="Contoh: Jalan ikan pari"
+                multiline={true}
+                numberOfLines={5}
                 onChangeText={onChange}
                 onBlur={onBlur}
                 value={value}
               />
             )}
-            name="alamat"
+            name="deskripsi"
           />
-          {errors.alamat && (
-            <Text style={styles.errors}>{errors.alamat.message}</Text>
+          {errors?.deskripsi && (
+            <Text style={styles.errors}>{errors.deskripsi.message}</Text>
           )}
           <Gap height={16} />
-          <Controller
-            control={control}
-            rules={{required: true}}
-            render={({field: {onChange, onBlur, value}}) => (
-              <BaseInput
-                label="No Handphone*"
-                type="text"
-                placeholder="Contoh: +628523456789"
-                onChangeText={onChange}
-                onBlur={onBlur}
-                value={value}
-              />
-            )}
-            name="nohp"
-          />
-          {errors.nohp && (
-            <Text style={styles.errors}>{errors.nohp.message}</Text>
-          )}
+          <BaseUploadPhoto label="Foto Produk" />
           <Gap height={24} />
-          <BaseButton title="Simpan" onPress={handleSubmit(onSubmit)} />
+          <View style={styles.btnContainer}>
+            <BaseButton
+              style={styles.btnPreview}
+              title="Preview"
+              onPress={handleSubmit(onSubmit)}
+            />
+            <BaseButton
+              style={styles.btnTerbitkan}
+              title="Terbitkan"
+              onPress={handleSubmit(onSubmit)}
+            />
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -184,7 +189,7 @@ const styles = StyleSheet.create({
     color: Colors.TEXT,
   },
   header: {
-    fontFamily: Fonts.PRIMARY.BOLD,
+    fontFamily: Fonts.PRIMARY.REGULAR,
     fontSize: moderateScale(14),
     color: Colors.TEXT,
     paddingLeft: moderateScale(80),
@@ -215,6 +220,19 @@ const styles = StyleSheet.create({
     color: Colors.ERROR,
     paddingBottom: moderateScale(8),
   },
+  btnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  btnPreview: {
+    width: '48%',
+    borderRadius: moderateScale(16),
+    backgroundColor: Colors.WHITE,
+    borderColor: Colors.PRIMARY,
+    borderWidth: 1,
+    color: Colors.TEXT,
+  },
+  btnTerbitkan: {width: '48%', borderRadius: moderateScale(16)},
 });
 
-export default Profile;
+export default TambahBarang;

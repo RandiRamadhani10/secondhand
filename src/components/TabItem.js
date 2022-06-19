@@ -54,7 +54,7 @@ const TabItem = props => {
         displayTitle = 'Jual';
         break;
       case 'DaftarJual':
-        displayTitle = 'DaftarJual';
+        displayTitle = 'Daftar Jual';
         break;
       case 'Akun':
         displayTitle = 'Akun';
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   title: isActive => ({
     fontFamily: isActive ? Fonts.PRIMARY.BOLD : Fonts.PRIMARY.REGULAR,
     fontSize: moderateScale(10),
-    color: isActive ? Colors.PRIMARY : Colors.PLACEHOLDER,
+    color: isActive ? Colors.PRIMARY : Colors.SECONDARY,
   }),
 });
 

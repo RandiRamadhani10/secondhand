@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     paddingVertical: moderateScale(12),
     justifyContent: 'space-around',
     elevation: moderateScale(8),
-    shadowColor: Colors.PLACEHOLDER,
+    shadowColor: Colors.SECONDARY,
   },
 });
 
