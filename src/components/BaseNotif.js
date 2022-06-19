@@ -60,6 +60,13 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: Colors.DISABLE,
   },
+  bidSuccess: {
+    fontFamily: Fonts.PRIMARY.REGULAR,
+    color: Colors.TEXT,
+    fontSize: moderateScale(14),
+    textDecorationLine: 'line-through', 
+    textDecorationStyle: 'solid'
+  }
 });
 
 BaseNotif.propTypes = {

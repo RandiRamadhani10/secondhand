@@ -3,6 +3,7 @@ import BaseButton from './BaseButton';
 import BottomTabNavigation from './BottomTabNavigation';
 import TabItem from './TabItem';
 import BaseNotif from './BaseNotif';
+import CardUser from './CardUser';
 import Gap from './Gap';
 
-export {Gap, BaseInput, BaseButton, BottomTabNavigation, TabItem, BaseNotif};
+export {Gap, BaseInput, BaseButton, BottomTabNavigation, TabItem, BaseNotif, CardUser};

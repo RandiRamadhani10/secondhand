@@ -20,6 +20,7 @@ import ICUser from './ic-user.svg';
 import ICCloseWhite from './ic-close-white.svg';
 import ICDummyProduct from './ic-dummy-product.svg';
 import ICNotifActive from './ic-notif-active.svg';
+import ICAvatarExample from './ic-avatar-example.svg';
 
 export {
   ICArrowLeft,
@@ -44,4 +45,5 @@ export {
   ICDummyAvatar,
   ICDummyProduct,
   ICNotifActive,
+  ICAvatarExample,
 };
