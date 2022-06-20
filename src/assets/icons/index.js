@@ -19,14 +19,17 @@ import ICUserActive from './ic-user-active.svg';
 import ICUser from './ic-user.svg';
 import ICCloseWhite from './ic-close-white.svg';
 import ICNotifActive from './ic-notif-active.svg';
-<<<<<<< HEAD
-import ICAvatarExample from './ic-avatar-example.svg';
-=======
 import ICSearch from './ic-search.svg';
 import ICSearchWhite from './ic-search-white.svg';
 import ICChevronDown from './ic-chevron-down.svg';
 import ICChevronUp from './ic-chevron-up.svg';
->>>>>>> d411422bfb179657d776600dd14850c6f0fdeb5a
+import ICAvatarExample from './ic-avatar-example.svg';
+import ICLove from './ic-love.svg';
+import ICLoveActive from './ic-love-active.svg';
+import ICBox from './ic-box.svg';
+import ICBoxActive from './ic-box-active.svg';
+import ICDollarSign from './ic-dollar-sign.svg';
+import ICDollarSignActive from './ic-dollar-sign-active.svg';
 
 export {
   ICArrowLeft,
@@ -50,12 +53,15 @@ export {
   ICCloseWhite,
   ICDummyAvatar,
   ICNotifActive,
-<<<<<<< HEAD
-  ICAvatarExample,
-=======
   ICSearch,
   ICSearchWhite,
   ICChevronDown,
   ICChevronUp,
->>>>>>> d411422bfb179657d776600dd14850c6f0fdeb5a
+  ICAvatarExample,
+  ICLove,
+  ICLoveActive,
+  ICBox,
+  ICBoxActive,
+  ICDollarSign,
+  ICDollarSignActive,
 };

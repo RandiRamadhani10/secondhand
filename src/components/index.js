@@ -11,9 +11,6 @@ import CategoryButtonItem from './CategoryButtonItem';
 import ProductItem from './ProductItem';
 import Divider from './Divider';
 
-<<<<<<< HEAD
-export {Gap, BaseInput, BaseButton, BottomTabNavigation, TabItem, BaseNotif, CardUser};
-=======
 export {
   Gap,
   BaseInput,
@@ -26,5 +23,5 @@ export {
   CategoryButtonItem,
   ProductItem,
   Divider,
+  CardUser,
 };
->>>>>>> d411422bfb179657d776600dd14850c6f0fdeb5a
