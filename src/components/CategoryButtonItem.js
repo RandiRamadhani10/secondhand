@@ -6,13 +6,18 @@ import {Colors, Fonts} from '../utils';
 import {ICSearch, ICSearchWhite} from '../assets';
 import Gap from './Gap';
 
-const CategoryButtonItem = ({isActive = false, title, onPress}) => {
+const CategoryButtonItem = ({
+  icon = <ICSearchWhite />,
+  isActive = false,
+  title,
+  onPress,
+}) => {
   return (
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.7}
       style={styles.container(isActive)}>
-      {isActive ? <ICSearchWhite /> : <ICSearch />}
+      {icon}
       <Gap width={moderateScale(8)} />
       <Text style={styles.title(isActive)}>{title}</Text>
     </TouchableOpacity>
@@ -39,6 +44,7 @@ CategoryButtonItem.propTypes = {
   isActive: propTypes.bool,
   onPress: propTypes.func,
   title: propTypes.string,
+  icon: propTypes.any,
 };
 
 export default CategoryButtonItem;
