@@ -2,7 +2,7 @@ import React from 'react';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import {Login, Notifikasi, Profile, Daftar, Splash} from '../screens';
+import {Login, Notifikasi, Profile, Daftar, Splash, DaftarJual} from '../screens';
 
 import BottomTabs from './BottomTabs';
 
