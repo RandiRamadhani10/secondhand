@@ -29,7 +29,7 @@ import ICLoveActive from './ic-love-active.svg';
 import ICBox from './ic-box.svg';
 import ICBoxActive from './ic-box-active.svg';
 import ICDollarSign from './ic-dollar-sign.svg';
-import ICDollarSignActive from './ic-dollar-sign-active.svg';
+// import ICDollarSignActive from './ic-dollar-sign-active.svg';
 
 export {
   ICArrowLeft,
@@ -63,5 +63,5 @@ export {
   ICBox,
   ICBoxActive,
   ICDollarSign,
-  ICDollarSignActive,
+  // ICDollarSignActive,
 };
