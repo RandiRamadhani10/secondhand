@@ -8,6 +8,7 @@ import Home from './Home';
 import Jual from './Jual';
 import Notifikasi from './Notifikasi';
 import Splash from './Splash';
+import InfoPenawar from './InfoPenawar';
 export {
   Login,
   Profile,
@@ -19,4 +20,5 @@ export {
   Notifikasi,
   Splash,
   TambahBarang,
+  InfoPenawar,
 };
