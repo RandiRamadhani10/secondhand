@@ -110,17 +110,18 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     accept:{
+        paddingVertical: moderateScale(7),
         width: moderateScale(156),
-        height: moderateScale(36),
         borderRadius: moderateScale(16)
     },
     decline:{
         width: moderateScale(156),
-        height: moderateScale(36),
+        paddingVertical: moderateScale(7),
         borderWidth: moderateScale(1.5),
         borderRadius: moderateScale(16),
         backgroundColor: Colors.WHITE,
         borderColor: Colors.PRIMARY,
+        color: Colors.PRIMARY
     }
 })
 
