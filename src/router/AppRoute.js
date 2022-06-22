@@ -8,12 +8,9 @@ import {
   Profile,
   Daftar,
   Splash,
-<<<<<<< HEAD
   InfoPenawar,
-=======
   DaftarJual,
   DetailProduk,
->>>>>>> f40331a078731cb6c422a4c9d8bfed42f3c7e346
 } from '../screens';
 
 import BottomTabs from './BottomTabs';
@@ -31,11 +28,8 @@ const AppRoute = () => {
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Daftar" component={Daftar} />
       <Stack.Screen name="Main" component={BottomTabs} />
-<<<<<<< HEAD
       <Stack.Screen name="InfoPenawar" component={InfoPenawar} />
-=======
       <Stack.Screen name="DetailProduk" component={DetailProduk} />
->>>>>>> f40331a078731cb6c422a4c9d8bfed42f3c7e346
     </Stack.Navigator>
   );
 };
