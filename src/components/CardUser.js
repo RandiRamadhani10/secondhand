@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
     height: moderateScale(80),
     width: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: Colors.WHITE,
     borderRadius: moderateScale(16),
     shadowColor: Colors.shadow,
@@ -52,7 +51,6 @@ const styles = StyleSheet.create({
     shadowRadius: moderateScale(8),
     elevation: moderateScale(8),
     flexDirection: 'row',
-    justifyContent: 'flex-start',
   },
   icon: {
     marginLeft: moderateScale(18),

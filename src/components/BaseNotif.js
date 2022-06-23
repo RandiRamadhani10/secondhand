@@ -70,9 +70,9 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.PRIMARY.REGULAR,
     color: Colors.TEXT,
     fontSize: moderateScale(14),
-    textDecorationLine: 'line-through', 
-    textDecorationStyle: 'solid'
-  }
+    textDecorationLine: 'line-through',
+    textDecorationStyle: 'solid',
+  },
 });
 
 BaseNotif.propTypes = {

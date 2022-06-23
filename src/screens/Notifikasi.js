@@ -11,6 +11,7 @@ const Notif = ({navigation}) => {
       <Text style={styles.header}>Notifikasi</Text>
       <Gap height={24} />
       <BaseNotif
+        onPress={() => navigation.navigate('InfoPenawar')}
         image={IMGDummyProduct}
         status={'Penawaran Produk'}
         title={'Jam Tangan Casio'}

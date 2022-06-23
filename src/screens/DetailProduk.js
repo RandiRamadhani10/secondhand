@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useMemo, useCallback} from 'react';
 import {
   View,
   Text,
@@ -12,26 +12,62 @@ import {
 } from 'react-native';
 import {moderateScale} from 'react-native-size-matters';
 import {Colors} from '../utils';
-import {Gap, BaseButton, CardUser} from '../components';
+import {Gap, BaseButton, CardUser, BaseInput} from '../components';
 import {Fonts} from '../utils';
-import {ICArrowLeft} from '../assets';
+import {ICArrowLeft, IMGDummyProduct} from '../assets';
+import {Controller, useForm} from 'react-hook-form';
+import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
+import FastImage from 'react-native-fast-image';
 const screen = Dimensions.get('screen');
 const DetailProduk = ({navigation}) => {
+  // ref
+  const bottomSheetRef = useRef(null);
+
+  //   variables
+  const snapPoints = useMemo(() => ['5%', '50'], []);
+
+  // callbacks
+  const handleSheetChanges = useCallback(index => {
+    console.log('handleSheetChanges', index);
+  }, []);
+
+  const handleClosePress = () => bottomSheetRef.current.close();
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm({
+    defaultValues: {
+      harga_tawar: '',
+    },
+  });
+
+  // renders
+  const renderBackdrop = useCallback(
+    props => (
+      <BottomSheetBackdrop
+        {...props}
+        pressBehavior="close"
+        disappearsOnIndex={1}
+        appearsOnIndex={2}
+      />
+    ),
+    [],
+  );
+
+  const onSubmit = data => {
+    console.log(data);
+    handleClosePress();
+  };
+
   return (
     <>
       <SafeAreaView style={styles.screen}>
         <ScrollView>
-          <View style={{position: 'relative'}}>
+          <View style={styles.btnBackContainer}>
             <TouchableOpacity
-              style={{
-                position: 'absolute',
-                backgroundColor: 'white',
-                zIndex: 99,
-                padding: 5,
-                borderRadius: 50,
-                left: 16,
-                top: 44,
-              }}
+              style={styles.btnBack}
               activeOpacity={0.7}
               onPress={() => navigation.navigate('Main', {screen: 'Home'})}>
               <ICArrowLeft />
@@ -77,15 +113,70 @@ const DetailProduk = ({navigation}) => {
           </View>
         </ScrollView>
       </SafeAreaView>
-      <View
-        style={{
-          padding: 16,
-          position: 'absolute',
-          width: '100%',
-          bottom: 1,
-        }}>
-        <BaseButton title="Saya Tertarik dan ingin Nego" />
+      <View style={styles.btnNego}>
+        <BaseButton onPress={() => {}} title="Saya Tertarik dan ingin Nego" />
       </View>
+
+      <BottomSheet
+        enableContentPanningGesture={true}
+        enableHandlePanningGesture={true}
+        animateOnMount={true}
+        enableOverDrag={true}
+        ref={bottomSheetRef}
+        index={1}
+        backdropComponent={renderBackdrop}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}>
+        <View style={styles.contentContainer}>
+          <Text style={styles.titleBtmSheet}>Masukkan Harga Tawarmu</Text>
+          <Gap height={moderateScale(16)} />
+          <Text style={styles.descBtmSheet}>
+            Harga tawaranmu akan diketahui penjual, jika penjual cocok kamu akan
+            segera dihubungi penjual.
+          </Text>
+          <Gap height={moderateScale(16)} />
+
+          {/* Card For Dummy Product */}
+          <View style={styles.mainCard}>
+            <View style={styles.icon}>
+              <FastImage
+                source={IMGDummyProduct}
+                style={styles.imageBtmSheet}
+                resizeMode="cover"
+              />
+            </View>
+            <View style={styles.contentText}>
+              <Text style={styles.name}>Jam Tangan Casio</Text>
+              <Text>Rp 250.000</Text>
+            </View>
+          </View>
+
+          <Gap height={moderateScale(16)} />
+          <Controller
+            control={control}
+            render={({field: {onChange, onBlur, value}}) => (
+              <BaseInput
+                label="Harga Tawar"
+                type="text"
+                placeholder="Rp. 0,00"
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+            name="harga_tawar"
+          />
+          {errors?.harga_tawar && (
+            <Text style={styles.errors}>{errors.harga_tawar.message}</Text>
+          )}
+
+          <Gap height={moderateScale(24)} />
+          <BaseButton
+            title="Kirim"
+            onPress={handleSubmit(data => onSubmit(data))}
+          />
+        </View>
+      </BottomSheet>
     </>
   );
 };
@@ -94,6 +185,18 @@ const styles = StyleSheet.create({
     position: 'relative',
     height: screen.height * 0.5,
     width: screen.width,
+  },
+  btnBackContainer: {
+    position: 'relative',
+  },
+  btnBack: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    zIndex: 99,
+    padding: 5,
+    borderRadius: 50,
+    left: 16,
+    top: 44,
   },
   abs: {
     width: '100%',
@@ -138,6 +241,63 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: Colors.BACKGROUND,
+  },
+  btnNego: {
+    padding: 16,
+    position: 'absolute',
+    width: '100%',
+    bottom: 1,
+  },
+
+  container: {
+    flex: 1,
+    padding: moderateScale(24),
+    backgroundColor: Colors.SECONDARY,
+  },
+  contentContainer: {
+    flex: 1,
+    padding: 32,
+  },
+  titleBtmSheet: {
+    fontFamily: Fonts.PRIMARY.MEDIUM,
+    fontSize: moderateScale(14),
+    color: Colors.TEXT,
+  },
+  descBtmSheet: {
+    fontFamily: Fonts.PRIMARY.REGULAR,
+    fontSize: moderateScale(14),
+    color: Colors.SECONDARY,
+  },
+
+  //   Styles for Card Product
+  mainCard: {
+    height: moderateScale(80),
+    width: '100%',
+    alignItems: 'center',
+    borderRadius: moderateScale(16),
+    backgroundColor: 'transparent',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 1,
+    flexDirection: 'row',
+  },
+  icon: {
+    marginLeft: moderateScale(18),
+  },
+  name: {
+    fontFamily: Fonts.PRIMARY.BOLD,
+    fontSize: moderateScale(14),
+    color: Colors.TEXT,
+  },
+  contentText: {
+    marginLeft: moderateScale(16),
+  },
+  imageBtmSheet: {
+    width: moderateScale(48),
+    height: moderateScale(48),
+    borderRadius: moderateScale(12),
+    backgroundColor: Colors.PRIMARY,
   },
 });
 

@@ -1,41 +1,50 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, Text, View, ScrollView} from 'react-native';
-import { 
-  Gap,
-  CardUser,
-  BaseNotif,
-  CategoryButtonItem
-} from '../components';
-import { IMGDummyProduct } from '../assets';
-import { Colors } from '../utils';
-import { moderateScale } from 'react-native-size-matters';
-import { Fonts } from '../utils';
-
+import {Gap, CardUser, BaseNotif, CategoryButtonItem} from '../components';
+import {
+  ICBox,
+  ICDollarSign,
+  ICLove,
+  ICLoveActive,
+  IMGDummyProduct,
+} from '../assets';
+import {Colors} from '../utils';
+import {moderateScale} from 'react-native-size-matters';
+import {Fonts} from '../utils';
 
 const DaftarJual = () => {
   return (
     <SafeAreaView style={styles.screen}>
       <Text style={styles.header}>Daftar Jual Saya</Text>
       <Gap height={16} />
-      <CardUser 
-        name={'John Doe'}
-        city={'Jakarta'}
-        button={false}
-      />
+      <CardUser name={'John Doe'} city={'Jakarta'} button={false} />
       <Gap height={24} />
       <View>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <CategoryButtonItem title="Semua"onPress={() => {}}/>
-              <Gap width={moderateScale(16)} />
-              <CategoryButtonItem isActive={true} title="Produk" onPress={() => {}} />
-              <Gap width={moderateScale(16)} />
-              <CategoryButtonItem title="Diminati" onPress={() => {}} />
-              <Gap width={moderateScale(16)} />
-              <CategoryButtonItem title="Terjual" onPress={() => {}} />
-            </ScrollView>
-          </View>
-        <Gap height={24} />
-        <BaseNotif
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <CategoryButtonItem
+            icon={<ICBox />}
+            title="Semua"
+            onPress={() => {}}
+          />
+          <Gap width={moderateScale(16)} />
+          <CategoryButtonItem
+            icon={<ICLoveActive />}
+            isActive={true}
+            title="Produk"
+            onPress={() => {}}
+          />
+          <Gap width={moderateScale(16)} />
+          <CategoryButtonItem
+            icon={<ICDollarSign />}
+            title="Diminati"
+            onPress={() => {}}
+          />
+          <Gap width={moderateScale(16)} />
+          <CategoryButtonItem title="Terjual" onPress={() => {}} />
+        </ScrollView>
+      </View>
+      <Gap height={24} />
+      <BaseNotif
         image={IMGDummyProduct}
         status={'Penawaran Produk'}
         title={'Jam Tangan Casio'}

@@ -8,9 +8,9 @@ import {
   Profile,
   Daftar,
   Splash,
-  InfoPenawar,
-  DaftarJual,
+  Detail,
   DetailProduk,
+  InfoPenawar,
 } from '../screens';
 
 import BottomTabs from './BottomTabs';
@@ -28,8 +28,9 @@ const AppRoute = () => {
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Daftar" component={Daftar} />
       <Stack.Screen name="Main" component={BottomTabs} />
-      <Stack.Screen name="InfoPenawar" component={InfoPenawar} />
+      <Stack.Screen name="Detail" component={Detail} />
       <Stack.Screen name="DetailProduk" component={DetailProduk} />
+      <Stack.Screen name="InfoPenawar" component={InfoPenawar} />
     </Stack.Navigator>
   );
 };
