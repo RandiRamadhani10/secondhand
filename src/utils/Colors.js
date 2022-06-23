@@ -11,6 +11,10 @@ const mainColors = {
     limeGreen02: '#FFF0DC',
     limeGreen01: '#FFF8ED',
   },
+  linear: {
+    yellow01: '#FFE9C9',
+    yellow02: '#FFE9CA',
+  },
   alert: {
     danger: '#FA2C5A',
     warning: '#F9CC00',
@@ -27,11 +31,15 @@ const mainColors = {
 
 export const Colors = {
   TEXT: mainColors.neutral.neutral05,
-  PLACEHOLDER: mainColors.neutral.neutral03,
+  CATEGORY: mainColors.primary.darkBlue01,
   BACKGROUND: mainColors.neutral.neutral01,
   PRIMARY: mainColors.primary.darkBlue05,
+  SOFTPRIMARY: mainColors.primary.darkBlue01,
+  SECONDARY: mainColors.neutral.neutral03,
   DISABLE: mainColors.neutral.neutral02,
   WHITE: mainColors.neutral.neutral01,
   SUCCESS: mainColors.alert.success,
   ERROR: mainColors.alert.danger,
+  YELLOW: mainColors.linear.yellow01,
+  YELLOW2: mainColors.linear.yellow02,
 };

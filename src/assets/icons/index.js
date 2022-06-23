@@ -18,8 +18,18 @@ import ICSettings from './ic-settings.svg';
 import ICUserActive from './ic-user-active.svg';
 import ICUser from './ic-user.svg';
 import ICCloseWhite from './ic-close-white.svg';
-import ICDummyProduct from './ic-dummy-product.svg';
 import ICNotifActive from './ic-notif-active.svg';
+import ICSearch from './ic-search.svg';
+import ICSearchWhite from './ic-search-white.svg';
+import ICChevronDown from './ic-chevron-down.svg';
+import ICChevronUp from './ic-chevron-up.svg';
+import ICAvatarExample from './ic-avatar-example.svg';
+import ICLove from './ic-love.svg';
+import ICLoveActive from './ic-love-active.svg';
+import ICBox from './ic-box.svg';
+import ICBoxActive from './ic-box-active.svg';
+import ICDollarSign from './ic-dollar-sign.svg';
+// import ICDollarSignActive from './ic-dollar-sign-active.svg';
 
 export {
   ICArrowLeft,
@@ -42,6 +52,16 @@ export {
   ICUser,
   ICCloseWhite,
   ICDummyAvatar,
-  ICDummyProduct,
   ICNotifActive,
+  ICSearch,
+  ICSearchWhite,
+  ICChevronDown,
+  ICChevronUp,
+  ICAvatarExample,
+  ICLove,
+  ICLoveActive,
+  ICBox,
+  ICBoxActive,
+  ICDollarSign,
+  // ICDollarSignActive,
 };

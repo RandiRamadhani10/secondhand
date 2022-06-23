@@ -14,7 +14,16 @@ import {ICEye, ICEyeActive} from '../assets';
 
 import {moderateScale} from 'react-native-size-matters';
 
-const BaseInput = ({label, type, placeholder, onChangeText, onBlur, value}) => {
+const BaseInput = ({
+  label,
+  type,
+  placeholder,
+  onChangeText,
+  onBlur,
+  value,
+  multiline,
+  numberOfLines,
+}) => {
   const [showPassword, setShowPassword] = useState(true);
 
   const handleShowPassword = () => {
@@ -30,6 +39,8 @@ const BaseInput = ({label, type, placeholder, onChangeText, onBlur, value}) => {
         value={value}
         placeholder={placeholder}
         onBlur={onBlur}
+        multiline={multiline === undefined ? false : multiline}
+        numberOfLines={numberOfLines === undefined ? 1 : numberOfLines}
         secureTextEntry={
           type === 'password' ? (showPassword ? true : false) : false
         }
@@ -59,13 +70,14 @@ const styles = StyleSheet.create({
     color: Colors.TEXT,
   },
   formInput: type => ({
+    textAlignVertical: 'top',
     fontFamily: Fonts.PRIMARY.REGULAR,
     fontSize: moderateScale(14),
     color: Colors.TEXT,
     paddingLeft: moderateScale(16),
     paddingRight: type === 'password' ? moderateScale(56) : moderateScale(18),
     paddingVertical: moderateScale(14),
-    borderColor: Colors.PLACEHOLDER,
+    borderColor: Colors.SECONDARY,
     borderWidth: moderateScale(1),
     borderRadius: moderateScale(16),
   }),
@@ -87,4 +99,6 @@ BaseInput.propTypes = {
   onBlur: propTypes.func,
   value: propTypes.string,
   styles: propTypes.object,
+  multiline: propTypes.bool,
+  numberOfLines: propTypes.number,
 };
