@@ -2,7 +2,16 @@ import React from 'react';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import {Login, Notifikasi, Profile, Daftar, Splash, Detail} from '../screens';
+import {
+  Login,
+  Notifikasi,
+  Profile,
+  Daftar,
+  Splash,
+  Detail,
+  DetailProduk,
+  InfoPenawar,
+} from '../screens';
 
 import BottomTabs from './BottomTabs';
 
@@ -11,7 +20,7 @@ const Stack = createNativeStackNavigator();
 const AppRoute = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Detail"
+      initialRouteName="Splash"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name="Login" component={Login} />
@@ -20,6 +29,8 @@ const AppRoute = () => {
       <Stack.Screen name="Daftar" component={Daftar} />
       <Stack.Screen name="Main" component={BottomTabs} />
       <Stack.Screen name="Detail" component={Detail} />
+      <Stack.Screen name="DetailProduk" component={DetailProduk} />
+      <Stack.Screen name="InfoPenawar" component={InfoPenawar} />
     </Stack.Navigator>
   );
 };

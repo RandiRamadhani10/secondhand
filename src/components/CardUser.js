@@ -7,26 +7,24 @@ import {ICAvatarExample} from '../assets';
 import {Colors} from '../utils/Colors';
 import {moderateScale} from 'react-native-size-matters';
 
-const CardUser = ({
-  avatar = <ICAvatarExample />,
-  name,
-  city,
-  button = false,
-  isActive = false,
-}) => {
+const CardUser = ({avatar, name, city, button = true, isActive = false}) => {
   return (
     <View style={styles.mainCard}>
-      <View style={styles.icon}>{avatar}</View>
+      <View style={styles.icon}>
+        <ICAvatarExample />
+      </View>
       <View style={styles.contentText}>
         <Text style={styles.name}>{name}</Text>
         <Text>{city}</Text>
       </View>
-      {button && (
+      {button ? (
         <View style={styles.buttonPlace}>
           <TouchableHighlight style={styles.button(isActive)}>
             <Text style={styles.buttonText}>Edit</Text>
           </TouchableHighlight>
         </View>
+      ) : (
+        <></>
       )}
     </View>
   );
@@ -45,13 +43,13 @@ const styles = StyleSheet.create({
     height: moderateScale(80),
     width: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: Colors.WHITE,
     borderRadius: moderateScale(16),
-    backgroundColor: 'transparent',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 1,
+    shadowColor: Colors.shadow,
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: moderateScale(1),
+    shadowRadius: moderateScale(8),
+    elevation: moderateScale(8),
     flexDirection: 'row',
   },
   icon: {

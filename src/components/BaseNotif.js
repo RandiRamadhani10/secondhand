@@ -8,9 +8,9 @@ import {Colors} from '../utils/Colors';
 import {moderateScale} from 'react-native-size-matters';
 import FastImage from 'react-native-fast-image';
 
-const BaseNotif = ({status, image, title, price, bid, tanggal}) => {
+const BaseNotif = ({status, image, title, price, bid, tanggal, onPress}) => {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPress}>
       <View style={styles.card}>
         <View>
           <Gap height={5} />
@@ -70,9 +70,9 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.PRIMARY.REGULAR,
     color: Colors.TEXT,
     fontSize: moderateScale(14),
-    textDecorationLine: 'line-through', 
-    textDecorationStyle: 'solid'
-  }
+    textDecorationLine: 'line-through',
+    textDecorationStyle: 'solid',
+  },
 });
 
 BaseNotif.propTypes = {
@@ -82,6 +82,7 @@ BaseNotif.propTypes = {
   price: propTypes.oneOfType([propTypes.string, propTypes.number]),
   bid: propTypes.string,
   tanggal: propTypes.string,
+  onPress: propTypes.func,
 };
 
 export default BaseNotif;

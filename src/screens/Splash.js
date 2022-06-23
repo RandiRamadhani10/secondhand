@@ -15,7 +15,7 @@ const Splash = props => {
   useEffect(() => {
     setTimeout(() => {
       if (usersState.hasOwnProperty('access_token')) {
-        navigation.reset({index: 0, routes: [{name: 'Detail'}]});
+        navigation.reset({index: 0, routes: [{name: 'Main'}]});
       } else {
         navigation.reset({index: 0, routes: [{name: 'Login'}]});
       }

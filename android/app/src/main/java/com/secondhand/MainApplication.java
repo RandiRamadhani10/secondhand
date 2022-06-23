@@ -7,7 +7,6 @@ import com.facebook.react.ReactApplication;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.swmansion.gesturehandler.RNGestureHandlerPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.horcrux.svg.SvgPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;

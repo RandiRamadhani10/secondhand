@@ -25,7 +25,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 const {height} = Dimensions.get('window');
 
-const Home = () => {
+const Home = ({navigation}) => {
   const {control, handleSubmit} = useForm({
     defaultValues: {
       keyword: '',
@@ -100,14 +100,18 @@ const Home = () => {
             image={IMGDummyProduct}
             category="Aksesoris"
             price={250000}
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate('DetailProduk');
+            }}
           />
           <ProductItem
             title="Smartwatch Samsung"
             image={IMGDummyProduct}
             category="Aksesoris"
             price={320000}
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate('DetailProduk');
+            }}
           />
         </View>
         <Gap height={moderateScale(24)} />

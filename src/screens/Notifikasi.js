@@ -5,12 +5,13 @@ import {Colors, Fonts} from '../utils';
 import {moderateScale} from 'react-native-size-matters';
 import {IMGDummyProduct} from '../assets';
 
-const Notif = () => {
+const Notif = ({navigation}) => {
   return (
     <SafeAreaView style={styles.screen}>
       <Text style={styles.header}>Notifikasi</Text>
       <Gap height={24} />
       <BaseNotif
+        onPress={() => navigation.navigate('InfoPenawar')}
         image={IMGDummyProduct}
         status={'Penawaran Produk'}
         title={'Jam Tangan Casio'}

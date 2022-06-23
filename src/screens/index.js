@@ -9,6 +9,9 @@ import Jual from './Jual';
 import Notifikasi from './Notifikasi';
 import Splash from './Splash';
 import Detail from './Detail';
+import DetailProduk from './DetailProduk';
+import InfoPenawar from './InfoPenawar';
+
 export {
   Login,
   Profile,
@@ -21,4 +24,6 @@ export {
   Splash,
   TambahBarang,
   Detail,
+  DetailProduk,
+  InfoPenawar,
 };
