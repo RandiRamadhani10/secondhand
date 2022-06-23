@@ -36,6 +36,7 @@ const BaseButton = props => {
 const styles = StyleSheet.create({
   container: style => ({
     width: style ? style.width : '100%',
+    paddingVertical: moderateScale(14),
     flexDirection: 'row',
     backgroundColor: Colors.PRIMARY,
     borderRadius: style ? style.borderRadius : moderateScale(16),
@@ -46,7 +47,6 @@ const styles = StyleSheet.create({
   title: style => ({
     fontFamily: Fonts.PRIMARY.MEDIUM,
     fontSize: moderateScale(14),
-    paddingVertical: moderateScale(14),
     color: style?.color ? style?.color : Colors.WHITE,
   }),
   disable: {

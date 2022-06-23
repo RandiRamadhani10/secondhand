@@ -8,6 +8,7 @@ import {
   Profile,
   Daftar,
   Splash,
+  InfoPenawar,
   DaftarJual,
   DetailProduk,
 } from '../screens';
@@ -27,6 +28,7 @@ const AppRoute = () => {
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Daftar" component={Daftar} />
       <Stack.Screen name="Main" component={BottomTabs} />
+      <Stack.Screen name="InfoPenawar" component={InfoPenawar} />
       <Stack.Screen name="DetailProduk" component={DetailProduk} />
     </Stack.Navigator>
   );
