@@ -1,18 +1,29 @@
-import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  SafeAreaView,
-  View,
-  TouchableOpacity,
-} from 'react-native';
-import {Colors, Fonts} from '../utils';
+import React, {useEffect} from 'react';
+import {StyleSheet, Text, SafeAreaView, View, TouchableOpacity} from 'react-native';
+import {Colors, Fonts, showError} from '../utils';
 import {moderateScale} from 'react-native-size-matters';
 import {Divider, Gap} from '../components';
 import CameraButton from '../components/CameraButton';
 import {ICEdit, ICLogout, ICSettings} from '../assets';
 
+import {useIsFocused} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {clearUser} from '../store/usersSlice';
+
 const Akun = ({navigation}) => {
+  const dispatch = useDispatch();
+
+  const isFocused = useIsFocused();
+  const usersState = useSelector(state => state.users.users);
+
+  useEffect(() => {
+    if (!usersState.hasOwnProperty('access_token')) {
+      showError({title: 'Akses Menu Tidak Diperkenankan', description: 'Silahkan Daftar & Login terlebih dahulu'});
+      navigation.navigate('Login');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFocused]);
+
   return (
     <SafeAreaView style={styles.screen}>
       <Text style={styles.header}>Akun Saya</Text>
@@ -36,10 +47,7 @@ const Akun = ({navigation}) => {
       <Divider />
 
       <Gap height={moderateScale(16)} />
-      <TouchableOpacity
-        style={styles.menuAkunItem}
-        activeOpacity={0.7}
-        onPress={() => {}}>
+      <TouchableOpacity style={styles.menuAkunItem} activeOpacity={0.7} onPress={() => {}}>
         <ICSettings />
         <Gap width={moderateScale(16)} />
         <Text style={styles.menuAkunItemTitle}>Pengaturan Akun</Text>
@@ -51,7 +59,10 @@ const Akun = ({navigation}) => {
       <TouchableOpacity
         style={styles.menuAkunItem}
         activeOpacity={0.7}
-        onPress={() => {}}>
+        onPress={() => {
+          dispatch(clearUser());
+          navigation.navigate('Main', {screen: 'Home'});
+        }}>
         <ICLogout />
         <Gap width={moderateScale(16)} />
         <Text style={styles.menuAkunItemTitle}>Keluar</Text>

@@ -7,7 +7,7 @@ import {
   StatusBar,
   TouchableOpacity,
 } from 'react-native';
-import {Colors, Fonts, showError, showSuccess} from '../utils';
+import {Colors, Fonts} from '../utils';
 
 import {moderateScale} from 'react-native-size-matters';
 import {ICArrowLeft} from '../assets';
@@ -17,15 +17,28 @@ import {Controller, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 
 import * as yup from 'yup';
-import apiClient from '../services/api';
+
+import {useDispatch, useSelector} from 'react-redux';
+import {authRegister} from '../store/actions/users';
 
 const Daftar = ({navigation}) => {
+  const dispatch = useDispatch();
+  const isLoading = useSelector(state => state.users.isLoading);
   const schema = yup
     .object()
     .shape({
-      full_name: yup.string().min(5).required('Silahkan isi nama lengkap'),
-      email: yup.string().email().required('Silahkan isi alamat email'),
-      password: yup.string().min(5).required(),
+      full_name: yup
+        .string()
+        .min(5, 'Silahkan isi nama minimal 5 karakter')
+        .required('Silahkan isi nama lengkap'),
+      email: yup
+        .string()
+        .email('Silahkan isi alamat email yang valid')
+        .required('Silahkan isi alamat email'),
+      password: yup
+        .string()
+        .min(5, 'Silahkan isi password minimal 5 karakter')
+        .required(),
     })
     .required();
 
@@ -43,17 +56,14 @@ const Daftar = ({navigation}) => {
   });
 
   const onSubmit = async data => {
-    try {
-      const response = await apiClient.post('/auth/register', data);
-
-      if (response.data) {
-        showSuccess({title: 'Register Sukses'});
-
-        navigation.navigate('Login');
-      }
-    } catch (error) {
-      showError({title: 'Register Gagal'});
-    }
+    let payload = {
+      ...data,
+      phone_number: '-',
+      address: '-',
+      image: '-',
+      city: '-',
+    };
+    dispatch(authRegister(payload));
   };
 
   return (
@@ -125,7 +135,12 @@ const Daftar = ({navigation}) => {
           <Text style={styles.errors}>{errors.password.message}</Text>
         )}
         <Gap height={16} />
-        <BaseButton title="Daftar" onPress={handleSubmit(onSubmit)} />
+        <BaseButton
+          disable={isLoading}
+          isLoading={isLoading}
+          title="Daftar"
+          onPress={handleSubmit(onSubmit)}
+        />
       </View>
       <View style={styles.loginContainer}>
         <View style={styles.loginWrapper}>

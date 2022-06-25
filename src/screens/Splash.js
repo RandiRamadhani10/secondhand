@@ -5,20 +5,12 @@ import {Colors, Fonts} from '../utils';
 
 import {moderateScale} from 'react-native-size-matters';
 
-import {useSelector} from 'react-redux';
-
 const Splash = props => {
   const {navigation} = props;
 
-  const usersState = useSelector(state => state.users.user);
-
   useEffect(() => {
     setTimeout(() => {
-      if (usersState.hasOwnProperty('access_token')) {
-        navigation.reset({index: 0, routes: [{name: 'Main'}]});
-      } else {
-        navigation.reset({index: 0, routes: [{name: 'Login'}]});
-      }
+      navigation.reset({index: 0, routes: [{name: 'Main'}]});
     }, 2000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

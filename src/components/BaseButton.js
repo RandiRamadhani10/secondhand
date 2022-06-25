@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {Colors, Fonts} from '../utils';
+import Gap from './Gap';
 
 const BaseButton = props => {
   const {title, onPress, style, isLoading, disable} = props;
@@ -22,11 +23,14 @@ const BaseButton = props => {
       onPress={onPress}
       disabled={disable}>
       {isLoading && (
-        <ActivityIndicator
-          size="small"
-          accessibilityLabel="loading"
-          color={Colors.WHITE}
-        />
+        <>
+          <ActivityIndicator
+            size="small"
+            accessibilityLabel="loading"
+            color={Colors.WHITE}
+          />
+          <Gap width={moderateScale(4)} />
+        </>
       )}
       <Text style={styles.title(style)}>{title}</Text>
     </TouchableOpacity>
