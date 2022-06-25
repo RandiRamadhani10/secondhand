@@ -1,7 +1,6 @@
 import Login from './Login';
 import Profile from './Profile';
 import Daftar from './Daftar';
-import TambahBarang from './TambahBarang';
 import Akun from './Akun';
 import DaftarJual from './DaftarJual';
 import Home from './Home';
@@ -22,7 +21,6 @@ export {
   Jual,
   Notifikasi,
   Splash,
-  TambahBarang,
   Detail,
   DetailProduk,
   InfoPenawar,

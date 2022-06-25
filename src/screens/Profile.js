@@ -1,12 +1,5 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useEffect} from 'react';
+import {View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import {Gap, BaseInput, BaseButton} from '../components';
 import SelectDropdown from 'react-native-select-dropdown';
 import {ICArrowLeft, ICChevronDown, ICChevronUp} from '../assets';
@@ -18,16 +11,19 @@ import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 import CameraButton from '../components/CameraButton';
 
+import {useDispatch, useSelector} from 'react-redux';
+import {authUser} from '../store/actions/users';
+
 const Profile = ({navigation}) => {
+  const dispatch = useDispatch();
+  const usersState = useSelector(state => state.users.users);
+
   const schema = yup
     .object({
       nama: yup.string().required('Silahkan Isi Nama'),
       kota: yup.string().required('Silahkan Pilih Kota'),
       alamat: yup.string().required('Silahkan Isi Alamat'),
-      nohp: yup
-        .number()
-        .typeError('Silahkan isi dengan No Handphone')
-        .required('Silahkan Isi No Handphone'),
+      nohp: yup.number().typeError('Silahkan isi dengan No Handphone').required('Silahkan Isi No Handphone'),
     })
     .required();
 
@@ -39,12 +35,21 @@ const Profile = ({navigation}) => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      nama: '',
-      kota: '',
-      alamat: '',
-      nohp: '',
+      full_name: '',
+      city: '',
+      address: '',
+      phone_number: '',
     },
   });
+
+  useEffect(() => {
+    // dispatch(authUser(usersState?.access_token));
+  }, []);
+
+  useEffect(() => {
+    console.log(usersState);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onSubmit = data => {
     console.log(data);
@@ -86,11 +91,9 @@ const Profile = ({navigation}) => {
                 value={value}
               />
             )}
-            name="nama"
+            name="full_name"
           />
-          {errors.nama && (
-            <Text style={styles.errors}>{errors.nama.message}</Text>
-          )}
+          {errors.full_name && <Text style={styles.errors}>{errors.full_name.message}</Text>}
           <Gap height={4} />
           <Text style={styles.label}>Kota*</Text>
           <Gap height={4} />
@@ -106,7 +109,7 @@ const Profile = ({navigation}) => {
                   return isOpened ? <ICChevronUp /> : <ICChevronDown />;
                 }}
                 onSelect={selectedItem => {
-                  setValue('kota', selectedItem);
+                  setValue('city', selectedItem);
                 }}
                 buttonTextAfterSelection={selectedItem => {
                   return selectedItem;
@@ -120,12 +123,10 @@ const Profile = ({navigation}) => {
                 value={value}
               />
             )}
-            name="kota"
+            name="city"
           />
           <Gap height={16} />
-          {errors.kota && (
-            <Text style={styles.errors}>{errors.kota.message}</Text>
-          )}
+          {errors.city && <Text style={styles.errors}>{errors.city.message}</Text>}
           <Gap height={16} />
           <Controller
             control={control}
@@ -140,11 +141,9 @@ const Profile = ({navigation}) => {
                 value={value}
               />
             )}
-            name="alamat"
+            name="address"
           />
-          {errors.alamat && (
-            <Text style={styles.errors}>{errors.alamat.message}</Text>
-          )}
+          {errors.address && <Text style={styles.errors}>{errors.address.message}</Text>}
           <Gap height={16} />
           <Controller
             control={control}
@@ -159,11 +158,9 @@ const Profile = ({navigation}) => {
                 value={value}
               />
             )}
-            name="nohp"
+            name="phone_number"
           />
-          {errors.nohp && (
-            <Text style={styles.errors}>{errors.nohp.message}</Text>
-          )}
+          {errors.phone_number && <Text style={styles.errors}>{errors.phone_number.message}</Text>}
           <Gap height={24} />
           <BaseButton title="Simpan" onPress={handleSubmit(onSubmit)} />
         </View>

@@ -5,11 +5,11 @@ import {NavigationContainer} from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 
 import AppRoute from './AppRoute';
-import {toastConfig} from '../utils';
+import {navigationRef, toastConfig} from '../utils';
 
 const Router = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <AppRoute />
       <Toast config={toastConfig} />
     </NavigationContainer>

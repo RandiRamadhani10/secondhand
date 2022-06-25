@@ -6,17 +6,9 @@ import {Colors, Fonts} from '../utils';
 import {ICSearch, ICSearchWhite} from '../assets';
 import Gap from './Gap';
 
-const CategoryButtonItem = ({
-  icon = <ICSearchWhite />,
-  isActive = false,
-  title,
-  onPress,
-}) => {
+const CategoryButtonItem = ({icon = <ICSearchWhite />, isActive = false, title, onPress}) => {
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      activeOpacity={0.7}
-      style={styles.container(isActive)}>
+    <TouchableOpacity onPress={onPress} activeOpacity={0.7} style={styles.container(isActive)}>
       {icon}
       <Gap width={moderateScale(8)} />
       <Text style={styles.title(isActive)}>{title}</Text>

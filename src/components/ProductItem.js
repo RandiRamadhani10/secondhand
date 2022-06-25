@@ -1,34 +1,48 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Dimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {moderateScale} from 'react-native-size-matters';
 import {Colors, Fonts} from '../utils';
 import Gap from './Gap';
+
+import {IMGPlaceholderProduct} from '../assets';
 
 // Alternative for choose width & height
 const {width, height} = Dimensions.get('window');
 
 const ProductItem = ({title, image, category, price, onPress}) => {
   return (
-    <TouchableOpacity
-      activeOpacity={0.7}
-      style={styles.containerShadow}
-      onPress={onPress}>
+    <TouchableOpacity activeOpacity={0.7} style={styles.containerShadow} onPress={onPress}>
       <View style={styles.container}>
-        <FastImage source={image} style={styles.image} />
+        <FastImage
+          source={{
+            uri: image,
+          }}
+          fallback
+          defaultSource={IMGPlaceholderProduct}
+          style={styles.image}
+        />
         <Gap height={moderateScale(8)} />
         <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
           {title}
         </Text>
         <Gap height={moderateScale(4)} />
-        <Text style={styles.category}>{category}</Text>
+
+        <View style={styles.categoryContainer}>
+          {typeof category === 'string' ? (
+            <Text style={styles.category}>{category}</Text>
+          ) : Array.isArray(category) ? (
+            category.map((item, index) => (
+              <Text key={item.id} style={styles.category}>
+                {index > 0 ? ',' : ''} {item.name}
+              </Text>
+            ))
+          ) : (
+            <Text style={styles.category}>{category}</Text>
+          )}
+        </View>
+
         <Gap height={moderateScale(8)} />
         <Text style={styles.price}>Rp. {price}</Text>
         <Gap height={moderateScale(8)} />
@@ -75,12 +89,17 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(14),
     color: Colors.TEXT,
   },
+  categoryContainer: {
+    flexDirection: 'row',
+    maxWidth: '100%',
+    overflow: 'hidden',
+  },
 });
 
 ProductItem.propTypes = {
   title: propTypes.string,
   image: propTypes.any,
-  category: propTypes.string,
+  category: propTypes.oneOfType([propTypes.string, propTypes.array]),
   price: propTypes.oneOfType([propTypes.string, propTypes.number]),
   onPress: propTypes.func,
 };

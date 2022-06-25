@@ -1,26 +1,15 @@
-import {
-  configureStore,
-  combineReducers,
-  getDefaultMiddleware,
-} from '@reduxjs/toolkit';
+import {configureStore, combineReducers, getDefaultMiddleware} from '@reduxjs/toolkit';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {
-  FLUSH,
-  PAUSE,
-  PERSIST,
-  persistReducer,
-  persistStore,
-  PURGE,
-  REGISTER,
-  REHYDRATE,
-} from 'redux-persist';
+import {FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE} from 'redux-persist';
 
 import usersSlice from './usersSlice';
+import buyerSlice from './buyerSlice';
 
 const rootReducer = combineReducers({
   users: usersSlice,
+  buyer: buyerSlice,
 });
 
 const persistConfig = {
@@ -33,11 +22,11 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: getDefaultMiddleware({
-    serializableCheck: {
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: false,
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-    },
-  }),
+    }),
 });
 
 store.subscribe(() => store.getState());
