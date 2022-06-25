@@ -1,30 +1,49 @@
-import React, {useRef, useMemo, useCallback} from 'react';
+import React, {useRef, useMemo, useCallback, useEffect} from 'react';
 import {
   View,
   Text,
-  Image,
   StyleSheet,
   Dimensions,
   StatusBar,
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
 import {moderateScale} from 'react-native-size-matters';
 import {Colors} from '../utils';
 import {Gap, BaseButton, CardUser, BaseInput} from '../components';
 import {Fonts} from '../utils';
-import {ICArrowLeft, IMGDummyProduct} from '../assets';
+import {ICArrowLeft} from '../assets';
 import {Controller, useForm} from 'react-hook-form';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import FastImage from 'react-native-fast-image';
+import {useDispatch, useSelector} from 'react-redux';
+import {getProductById} from '../store/actions/buyer';
+
 const screen = Dimensions.get('screen');
-const DetailProduk = ({navigation}) => {
+
+const DetailProduk = ({navigation, route}) => {
+  const {id} = route.params;
+
+  const isFocused = useIsFocused();
+
+  const dispatch = useDispatch();
+
+  const {isLoading, productDetail} = useSelector(state => state.buyer);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getProductById(id));
+    }
+  }, [dispatch, isFocused, id]);
+
   // ref
   const bottomSheetRef = useRef(null);
 
   //   variables
-  const snapPoints = useMemo(() => ['5%', '50'], []);
+  const snapPoints = useMemo(() => ['1%', '70%'], []);
 
   // callbacks
   const handleSheetChanges = useCallback(index => {
@@ -32,6 +51,8 @@ const DetailProduk = ({navigation}) => {
   }, []);
 
   const handleClosePress = () => bottomSheetRef.current.close();
+
+  const handleOpenPress = () => bottomSheetRef.current.expand();
 
   const {
     control,
@@ -43,19 +64,6 @@ const DetailProduk = ({navigation}) => {
     },
   });
 
-  // renders
-  const renderBackdrop = useCallback(
-    props => (
-      <BottomSheetBackdrop
-        {...props}
-        pressBehavior="close"
-        disappearsOnIndex={1}
-        appearsOnIndex={2}
-      />
-    ),
-    [],
-  );
-
   const onSubmit = data => {
     console.log(data);
     handleClosePress();
@@ -64,119 +72,117 @@ const DetailProduk = ({navigation}) => {
   return (
     <>
       <SafeAreaView style={styles.screen}>
-        <ScrollView>
-          <View style={styles.btnBackContainer}>
-            <TouchableOpacity
-              style={styles.btnBack}
-              activeOpacity={0.7}
-              onPress={() => navigation.navigate('Main', {screen: 'Home'})}>
-              <ICArrowLeft />
-            </TouchableOpacity>
-            <StatusBar backgroundColor="transparent" translucent={true} />
-            <View style={styles.imageContainer}>
-              <Image
-                style={styles.image}
-                source={{
-                  uri: 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRdbhQQ3WnSAlLTQ16icqtcUo7H2mDGk9SqyC0vN9OXG3LFeyZyUF1aw_WKFuGY4pE0FujTymiXMMkTclEL6LKl4zd_iqdnjQPv6bM27Y8&usqp=CAE',
-                }}
-              />
-              <View style={styles.abs}>
-                <View style={styles.absSet}>
-                  <View style={styles.title}>
-                    <Text style={styles.txtTitle}>Jam Tangan Hitam</Text>
-                    <Text style={styles.txtCat}>Aksesoris</Text>
-                    <Text style={styles.txtTitle}>Rp. 250.000</Text>
+        {isLoading ? (
+          <View style={styles.screen}>
+            <ActivityIndicator style={styles.loading} size={'large'} color={Colors.PRIMARY} />
+          </View>
+        ) : (
+          <>
+            <ScrollView style={styles.scrollScreen}>
+              <StatusBar backgroundColor="transparent" translucent={true} />
+              <View style={styles.btnBackContainer}>
+                <TouchableOpacity
+                  style={styles.btnBack}
+                  activeOpacity={0.7}
+                  onPress={() => navigation.navigate('Main', {screen: 'Home'})}>
+                  <ICArrowLeft />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.imageContainer}>
+                <FastImage
+                  style={styles.image}
+                  source={{
+                    uri: productDetail?.image_url,
+                  }}
+                />
+                <View style={styles.abs}>
+                  <View style={styles.absSet}>
+                    <View style={styles.title}>
+                      <Text style={styles.txtTitle}>{productDetail?.name}</Text>
+                      <Text style={styles.txtCat}>
+                        {productDetail?.Categories.length > 0 &&
+                          productDetail?.Categories.map((item, index) => (
+                            <Text key={item.id} style={styles.category}>
+                              {index > 0 ? ',' : ''} {item.name}
+                            </Text>
+                          ))}
+                      </Text>
+                      <Text style={styles.txtTitle}>{productDetail?.base_price}</Text>
+                    </View>
                   </View>
                 </View>
               </View>
-            </View>
-            <View style={styles.card}>
-              <CardUser
-                name={'Randi Pandugo'}
-                city={'Jombang'}
-                button={false}
+              <View style={styles.card}>
+                <CardUser name={productDetail?.user_id} city={productDetail?.location} button={false} />
+              </View>
+              <View style={styles.title}>
+                <Text style={styles.txtTitle}>Deskripsi</Text>
+                <Text style={styles.des}>{productDetail?.description}</Text>
+              </View>
+              <Gap height={60} />
+            </ScrollView>
+            <View style={styles.btnNego}>
+              <BaseButton
+                onPress={() => {
+                  handleOpenPress();
+                }}
+                title="Saya Tertarik dan ingin Nego"
               />
             </View>
-            <View style={styles.title}>
-              <Text style={styles.txtTitle}>Deskripsi</Text>
-              <Text style={styles.des}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </Text>
-            </View>
-            <Gap height={60} />
-          </View>
-        </ScrollView>
+
+            <BottomSheet
+              enablePanDownToClose
+              enableContentPanningGesture={true}
+              enableHandlePanningGesture={true}
+              animateOnMount={true}
+              enableOverDrag={true}
+              ref={bottomSheetRef}
+              index={0}
+              snapPoints={snapPoints}
+              onChange={handleSheetChanges}>
+              <View style={styles.contentContainer}>
+                <Text style={styles.titleBtmSheet}>Masukkan Harga Tawarmu</Text>
+                <Gap height={moderateScale(16)} />
+                <Text style={styles.descBtmSheet}>
+                  Harga tawaranmu akan diketahui penjual, jika penjual cocok kamu akan segera dihubungi penjual.
+                </Text>
+                <Gap height={moderateScale(16)} />
+
+                {/* Card For Dummy Product */}
+                <View style={styles.mainCard}>
+                  <View style={styles.icon}>
+                    <FastImage source={productDetail?.image_url} style={styles.imageBtmSheet} resizeMode="cover" />
+                  </View>
+                  <View style={styles.contentText}>
+                    <Text style={styles.name}>{productDetail?.name}</Text>
+                    <Text>Rp {productDetail?.base_price}</Text>
+                  </View>
+                </View>
+
+                <Gap height={moderateScale(16)} />
+                <Controller
+                  control={control}
+                  render={({field: {onChange, onBlur, value}}) => (
+                    <BaseInput
+                      label="Harga Tawar"
+                      type="text"
+                      placeholder="Rp. 0,00"
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      value={value}
+                    />
+                  )}
+                  name="harga_tawar"
+                />
+                {errors?.harga_tawar && <Text style={styles.errors}>{errors.harga_tawar.message}</Text>}
+
+                <Gap height={moderateScale(24)} />
+                <BaseButton title="Kirim" onPress={handleSubmit(data => onSubmit(data))} />
+              </View>
+            </BottomSheet>
+          </>
+        )}
       </SafeAreaView>
-      <View style={styles.btnNego}>
-        <BaseButton onPress={() => {}} title="Saya Tertarik dan ingin Nego" />
-      </View>
-
-      <BottomSheet
-        enableContentPanningGesture={true}
-        enableHandlePanningGesture={true}
-        animateOnMount={true}
-        enableOverDrag={true}
-        ref={bottomSheetRef}
-        index={1}
-        backdropComponent={renderBackdrop}
-        snapPoints={snapPoints}
-        onChange={handleSheetChanges}>
-        <View style={styles.contentContainer}>
-          <Text style={styles.titleBtmSheet}>Masukkan Harga Tawarmu</Text>
-          <Gap height={moderateScale(16)} />
-          <Text style={styles.descBtmSheet}>
-            Harga tawaranmu akan diketahui penjual, jika penjual cocok kamu akan
-            segera dihubungi penjual.
-          </Text>
-          <Gap height={moderateScale(16)} />
-
-          {/* Card For Dummy Product */}
-          <View style={styles.mainCard}>
-            <View style={styles.icon}>
-              <FastImage
-                source={IMGDummyProduct}
-                style={styles.imageBtmSheet}
-                resizeMode="cover"
-              />
-            </View>
-            <View style={styles.contentText}>
-              <Text style={styles.name}>Jam Tangan Casio</Text>
-              <Text>Rp 250.000</Text>
-            </View>
-          </View>
-
-          <Gap height={moderateScale(16)} />
-          <Controller
-            control={control}
-            render={({field: {onChange, onBlur, value}}) => (
-              <BaseInput
-                label="Harga Tawar"
-                type="text"
-                placeholder="Rp. 0,00"
-                onChangeText={onChange}
-                onBlur={onBlur}
-                value={value}
-              />
-            )}
-            name="harga_tawar"
-          />
-          {errors?.harga_tawar && (
-            <Text style={styles.errors}>{errors.harga_tawar.message}</Text>
-          )}
-
-          <Gap height={moderateScale(24)} />
-          <BaseButton
-            title="Kirim"
-            onPress={handleSubmit(data => onSubmit(data))}
-          />
-        </View>
-      </BottomSheet>
     </>
   );
 };
@@ -238,6 +244,10 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.PRIMARY.REGULAR,
     fontSize: moderateScale(14),
   },
+  scrollScreen: {
+    flex: 1,
+    backgroundColor: Colors.BACKGROUND,
+  },
   screen: {
     flex: 1,
     backgroundColor: Colors.BACKGROUND,
@@ -298,6 +308,11 @@ const styles = StyleSheet.create({
     height: moderateScale(48),
     borderRadius: moderateScale(12),
     backgroundColor: Colors.PRIMARY,
+  },
+  loading: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

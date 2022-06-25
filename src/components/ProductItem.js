@@ -19,8 +19,6 @@ const ProductItem = ({title, image, category, price, onPress}) => {
           source={{
             uri: image,
           }}
-          fallback
-          defaultSource={IMGPlaceholderProduct}
           style={styles.image}
         />
         <Gap height={moderateScale(8)} />
