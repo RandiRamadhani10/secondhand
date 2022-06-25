@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
 
@@ -11,61 +11,17 @@ import {moderateScale} from 'react-native-size-matters';
 import {ICCloseWhite} from '../assets';
 
 export const toastConfig = {
-  success: props => (
-    <BaseToast
-      {...props}
-      style={{borderLeftColor: Colors.SUCCESS}}
-      contentContainerStyle={{
-        paddingHorizontal: 24,
-        paddingVertical: 16,
-        backgroundColor: Colors.SUCCESS,
-      }}
-      text1Style={{
-        color: Colors.WHITE,
-        fontSize: 12,
-        fontFamily: Fonts.PRIMARY.MEDIUM,
-      }}
-      text1NumberOfLines={2}
-    />
-  ),
-  error: props => (
-    <ErrorToast
-      {...props}
-      style={{borderLeftColor: Colors.ERROR}}
-      contentContainerStyle={{
-        paddingHorizontal: 24,
-        paddingVertical: 16,
-        backgroundColor: Colors.ERROR,
-      }}
-      text1Style={{
-        color: Colors.WHITE,
-        fontSize: 14,
-        fontFamily: Fonts.PRIMARY.MEDIUM,
-      }}
-    />
-  ),
+  successToast: ({text1, text2}) => (
+    <View style={styles.successContainer}>
+      {text2 ? (
+        <View style={styles.contentContainer}>
+          <Text style={styles.successText}>{text1}</Text>
+          <Text style={styles.successDescription}>{text2}</Text>
+        </View>
+      ) : (
+        <Text style={styles.successText}>{text1}</Text>
+      )}
 
-  successToast: ({text1}) => (
-    <View
-      style={{
-        height: moderateScale(60),
-        width: '90%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: Colors.SUCCESS,
-        borderRadius: moderateScale(16),
-        paddingHorizontal: moderateScale(24),
-        paddingVertical: moderateScale(16),
-      }}>
-      <Text
-        style={{
-          color: Colors.WHITE,
-          fontSize: moderateScale(14),
-          fontFamily: Fonts.PRIMARY.MEDIUM,
-        }}>
-        {text1}
-      </Text>
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={() => {
@@ -76,27 +32,16 @@ export const toastConfig = {
     </View>
   ),
 
-  errorToast: ({text1}) => (
-    <View
-      style={{
-        height: moderateScale(60),
-        width: '90%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: Colors.ERROR,
-        borderRadius: moderateScale(16),
-        paddingHorizontal: moderateScale(24),
-        paddingVertical: moderateScale(16),
-      }}>
-      <Text
-        style={{
-          color: Colors.WHITE,
-          fontSize: moderateScale(14),
-          fontFamily: Fonts.PRIMARY.MEDIUM,
-        }}>
-        {text1}
-      </Text>
+  errorToast: ({text1, text2}) => (
+    <View style={styles.errorContainer}>
+      {text2 ? (
+        <View style={styles.contentContainer}>
+          <Text style={styles.errorText}>{text1}</Text>
+          <Text style={styles.errorDescription}>{text2}</Text>
+        </View>
+      ) : (
+        <Text style={styles.errorText}>{text1}</Text>
+      )}
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={() => {
@@ -108,20 +53,70 @@ export const toastConfig = {
   ),
 };
 
-export const showSuccess = ({title = 'Success'}) => {
+export const showSuccess = ({title = 'Success', description}) => {
   Toast.show({
     type: 'successToast',
     text1: title,
+    text2: description && description,
     onPress: () => Toast.hide(),
     autoHide: true,
   });
 };
 
-export const showError = ({title = 'Error'}) => {
+export const showError = ({title = 'Error', description}) => {
   Toast.show({
     type: 'errorToast',
     text1: title,
+    text2: description && description,
     onPress: () => Toast.hide(),
     autoHide: true,
   });
 };
+
+const styles = StyleSheet.create({
+  successContainer: {
+    height: moderateScale(60),
+    width: '90%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: Colors.SUCCESS,
+    borderRadius: moderateScale(16),
+    paddingHorizontal: moderateScale(24),
+    paddingVertical: moderateScale(16),
+  },
+  successText: {
+    color: Colors.WHITE,
+    fontSize: moderateScale(14),
+    fontFamily: Fonts.PRIMARY.MEDIUM,
+  },
+  successDescription: {
+    color: Colors.WHITE,
+    fontSize: moderateScale(10),
+    fontFamily: Fonts.PRIMARY.REGULAR,
+  },
+  errorContainer: {
+    height: moderateScale(60),
+    width: '90%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: Colors.ERROR,
+    borderRadius: moderateScale(16),
+    paddingHorizontal: moderateScale(24),
+    paddingVertical: moderateScale(16),
+  },
+  errorText: {
+    color: Colors.WHITE,
+    fontSize: moderateScale(14),
+    fontFamily: Fonts.PRIMARY.MEDIUM,
+  },
+  errorDescription: {
+    color: Colors.WHITE,
+    fontSize: moderateScale(10),
+    fontFamily: Fonts.PRIMARY.REGULAR,
+  },
+  contentContainer: {
+    flexDirection: 'column',
+  },
+});

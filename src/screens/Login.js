@@ -9,27 +9,21 @@ import {
 } from 'react-native';
 
 import {moderateScale} from 'react-native-size-matters';
-
 import {useForm, Controller} from 'react-hook-form';
 import {BaseButton, BaseInput, Gap} from '../components';
 import {Colors} from '../utils/Colors';
 import {ICArrowLeft} from '../assets';
 import {Fonts} from '../utils';
-
-import apiClient from '../services/api';
-
+import {useDispatch, useSelector} from 'react-redux';
 import {yupResolver} from '@hookform/resolvers/yup';
-
-import {useDispatch} from 'react-redux';
-
 import * as yup from 'yup';
 
-import {showSuccess, showError} from '../utils/showMessages';
-
-import {setUser} from '../store/usersSlice';
+import {authLogin} from '../store/actions/users';
 
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
+
+  const isLoading = useSelector(state => state.users.isLoading);
 
   const schema = yup
     .object()
@@ -52,23 +46,7 @@ const Login = ({navigation}) => {
   });
 
   const onSubmit = async data => {
-    try {
-      const response = await apiClient.post('auth/login', data);
-
-      if (response.data) {
-        const {name} = response.data;
-
-        dispatch(setUser(response.data));
-
-        showSuccess({
-          title: `Hello ${name}`,
-        });
-
-        navigation.navigate('Main', {screen: 'Home'});
-      }
-    } catch (error) {
-      showError({title: 'Oops... terjadi kesalahan'});
-    }
+    dispatch(authLogin(data));
   };
 
   return (
@@ -118,7 +96,12 @@ const Login = ({navigation}) => {
           <Text style={styles.errors}>{errors.password.message}</Text>
         )}
         <Gap height={16} />
-        <BaseButton title="Masuk" onPress={handleSubmit(onSubmit)} />
+        <BaseButton
+          disable={isLoading}
+          isLoading={isLoading}
+          title="Masuk"
+          onPress={handleSubmit(onSubmit)}
+        />
       </View>
       <View style={styles.registerContainer}>
         <View style={styles.registerWrapper}>
