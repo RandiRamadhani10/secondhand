@@ -9,6 +9,7 @@ import BaseUploadPhoto from './BaseUploadPhoto';
 import SearchBar from './SearchBar';
 import CategoryButtonItem from './CategoryButtonItem';
 import ProductItem from './ProductItem';
+import ProductItemSkeleton from './ProductItemSkeleton';
 import Divider from './Divider';
 
 export {
@@ -24,4 +25,5 @@ export {
   ProductItem,
   Divider,
   CardUser,
+  ProductItemSkeleton,
 };

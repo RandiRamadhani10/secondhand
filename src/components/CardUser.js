@@ -1,17 +1,25 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import {StyleSheet, Text, View, TouchableHighlight, Button} from 'react-native';
+import {StyleSheet, Text, View, TouchableHighlight} from 'react-native';
 import {Fonts} from '../utils';
 import {Gap} from './Gap';
-import {ICAvatarExample} from '../assets';
 import {Colors} from '../utils/Colors';
 import {moderateScale} from 'react-native-size-matters';
+import FastImage from 'react-native-fast-image';
 
 const CardUser = ({avatar, name, city, button = true, isActive = false}) => {
   return (
     <View style={styles.mainCard}>
       <View style={styles.icon}>
-        <ICAvatarExample />
+        {avatar ? (
+          <FastImage style={styles.image} resizeMode="cover" source={{uri: avatar}} />
+        ) : (
+          <FastImage
+            style={styles.image}
+            resizeMode="cover"
+            source={require('../assets/images/img-placeholder-product.png')}
+          />
+        )}
       </View>
       <View style={styles.contentText}>
         <Text style={styles.name}>{name}</Text>
@@ -33,7 +41,7 @@ const CardUser = ({avatar, name, city, button = true, isActive = false}) => {
 CardUser.propTypes = {
   isActive: propTypes.bool,
   avatar: propTypes.string,
-  name: propTypes.string,
+  name: propTypes.oneOfType[(propTypes.string, propTypes.number)],
   city: propTypes.string,
   button: propTypes.bool,
 };
@@ -81,6 +89,11 @@ const styles = StyleSheet.create({
     color: Colors.TEXT,
     fontSize: moderateScale(12),
     marginTop: moderateScale(2),
+  },
+  image: {
+    width: moderateScale(50),
+    height: moderateScale(50),
+    borderRadius: moderateScale(4),
   },
 });
 

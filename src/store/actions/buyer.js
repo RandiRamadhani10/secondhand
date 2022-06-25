@@ -4,7 +4,9 @@ import {showError} from '../../utils';
 
 export const getProduct = createAsyncThunk('buyer/getProduct', async (params, {rejectWithValue}) => {
   try {
-    const response = await apiClient.get(`buyer/product?search=${params?.search}&category_id=${params?.category_id}`);
+    const response = await apiClient.get(
+      `buyer/product?search=${params?.search}&category_id=${params?.category_id}&status=${params?.status}`,
+    );
 
     return response.data;
   } catch (error) {

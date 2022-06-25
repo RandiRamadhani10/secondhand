@@ -1,11 +1,11 @@
-import React, {Fragment, useEffect, useState, useMemo} from 'react';
-import {StyleSheet, Text, View, SafeAreaView, Dimensions, ScrollView, FlatList, ActivityIndicator} from 'react-native';
+import React, {Fragment, useEffect, useState} from 'react';
+import {StyleSheet, Text, View, SafeAreaView, Dimensions, ScrollView, FlatList} from 'react-native';
 
 import {Colors, Fonts} from '../utils';
 
 import {moderateScale} from 'react-native-size-matters';
 
-import {SearchBar, Gap, CategoryButtonItem, ProductItem} from '../components';
+import {SearchBar, Gap, CategoryButtonItem, ProductItem, ProductItemSkeleton} from '../components';
 
 import {useForm, Controller} from 'react-hook-form';
 
@@ -15,10 +15,10 @@ import FastImage from 'react-native-fast-image';
 
 import LinearGradient from 'react-native-linear-gradient';
 
-const {height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 import {useDispatch, useSelector} from 'react-redux';
-import {getProduct} from '../store/actions/buyer';
+import {getProduct, getProductById} from '../store/actions/buyer';
 import {IMGGift} from '../assets';
 
 const Home = ({navigation}) => {
@@ -70,7 +70,13 @@ const Home = ({navigation}) => {
   const keyword = watch('keyword');
 
   useEffect(() => {
-    dispatch(getProduct({category_id: categorySelected?.id !== 0 ? categorySelected?.id : '', search: keyword}));
+    dispatch(
+      getProduct({
+        category_id: categorySelected?.id !== 0 ? categorySelected?.id : '',
+        search: keyword,
+        status: 'available',
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused, categorySelected?.id, keyword, listCategory.length]);
 
@@ -79,7 +85,7 @@ const Home = ({navigation}) => {
       filterCategory();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFocused]);
+  }, []);
 
   const onSubmit = data => {
     if (keyword === data.keyword) {
@@ -89,6 +95,7 @@ const Home = ({navigation}) => {
         getProduct({
           category_id: categorySelected?.id,
           search: data.keyword,
+          status: 'available',
         }),
       );
     }
@@ -172,8 +179,8 @@ const Home = ({navigation}) => {
         ListEmptyComponent={emptyContent}
         renderItem={({item}) => {
           return buyerState.isLoading ? (
-            <View style={styles.screen}>
-              <ActivityIndicator style={styles.loading} size={'large'} color={Colors.PRIMARY} />
+            <View style={styles.loadingContainer}>
+              <ProductItemSkeleton />
             </View>
           ) : (
             <ProductItem
@@ -183,7 +190,7 @@ const Home = ({navigation}) => {
               category={item.Categories}
               price={item?.base_price}
               onPress={() => {
-                navigation.navigate('DetailProduk');
+                navigation.navigate('DetailProduk', {id: item.id});
               }}
             />
           );
@@ -251,6 +258,11 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(12),
     color: Colors.TEXT,
     textAlign: 'center',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
