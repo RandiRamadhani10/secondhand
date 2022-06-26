@@ -16,6 +16,8 @@ const Jual = ({navigation}) => {
   const isFocused = useIsFocused();
   const usersState = useSelector(state => state.users.users);
 
+  // console.log('ini users', usersState);
+
   useEffect(() => {
     if (!usersState.hasOwnProperty('access_token')) {
       showError({title: 'Akses Menu Tidak Diperkenankan', description: 'Silahkan Daftar & Login terlebih dahulu'});

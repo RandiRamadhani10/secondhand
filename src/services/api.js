@@ -6,6 +6,7 @@ const apiClient = Axios.create({
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
+  timeout: 1000 * 5,
 });
 
 export default apiClient;
