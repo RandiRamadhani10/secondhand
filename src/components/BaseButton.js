@@ -3,12 +3,7 @@ import propTypes from 'prop-types';
 
 import {moderateScale} from 'react-native-size-matters';
 
-import {
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import {Text, TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
 import {Colors, Fonts} from '../utils';
 import Gap from './Gap';
 
@@ -24,11 +19,7 @@ const BaseButton = props => {
       disabled={disable}>
       {isLoading && (
         <>
-          <ActivityIndicator
-            size="small"
-            accessibilityLabel="loading"
-            color={Colors.WHITE}
-          />
+          <ActivityIndicator size="small" accessibilityLabel="loading" color={Colors.WHITE} />
           <Gap width={moderateScale(4)} />
         </>
       )}

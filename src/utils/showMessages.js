@@ -60,6 +60,7 @@ export const showSuccess = ({title = 'Success', description}) => {
     text2: description && description,
     onPress: () => Toast.hide(),
     autoHide: true,
+    visibilityTime: 4000,
   });
 };
 
@@ -70,6 +71,7 @@ export const showError = ({title = 'Error', description}) => {
     text2: description && description,
     onPress: () => Toast.hide(),
     autoHide: true,
+    visibilityTime: 4000,
   });
 };
 

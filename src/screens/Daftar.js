@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  StatusBar,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity} from 'react-native';
 import {Colors, Fonts} from '../utils';
 
 import {moderateScale} from 'react-native-size-matters';
@@ -27,18 +20,9 @@ const Daftar = ({navigation}) => {
   const schema = yup
     .object()
     .shape({
-      full_name: yup
-        .string()
-        .min(5, 'Silahkan isi nama minimal 5 karakter')
-        .required('Silahkan isi nama lengkap'),
-      email: yup
-        .string()
-        .email('Silahkan isi alamat email yang valid')
-        .required('Silahkan isi alamat email'),
-      password: yup
-        .string()
-        .min(5, 'Silahkan isi password minimal 5 karakter')
-        .required(),
+      full_name: yup.string().min(5, 'Silahkan isi nama minimal 5 karakter').required('Silahkan isi nama lengkap'),
+      email: yup.string().email('Silahkan isi alamat email yang valid').required('Silahkan isi alamat email'),
+      password: yup.string().min(5, 'Silahkan isi password minimal 5 karakter').required(),
     })
     .required();
 
@@ -70,9 +54,7 @@ const Daftar = ({navigation}) => {
     <SafeAreaView style={styles.screen}>
       <StatusBar backgroundColor={Colors.WHITE} />
       <View>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => navigation.navigate('Main', {screen: 'Home'})}>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('Main', {screen: 'Home'})}>
           <ICArrowLeft />
         </TouchableOpacity>
         <Gap height={40} />
@@ -93,9 +75,7 @@ const Daftar = ({navigation}) => {
           )}
           name="full_name"
         />
-        {errors?.full_name && (
-          <Text style={styles.errors}>{errors.full_name.message}</Text>
-        )}
+        {errors?.full_name && <Text style={styles.errors}>{errors.full_name.message}</Text>}
         <Gap height={16} />
         <Controller
           control={control}
@@ -112,9 +92,7 @@ const Daftar = ({navigation}) => {
           )}
           name="email"
         />
-        {errors?.email && (
-          <Text style={styles.errors}>{errors.email.message}</Text>
-        )}
+        {errors?.email && <Text style={styles.errors}>{errors.email.message}</Text>}
         <Gap height={16} />
         <Controller
           control={control}
@@ -131,16 +109,9 @@ const Daftar = ({navigation}) => {
           )}
           name="password"
         />
-        {errors?.password && (
-          <Text style={styles.errors}>{errors.password.message}</Text>
-        )}
+        {errors?.password && <Text style={styles.errors}>{errors.password.message}</Text>}
         <Gap height={16} />
-        <BaseButton
-          disable={isLoading}
-          isLoading={isLoading}
-          title="Daftar"
-          onPress={handleSubmit(onSubmit)}
-        />
+        <BaseButton disable={isLoading} isLoading={isLoading} title="Daftar" onPress={handleSubmit(onSubmit)} />
       </View>
       <View style={styles.loginContainer}>
         <View style={styles.loginWrapper}>

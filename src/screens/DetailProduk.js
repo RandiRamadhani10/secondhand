@@ -1,4 +1,4 @@
-import React, {useRef, useMemo, useCallback, useEffect} from 'react';
+import React, {useRef, useMemo, useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
-import {moderateScale} from 'react-native-size-matters';
+import {moderateScale, s} from 'react-native-size-matters';
 import {Colors} from '../utils';
 import {Gap, BaseButton, CardUser, BaseInput} from '../components';
 import {Fonts} from '../utils';
@@ -20,7 +20,7 @@ import {Controller, useForm} from 'react-hook-form';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import FastImage from 'react-native-fast-image';
 import {useDispatch, useSelector} from 'react-redux';
-import {getProductById} from '../store/actions/buyer';
+import {bidProduct, getProductById} from '../store/actions/buyer';
 
 const screen = Dimensions.get('screen');
 
@@ -31,13 +31,31 @@ const DetailProduk = ({navigation, route}) => {
 
   const dispatch = useDispatch();
 
-  const {isLoading, productDetail} = useSelector(state => state.buyer);
+  const stateBuyer = useSelector(state => state.buyer);
+
+  const [isAlreadyBid, setIsAlreadyBid] = useState(false);
+
+  const checkStatusBid = useCallback(() => {
+    const bids = [];
+
+    stateBuyer?.bidProducts?.length > 0 &&
+      stateBuyer?.bidProducts.map(item => {
+        if (item?.product_id === id && item?.status === 'pending') {
+          bids.push(item);
+        }
+      });
+
+    return bids?.length ? setIsAlreadyBid(true) : setIsAlreadyBid(false);
+  }, [stateBuyer?.bidProducts, id]);
 
   useEffect(() => {
     if (id) {
       dispatch(getProductById(id));
+
+      checkStatusBid();
     }
-  }, [dispatch, isFocused, id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFocused, id]);
 
   // ref
   const bottomSheetRef = useRef(null);
@@ -47,12 +65,12 @@ const DetailProduk = ({navigation, route}) => {
 
   // callbacks
   const handleSheetChanges = useCallback(index => {
-    console.log('handleSheetChanges', index);
+    console.log('sheet index', index);
   }, []);
 
-  const handleClosePress = () => bottomSheetRef.current.close();
+  const handleClosePress = () => bottomSheetRef.current?.close();
 
-  const handleOpenPress = () => bottomSheetRef.current.expand();
+  const handleOpenPress = () => bottomSheetRef.current?.expand();
 
   const {
     control,
@@ -60,129 +78,145 @@ const DetailProduk = ({navigation, route}) => {
     formState: {errors},
   } = useForm({
     defaultValues: {
-      harga_tawar: '',
+      bid_price: '',
     },
   });
 
-  const onSubmit = data => {
-    console.log(data);
-    handleClosePress();
+  const onSubmit = async data => {
+    try {
+      await dispatch(bidProduct({product_id: id, bid_price: Number(data?.bid_price)}));
+      handleClosePress();
+      setIsAlreadyBid(true);
+    } catch (err) {
+      setIsAlreadyBid(false);
+    }
   };
 
   return (
     <>
-      <SafeAreaView style={styles.screen}>
-        {isLoading ? (
-          <View style={styles.screen}>
-            <ActivityIndicator style={styles.loading} size={'large'} color={Colors.PRIMARY} />
-          </View>
-        ) : (
-          <>
-            <ScrollView style={styles.scrollScreen}>
-              <StatusBar backgroundColor="transparent" translucent={true} />
-              <View style={styles.btnBackContainer}>
-                <TouchableOpacity
-                  style={styles.btnBack}
-                  activeOpacity={0.7}
-                  onPress={() => navigation.navigate('Main', {screen: 'Home'})}>
-                  <ICArrowLeft />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.imageContainer}>
-                <FastImage
-                  style={styles.image}
-                  source={{
-                    uri: productDetail?.image_url,
-                  }}
-                />
-                <View style={styles.abs}>
-                  <View style={styles.absSet}>
-                    <View style={styles.title}>
-                      <Text style={styles.txtTitle}>{productDetail?.name}</Text>
-                      <Text style={styles.txtCat}>
-                        {productDetail?.Categories.length > 0 &&
-                          productDetail?.Categories.map((item, index) => (
-                            <Text key={item.id} style={styles.category}>
-                              {index > 0 ? ',' : ''} {item.name}
-                            </Text>
-                          ))}
-                      </Text>
-                      <Text style={styles.txtTitle}>{productDetail?.base_price}</Text>
-                    </View>
+      {stateBuyer?.isLoading ? (
+        <View style={styles.screen}>
+          <ActivityIndicator style={styles.loading} size={'large'} color={Colors.PRIMARY} />
+        </View>
+      ) : (
+        <SafeAreaView style={styles.screen}>
+          <ScrollView style={styles.scrollScreen}>
+            <StatusBar backgroundColor="transparent" translucent={true} />
+            <View style={styles.btnBackContainer}>
+              <TouchableOpacity style={styles.btnBack} activeOpacity={0.7} onPress={() => navigation.goBack()}>
+                <ICArrowLeft />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.imageContainer}>
+              <FastImage
+                style={styles.image}
+                source={{
+                  uri: stateBuyer?.productDetail?.image_url,
+                }}
+              />
+              <View style={styles.abs}>
+                <View style={styles.absSet}>
+                  <View style={styles.title}>
+                    <Text style={styles.txtTitle}>{stateBuyer?.productDetail?.name}</Text>
+                    <Text style={styles.txtCat}>
+                      {stateBuyer?.productDetail?.Categories.length > 0 &&
+                        stateBuyer?.productDetail?.Categories.map((item, index) => (
+                          <Text key={item.id} style={styles.category}>
+                            {index > 0 ? ',' : ''} {item.name}
+                          </Text>
+                        ))}
+                    </Text>
+                    <Text style={styles.txtTitle}>{stateBuyer?.productDetail?.base_price}</Text>
                   </View>
                 </View>
               </View>
-              <View style={styles.card}>
-                <CardUser name={productDetail?.user_id} city={productDetail?.location} button={false} />
-              </View>
-              <View style={styles.title}>
-                <Text style={styles.txtTitle}>Deskripsi</Text>
-                <Text style={styles.des}>{productDetail?.description}</Text>
-              </View>
-              <Gap height={60} />
-            </ScrollView>
-            <View style={styles.btnNego}>
-              <BaseButton
-                onPress={() => {
-                  handleOpenPress();
-                }}
-                title="Saya Tertarik dan ingin Nego"
+            </View>
+            <View style={styles.card}>
+              <CardUser
+                name={stateBuyer?.productDetail?.user_id}
+                city={stateBuyer?.productDetail?.location}
+                button={false}
               />
             </View>
+            <View style={styles.title}>
+              <Text style={styles.txtTitle}>Deskripsi</Text>
+              <Text style={styles.des}>{stateBuyer?.productDetail?.description}</Text>
+            </View>
+            <Gap height={60} />
+          </ScrollView>
+          <View style={styles.btnNego}>
+            <BaseButton
+              disable={isAlreadyBid}
+              isLoading={stateBuyer?.isLoadingBid}
+              onPress={() => {
+                handleOpenPress();
+              }}
+              title={isAlreadyBid ? 'Menunggu respon penjual' : 'Saya Tertarik dan ingin Nego'}
+            />
+          </View>
 
-            <BottomSheet
-              enablePanDownToClose
-              enableContentPanningGesture={true}
-              enableHandlePanningGesture={true}
-              animateOnMount={true}
-              enableOverDrag={true}
-              ref={bottomSheetRef}
-              index={0}
-              snapPoints={snapPoints}
-              onChange={handleSheetChanges}>
-              <View style={styles.contentContainer}>
-                <Text style={styles.titleBtmSheet}>Masukkan Harga Tawarmu</Text>
-                <Gap height={moderateScale(16)} />
-                <Text style={styles.descBtmSheet}>
-                  Harga tawaranmu akan diketahui penjual, jika penjual cocok kamu akan segera dihubungi penjual.
-                </Text>
-                <Gap height={moderateScale(16)} />
+          <BottomSheet
+            enablePanDownToClose
+            enableContentPanningGesture={true}
+            enableHandlePanningGesture={true}
+            animateOnMount={true}
+            enableOverDrag={true}
+            ref={bottomSheetRef}
+            index={-1}
+            snapPoints={snapPoints}
+            onChange={handleSheetChanges}>
+            <View style={styles.contentContainer}>
+              <Text style={styles.titleBtmSheet}>Masukkan Harga Tawarmu</Text>
+              <Gap height={moderateScale(16)} />
+              <Text style={styles.descBtmSheet}>
+                Harga tawaranmu akan diketahui penjual, jika penjual cocok kamu akan segera dihubungi penjual.
+              </Text>
+              <Gap height={moderateScale(16)} />
 
-                {/* Card For Dummy Product */}
-                <View style={styles.mainCard}>
-                  <View style={styles.icon}>
-                    <FastImage source={productDetail?.image_url} style={styles.imageBtmSheet} resizeMode="cover" />
-                  </View>
-                  <View style={styles.contentText}>
-                    <Text style={styles.name}>{productDetail?.name}</Text>
-                    <Text>Rp {productDetail?.base_price}</Text>
-                  </View>
+              {/* Card For Dummy Product */}
+              <View style={styles.mainCard}>
+                <View style={styles.icon}>
+                  <FastImage
+                    source={stateBuyer?.productDetail?.image_url}
+                    style={styles.imageBtmSheet}
+                    resizeMode="cover"
+                  />
                 </View>
-
-                <Gap height={moderateScale(16)} />
-                <Controller
-                  control={control}
-                  render={({field: {onChange, onBlur, value}}) => (
-                    <BaseInput
-                      label="Harga Tawar"
-                      type="text"
-                      placeholder="Rp. 0,00"
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                    />
-                  )}
-                  name="harga_tawar"
-                />
-                {errors?.harga_tawar && <Text style={styles.errors}>{errors.harga_tawar.message}</Text>}
-
-                <Gap height={moderateScale(24)} />
-                <BaseButton title="Kirim" onPress={handleSubmit(data => onSubmit(data))} />
+                <View style={styles.contentText}>
+                  <Text style={styles.name}>{stateBuyer?.productDetail?.name}</Text>
+                  <Text>Rp {stateBuyer?.productDetail?.base_price}</Text>
+                </View>
               </View>
-            </BottomSheet>
-          </>
-        )}
-      </SafeAreaView>
+
+              <Gap height={moderateScale(16)} />
+              <Controller
+                control={control}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <BaseInput
+                    label="Harga Tawar"
+                    type="text"
+                    placeholder="Rp. 0,00"
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                  />
+                )}
+                name="bid_price"
+                rules={{required: {value: true, message: 'Silahkan Isi Penawaran'}}}
+              />
+              {errors?.bid_price && <Text style={styles.errors}>{errors.bid_price.message}</Text>}
+
+              <Gap height={moderateScale(24)} />
+              <BaseButton
+                disable={stateBuyer?.isLoadingBid}
+                isLoading={stateBuyer?.isLoadingBid}
+                title="Kirim"
+                onPress={handleSubmit(async data => await onSubmit(data))}
+              />
+            </View>
+          </BottomSheet>
+        </SafeAreaView>
+      )}
     </>
   );
 };
@@ -266,7 +300,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    padding: 32,
+    padding: moderateScale(32),
   },
   titleBtmSheet: {
     fontFamily: Fonts.PRIMARY.MEDIUM,
@@ -313,6 +347,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  errors: {
+    fontFamily: Fonts.PRIMARY.REGULAR,
+    fontSize: moderateScale(10),
+    color: Colors.ERROR,
+    paddingBottom: moderateScale(8),
   },
 });
 
