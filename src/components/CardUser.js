@@ -41,7 +41,7 @@ const CardUser = ({avatar, name, city, button = true, isActive = false}) => {
 CardUser.propTypes = {
   isActive: propTypes.bool,
   avatar: propTypes.string,
-  name: propTypes.oneOfType[(propTypes.string, propTypes.number)],
+  name: propTypes.oneOfType([propTypes.string, propTypes.number]),
   city: propTypes.string,
   button: propTypes.bool,
 };

@@ -1,6 +1,6 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import apiClient from '../../services/api';
-import {showError} from '../../utils';
+import {showError, showSuccess} from '../../utils';
 
 export const getProduct = createAsyncThunk('buyer/getProduct', async (params, {rejectWithValue}) => {
   try {
@@ -41,3 +41,108 @@ export const getProductById = createAsyncThunk('buyer/getProductById', async (id
     return rejectWithValue(error.response.data);
   }
 });
+
+export const getCategory = createAsyncThunk('buyer/getCategory', async (params, {rejectWithValue}) => {
+  try {
+    const response = await apiClient.get('seller/category');
+
+    return response.data;
+  } catch (error) {
+    if (!error.response) {
+      throw error;
+    }
+
+    showError({
+      title: 'Oops Terjadi kesalahan',
+      description: error.response?.data?.message,
+    });
+
+    return rejectWithValue(error.response.data);
+  }
+});
+
+export const getAllBidProducts = createAsyncThunk(
+  'buyer/getAllbBidProducts',
+  async (payload, {getState, rejectWithValue}) => {
+    const state = getState();
+    try {
+      const response = await apiClient.get('buyer/order', {
+        headers: {
+          access_token: state?.users.users?.access_token,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+
+      showError({
+        title: 'Oops Terjadi kesalahan',
+        description: error.response?.data?.message,
+      });
+
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const bidProduct = createAsyncThunk(
+  'buyer/bidProduct',
+  async (payload, {getState, dispatch, rejectWithValue}) => {
+    const state = getState();
+    try {
+      const response = await apiClient.post('buyer/order', payload, {
+        headers: {
+          access_token: state?.users.users?.access_token,
+        },
+      });
+
+      if (response?.data) {
+        showSuccess({title: 'Penawaran Dikirim', description: 'Harga tawarmu berhasil dikirim ke penjual'});
+        dispatch(getAllBidProducts());
+      }
+
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+
+      showError({
+        title: 'Oops Terjadi kesalahan',
+        description: error.response?.data?.message,
+      });
+
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const getBidProductById = createAsyncThunk(
+  'buyer/getBidProductById',
+  async (id, {getState, rejectWithValue}) => {
+    const state = getState();
+    try {
+      const response = await apiClient.get(`buyer/order${id}`, {
+        headers: {
+          access_token: state?.users.users?.access_token,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+
+      showError({
+        title: 'Oops Terjadi kesalahan',
+        description: error.response?.data?.message,
+      });
+
+      return rejectWithValue(error.response.data);
+    }
+  },
+);

@@ -9,8 +9,6 @@ import {SearchBar, Gap, CategoryButtonItem, ProductItem, ProductItemSkeleton} fr
 
 import {useForm, Controller} from 'react-hook-form';
 
-import {useIsFocused} from '@react-navigation/native';
-
 import FastImage from 'react-native-fast-image';
 
 import LinearGradient from 'react-native-linear-gradient';
@@ -18,48 +16,15 @@ import LinearGradient from 'react-native-linear-gradient';
 const {width} = Dimensions.get('window');
 
 import {useDispatch, useSelector} from 'react-redux';
-import {getProduct, getProductById} from '../store/actions/buyer';
+import {getCategory, getProduct, getAllBidProducts} from '../store/actions/buyer';
 import {IMGGift} from '../assets';
 
 const Home = ({navigation}) => {
-  const isFocused = useIsFocused();
   const dispatch = useDispatch();
 
   const buyerState = useSelector(state => state.buyer);
 
-  const [categorySelected, setCategorySelected] = useState({
-    id: 0,
-    name: '',
-  });
-
-  const [listCategory, setListCategory] = useState([]);
-
-  const filterCategory = () => {
-    const filteredId = [];
-    const filtered = [];
-    buyerState.products.length > 0 &&
-      buyerState.products.map(item => {
-        if (item?.Categories.length > 0 && item?.Categories.length === 1) {
-          // console.log('ini item category 1', item);
-          if (!filteredId.includes(item.Categories[0].id)) {
-            filteredId.push(item?.Categories[0].id);
-            filtered.push(item?.Categories[0]);
-          }
-        } else if (item?.Categories.length >= 2) {
-          // console.log('ini item category 2', item);
-
-          for (const value of item?.Categories) {
-            // console.log('ini value', value.id);
-            if (!filteredId.includes(value.id)) {
-              filteredId.push(value.id);
-              filtered.push(value);
-            }
-          }
-        }
-      });
-
-    return setListCategory(filtered);
-  };
+  const [categorySelectedId, setCategorySelectedId] = useState(0);
 
   const {control, watch, handleSubmit} = useForm({
     defaultValues: {
@@ -72,20 +37,15 @@ const Home = ({navigation}) => {
   useEffect(() => {
     dispatch(
       getProduct({
-        category_id: categorySelected?.id !== 0 ? categorySelected?.id : '',
+        category_id: categorySelectedId !== 0 ? categorySelectedId : '',
         search: keyword,
         status: 'available',
       }),
     );
+    dispatch(getCategory());
+    dispatch(getAllBidProducts());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFocused, categorySelected?.id, keyword, listCategory.length]);
-
-  useEffect(() => {
-    if (buyerState.products.length > 0) {
-      filterCategory();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [categorySelectedId, keyword]);
 
   const onSubmit = data => {
     if (keyword === data.keyword) {
@@ -93,7 +53,7 @@ const Home = ({navigation}) => {
     } else {
       dispatch(
         getProduct({
-          category_id: categorySelected?.id,
+          category_id: categorySelectedId !== 0 ? categorySelectedId : '',
           search: data.keyword,
           status: 'available',
         }),
@@ -136,21 +96,21 @@ const Home = ({navigation}) => {
         <View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <CategoryButtonItem
-              isActive={categorySelected?.id === 0}
+              isActive={categorySelectedId === 0}
               title="Semua"
               onPress={() => {
-                setCategorySelected({id: 0, name: ''});
+                setCategorySelectedId(0);
               }}
             />
             <Gap width={moderateScale(16)} />
-            {listCategory.length > 0 &&
-              listCategory?.map((item, index) => (
+            {buyerState?.category?.length > 0 &&
+              buyerState?.category?.map((item, index) => (
                 <Fragment key={item.id || index}>
                   <CategoryButtonItem
-                    isActive={categorySelected?.id === item?.id}
+                    isActive={categorySelectedId === item?.id}
                     title={item.name}
                     onPress={() => {
-                      setCategorySelected(item);
+                      setCategorySelectedId(item?.id);
                     }}
                   />
                   <Gap width={moderateScale(16)} />
@@ -189,9 +149,7 @@ const Home = ({navigation}) => {
               image={item?.image_url}
               category={item.Categories}
               price={item?.base_price}
-              onPress={() => {
-                navigation.navigate('DetailProduk', {id: item.id});
-              }}
+              onPress={() => navigation.navigate('DetailProduk', {id: item.id})}
             />
           );
         }}

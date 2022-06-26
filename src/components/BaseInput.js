@@ -1,12 +1,6 @@
 import React, {useState} from 'react';
 import propTypes from 'prop-types';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, Text, View, TextInput, TouchableOpacity} from 'react-native';
 import {Fonts} from '../utils';
 import Gap from './Gap';
 import {Colors} from '../utils/Colors';
@@ -14,16 +8,7 @@ import {ICEye, ICEyeActive} from '../assets';
 
 import {moderateScale} from 'react-native-size-matters';
 
-const BaseInput = ({
-  label,
-  type,
-  placeholder,
-  onChangeText,
-  onBlur,
-  value,
-  multiline,
-  numberOfLines,
-}) => {
+const BaseInput = ({label, type, placeholder, onChangeText, onBlur, value, multiline, numberOfLines}) => {
   const [showPassword, setShowPassword] = useState(true);
 
   const handleShowPassword = () => {
@@ -41,9 +26,7 @@ const BaseInput = ({
         onBlur={onBlur}
         multiline={multiline === undefined ? false : multiline}
         numberOfLines={numberOfLines === undefined ? 1 : numberOfLines}
-        secureTextEntry={
-          type === 'password' ? (showPassword ? true : false) : false
-        }
+        secureTextEntry={type === 'password' ? (showPassword ? true : false) : false}
         onChangeText={onChangeText}
       />
       {type === 'password' && (
