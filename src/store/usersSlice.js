@@ -1,8 +1,9 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {authLogin, authRegister, authUser} from './actions/users';
+import {authLogin, authRegister, authUser, putAuthUser} from './actions/users';
 
 const initialState = {
   users: {},
+  profile: {},
   isLoading: false,
   error: null,
 };
@@ -48,17 +49,37 @@ export const userSlice = createSlice({
         isLoading: false,
       };
     },
+
+    // Get Profile
     [authUser.pending]: state => {
       return {...state, isLoading: true};
     },
     [authUser.fulfilled]: (state, action) => {
       return {
         ...state,
-        users: Object.assign(state.users, action.payload),
+        profile: action.payload,
         isLoading: false,
       };
     },
     [authUser.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+      };
+    },
+
+    [putAuthUser.pending]: state => {
+      return {...state, isLoading: true};
+    },
+    [putAuthUser.fulfilled]: (state, action) => {
+      return {
+        ...state,
+        profile: action.payload,
+        isLoading: false,
+      };
+    },
+    [putAuthUser.rejected]: (state, action) => {
       return {
         ...state,
         error: action.payload,

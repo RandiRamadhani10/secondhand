@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 import {Gap, CardUser, BaseNotif, BaseButton} from '../components';
 import {ICArrowLeft, IMGDummyProduct} from '../assets';
 import {Colors} from '../utils';
