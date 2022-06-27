@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, Button} from 'react-native';
 import {Gap, BaseInput, BaseButton} from '../components';
 import SelectDropdown from 'react-native-select-dropdown';
 import {ICArrowLeft, ICChevronDown, ICChevronUp} from '../assets';
@@ -12,11 +12,11 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import CameraButton from '../components/CameraButton';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {authUser} from '../store/actions/users';
+import {authUser, putAuthUser} from '../store/actions/users';
 
 const Profile = ({navigation}) => {
   const dispatch = useDispatch();
-  const usersState = useSelector(state => state.users.users);
+  const usersState = useSelector(state => state.users);
 
   const schema = yup
     .object({
@@ -31,6 +31,7 @@ const Profile = ({navigation}) => {
     control,
     handleSubmit,
     setValue,
+    watch,
     formState: {errors},
   } = useForm({
     resolver: yupResolver(schema),
@@ -42,17 +43,25 @@ const Profile = ({navigation}) => {
     },
   });
 
-  useEffect(() => {
-    // dispatch(authUser(usersState?.access_token));
-  }, []);
+  const watchCity = watch('city');
+
+  const watchAllFields = watch();
+
+  // useEffect(() => {
+  //   dispatch(authUser());
+  // }, [dispatch]);
 
   useEffect(() => {
-    console.log(usersState);
+    // Dynamic Set Value
+    for (const key in usersState?.profile) {
+      setValue(key, usersState?.profile[key]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onSubmit = data => {
-    console.log(data);
+  const onSubmit = () => {
+    const {full_name, address, city, phone_number} = watchAllFields;
+    dispatch(putAuthUser({full_name, address, city, phone_number}));
   };
 
   const kota = ['Jakarta', 'Bandung', 'Surabaya', 'Malang', 'Yogyakarta'];
@@ -103,6 +112,7 @@ const Profile = ({navigation}) => {
             render={({field: {onBlur, value}}) => (
               <SelectDropdown
                 data={kota}
+                defaultValue={watchCity ? watchCity : ''}
                 defaultButtonText={'Pilih Kota'}
                 buttonTextStyle={styles.buttonTextStyle}
                 renderDropdownIcon={isOpened => {
@@ -162,7 +172,15 @@ const Profile = ({navigation}) => {
           />
           {errors.phone_number && <Text style={styles.errors}>{errors.phone_number.message}</Text>}
           <Gap height={24} />
-          <BaseButton title="Simpan" onPress={handleSubmit(onSubmit)} />
+          <BaseButton
+            disable={usersState?.isLoading}
+            isLoading={usersState?.isLoading}
+            title="Simpan"
+            onPress={() => {
+              console.log('triggered');
+              onSubmit();
+            }}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -12,7 +12,7 @@ const Notif = ({navigation}) => {
       <Gap height={24} />
       <BaseNotif
         onPress={() => navigation.navigate('InfoPenawar')}
-        image={IMGDummyProduct}
+        // image={IMGDummyProduct}
         status={'Penawaran Produk'}
         title={'Jam Tangan Casio'}
         price={'Rp. 250.000'}
@@ -24,7 +24,7 @@ const Notif = ({navigation}) => {
       <Gap height={16} />
       <BaseNotif
         onPress={() => navigation.navigate('InfoPenawar')}
-        image={IMGDummyProduct}
+        // image={IMGDummyProduct}
         status={'Penawaran Produk'}
         title={'Jam Tangan Casio'}
         price={'Rp. 250.000'}

@@ -42,11 +42,13 @@ const Daftar = ({navigation}) => {
   const onSubmit = async data => {
     let payload = {
       ...data,
-      phone_number: '-',
+      phone_number: 0,
       address: '-',
       image: '-',
-      city: '-',
+      city: '_',
     };
+
+    console.log(payload);
     dispatch(authRegister(payload));
   };
 

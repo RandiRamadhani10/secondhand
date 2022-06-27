@@ -10,20 +10,26 @@ import {useIsFocused} from '@react-navigation/native';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 const Jual = ({navigation}) => {
+  const dispatch = useDispatch();
   const isFocused = useIsFocused();
-  const usersState = useSelector(state => state.users.users);
-
-  // console.log('ini users', usersState);
+  const usersState = useSelector(state => state.users);
 
   useEffect(() => {
-    if (!usersState.hasOwnProperty('access_token')) {
+    if (!usersState?.users?.hasOwnProperty('access_token')) {
       showError({title: 'Akses Menu Tidak Diperkenankan', description: 'Silahkan Daftar & Login terlebih dahulu'});
       navigation.navigate('Login');
+    } else if (usersState?.users?.hasOwnProperty('access_token')) {
+      console.log(usersState?.profile);
+      for (const key in usersState?.profile) {
+        if (usersState?.profile[key] === '-' || usersState?.profile[key] === '' || usersState?.profile[key] === 0) {
+          navigation.navigate('Profile');
+        }
+      }
     }
-  }, [isFocused, navigation, usersState]);
+  }, [isFocused, navigation, usersState?.profile, usersState?.users]);
 
   const schema = yup
     .object()
