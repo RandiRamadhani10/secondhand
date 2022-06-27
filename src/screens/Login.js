@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  StatusBar,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity} from 'react-native';
 
 import {moderateScale} from 'react-native-size-matters';
 import {useForm, Controller} from 'react-hook-form';
@@ -53,9 +46,7 @@ const Login = ({navigation}) => {
     <SafeAreaView style={styles.screen}>
       <StatusBar backgroundColor={Colors.WHITE} />
       <View>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => navigation.navigate('Main', {screen: 'Home'})}>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('Main', {screen: 'Home'})}>
           <ICArrowLeft />
         </TouchableOpacity>
         <Gap height={40} />
@@ -75,9 +66,7 @@ const Login = ({navigation}) => {
           )}
           name="email"
         />
-        {errors?.email && (
-          <Text style={styles.errors}>{errors.email.message}</Text>
-        )}
+        {errors?.email && <Text style={styles.errors}>{errors.email.message}</Text>}
         <Controller
           control={control}
           render={({field: {onChange, onBlur, value}}) => (
@@ -92,16 +81,9 @@ const Login = ({navigation}) => {
           )}
           name="password"
         />
-        {errors.password && (
-          <Text style={styles.errors}>{errors.password.message}</Text>
-        )}
+        {errors.password && <Text style={styles.errors}>{errors.password.message}</Text>}
         <Gap height={16} />
-        <BaseButton
-          disable={isLoading}
-          isLoading={isLoading}
-          title="Masuk"
-          onPress={handleSubmit(onSubmit)}
-        />
+        <BaseButton disable={isLoading} isLoading={isLoading} title="Masuk" onPress={handleSubmit(onSubmit)} />
       </View>
       <View style={styles.registerContainer}>
         <View style={styles.registerWrapper}>

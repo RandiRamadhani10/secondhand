@@ -1,68 +1,62 @@
-import React from 'react';
+import React, {Fragment, useEffect} from 'react';
 import {SafeAreaView, StyleSheet, Text, View, ScrollView} from 'react-native';
 import {Gap, CardUser, BaseNotif, CategoryButtonItem} from '../components';
-import {
-  ICBox,
-  ICDollarSign,
-  ICLove,
-  ICLoveActive,
-  IMGDummyProduct,
-} from '../assets';
+import {ICBox, ICDollarSign, ICLove, ICLoveActive, IMGDummyProduct} from '../assets';
 import {Colors} from '../utils';
 import {moderateScale} from 'react-native-size-matters';
 import {Fonts} from '../utils';
 
+import {useDispatch, useSelector} from 'react-redux';
+import {getAllBidProducts} from '../store/actions/buyer';
+
 const DaftarJual = () => {
+  const dispatch = useDispatch();
+
+  const buyerState = useSelector(state => state.buyer);
+
+  useEffect(() => {
+    dispatch(getAllBidProducts());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <SafeAreaView style={styles.screen}>
-      <Text style={styles.header}>Daftar Jual Saya</Text>
-      <Gap height={16} />
-      <CardUser name={'John Doe'} city={'Jakarta'} button={false} />
-      <Gap height={24} />
-      <View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <CategoryButtonItem
-            icon={<ICBox />}
-            title="Semua"
-            onPress={() => {}}
-          />
-          <Gap width={moderateScale(16)} />
-          <CategoryButtonItem
-            icon={<ICLoveActive />}
-            isActive={true}
-            title="Produk"
-            onPress={() => {}}
-          />
-          <Gap width={moderateScale(16)} />
-          <CategoryButtonItem
-            icon={<ICDollarSign />}
-            title="Diminati"
-            onPress={() => {}}
-          />
-          <Gap width={moderateScale(16)} />
-          <CategoryButtonItem title="Terjual" onPress={() => {}} />
-        </ScrollView>
-      </View>
-      <Gap height={24} />
-      <BaseNotif
-        image={IMGDummyProduct}
-        status={'Penawaran Produk'}
-        title={'Jam Tangan Casio'}
-        price={'Rp. 250.000'}
-        bid={'Ditawar Rp. 200.000'}
-        tanggal={'20 Apr, 14.04'}
-      />
-      <Gap height={16} />
-      <View style={styles.divider} />
-      <Gap height={16} />
-      <BaseNotif
-        image={IMGDummyProduct}
-        status={'Penawaran Produk'}
-        title={'Jam Tangan Casio'}
-        price={'Rp. 250.000'}
-        bid={'Ditawar Rp. 200.000'}
-        tanggal={'20 Apr, 14.04'}
-      />
+      <ScrollView>
+        <Text style={styles.header}>Daftar Jual Saya</Text>
+        <Gap height={16} />
+        <CardUser name={'John Doe'} city={'Jakarta'} button={false} />
+        <Gap height={24} />
+        <View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <CategoryButtonItem icon={<ICBox />} title="Semua" onPress={() => {}} />
+            <Gap width={moderateScale(16)} />
+            <CategoryButtonItem icon={<ICLoveActive />} isActive={true} title="Produk" onPress={() => {}} />
+            <Gap width={moderateScale(16)} />
+            <CategoryButtonItem icon={<ICDollarSign />} title="Diminati" onPress={() => {}} />
+            <Gap width={moderateScale(16)} />
+            <CategoryButtonItem title="Terjual" onPress={() => {}} />
+          </ScrollView>
+        </View>
+        <Gap height={24} />
+        {buyerState?.bidProducts?.length > 0 &&
+          buyerState?.bidProducts?.map(item => {
+            return (
+              <Fragment key={item.id}>
+                <Gap height={16} />
+                <BaseNotif
+                  image={item?.Product?.image_url}
+                  status={'Penawaran Produk'}
+                  title={item?.Product?.name}
+                  price={item?.Product?.base_price}
+                  bid={`Ditawar Rp. ${item?.price}`}
+                  tanggal={'20 Apr, 14.04'}
+                />
+                <Gap height={16} />
+                <View style={styles.divider} />
+              </Fragment>
+            );
+          })}
+      </ScrollView>
     </SafeAreaView>
   );
 };
