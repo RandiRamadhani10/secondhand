@@ -6,10 +6,12 @@ import {FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, RE
 
 import usersSlice from './usersSlice';
 import buyerSlice from './buyerSlice';
+import notificationSlice from './notificationSlice';
 
 const rootReducer = combineReducers({
   users: usersSlice,
   buyer: buyerSlice,
+  notification: notificationSlice,
 });
 
 const persistConfig = {

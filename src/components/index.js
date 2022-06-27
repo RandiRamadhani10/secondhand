@@ -10,6 +10,7 @@ import SearchBar from './SearchBar';
 import CategoryButtonItem from './CategoryButtonItem';
 import ProductItem from './ProductItem';
 import ProductItemSkeleton from './ProductItemSkeleton';
+import NotifItemSkeleton from './NotifItemSkeleton';
 import Divider from './Divider';
 
 export {
@@ -26,4 +27,5 @@ export {
   Divider,
   CardUser,
   ProductItemSkeleton,
+  NotifItemSkeleton,
 };
