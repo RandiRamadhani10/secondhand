@@ -15,6 +15,12 @@ const Notif = ({navigation}) => {
 
   const notificationState = useSelector(state => state.notification);
 
+  const emptyContent = (
+    <View style={styles.screen}>
+      <Text style={styles.emptyText}>Belum ada Notifikasi</Text>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.screen}>
       <Text style={styles.header}>Notifikasi</Text>
@@ -22,9 +28,10 @@ const Notif = ({navigation}) => {
       <FlatList
         data={notificationState}
         keyExtractor={item => item.id}
+        ListEmptyComponent={emptyContent}
         renderItem={({item}) => {
           return notificationState.isLoading ? (
-            <View>
+            <View style={styles.loadingContainer}>
               <NotifItemSkeleton />
             </View>
           ) : (
@@ -55,6 +62,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.BACKGROUND,
     padding: moderateScale(20),
+  },
+  emptyText: {
+    fontFamily: Fonts.PRIMARY.REGULAR,
+    fontSize: moderateScale(12),
+    color: Colors.TEXT,
+    textAlign: 'center',
   },
   header: {
     fontFamily: Fonts.PRIMARY.BOLD,
