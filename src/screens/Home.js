@@ -16,13 +16,16 @@ import LinearGradient from 'react-native-linear-gradient';
 const {width} = Dimensions.get('window');
 
 import {useDispatch, useSelector} from 'react-redux';
-import {getCategory, getProduct, getAllBidProducts} from '../store/actions/buyer';
+import {getCategory, getProduct} from '../store/actions/buyer';
 import {IMGGift} from '../assets';
+import {authUser} from '../store/actions/users';
 
 const Home = ({navigation}) => {
   const dispatch = useDispatch();
 
   const buyerState = useSelector(state => state.buyer);
+
+  const usersState = useSelector(state => state.users.users);
 
   const [categorySelectedId, setCategorySelectedId] = useState(0);
 
@@ -42,18 +45,16 @@ const Home = ({navigation}) => {
         status: 'available',
       }),
     );
-
     dispatch(getCategory());
-    dispatch(getAllBidProducts());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categorySelectedId, keyword]);
 
-  // useEffect(() => {
-  //   if (usersState.hasOwnProperty('access_token')) {
-  //     dispatch(authUser());
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [usersState?.access_token]);
+  useEffect(() => {
+    if (usersState.hasOwnProperty('access_token')) {
+      dispatch(authUser());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [usersState?.access_token]);
 
   const onSubmit = data => {
     if (keyword === data.keyword) {
