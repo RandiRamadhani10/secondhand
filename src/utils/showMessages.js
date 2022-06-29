@@ -36,7 +36,9 @@ export const toastConfig = {
     <View style={styles.errorContainer}>
       {text2 ? (
         <View style={styles.contentContainer}>
-          <Text style={styles.errorText}>{text1}</Text>
+          <Text numberOfLines={2} style={styles.errorText}>
+            {text1}
+          </Text>
           <Text style={styles.errorDescription}>{text2}</Text>
         </View>
       ) : (
@@ -118,7 +120,7 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(10),
     fontFamily: Fonts.PRIMARY.REGULAR,
   },
-  contentContainer: {
-    flexDirection: 'column',
-  },
+  // contentContainer: {
+  //   flexDirection: 'column',
+  // },
 });

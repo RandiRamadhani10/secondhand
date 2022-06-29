@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
-import {moderateScale, s} from 'react-native-size-matters';
+import {moderateScale} from 'react-native-size-matters';
 import {Colors} from '../utils';
 import {Gap, BaseButton, CardUser, BaseInput} from '../components';
 import {Fonts} from '../utils';
@@ -164,6 +164,7 @@ const DetailProduk = ({navigation, route}) => {
             ref={bottomSheetRef}
             index={-1}
             snapPoints={snapPoints}
+            backdropComponent={props => <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />}
             onChange={handleSheetChanges}>
             <View style={styles.contentContainer}>
               <Text style={styles.titleBtmSheet}>Masukkan Harga Tawarmu</Text>

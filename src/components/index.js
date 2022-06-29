@@ -11,6 +11,7 @@ import CategoryButtonItem from './CategoryButtonItem';
 import ProductItem from './ProductItem';
 import ProductItemSkeleton from './ProductItemSkeleton';
 import Divider from './Divider';
+import RadioButton from './RadioButton';
 
 export {
   Gap,
@@ -26,4 +27,5 @@ export {
   Divider,
   CardUser,
   ProductItemSkeleton,
+  RadioButton,
 };

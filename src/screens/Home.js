@@ -42,10 +42,18 @@ const Home = ({navigation}) => {
         status: 'available',
       }),
     );
+
     dispatch(getCategory());
     dispatch(getAllBidProducts());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categorySelectedId, keyword]);
+
+  // useEffect(() => {
+  //   if (usersState.hasOwnProperty('access_token')) {
+  //     dispatch(authUser());
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [usersState?.access_token]);
 
   const onSubmit = data => {
     if (keyword === data.keyword) {
