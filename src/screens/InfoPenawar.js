@@ -1,7 +1,7 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 import {Gap, CardUser, BaseNotif, BaseButton} from '../components';
-import {ICArrowLeft, IMGDummyProduct} from '../assets';
+import {ICArrowLeft} from '../assets';
 import {Colors} from '../utils';
 import {moderateScale} from 'react-native-size-matters';
 import {Fonts} from '../utils';
@@ -28,7 +28,7 @@ const InfoPenawar = ({navigation}) => {
         <Text style={styles.title}>Daftar Produkmu yang Ditawar</Text>
         <Gap height={16} />
         <BaseNotif
-          image={IMGDummyProduct}
+          image={'https://via.placeholder.com/48?text=Dummy'}
           status={'Penawaran Produk'}
           title={'Jam Tangan Casio'}
           price={'Rp. 250.000'}
@@ -48,7 +48,7 @@ const InfoPenawar = ({navigation}) => {
         <View style={styles.divider} />
         <Gap height={16} />
         <BaseNotif
-          image={IMGDummyProduct}
+          image={'https://via.placeholder.com/48?text=Dummy'}
           status={'Penawaran Produk'}
           title={'Smartwatch Samsung Galaxy Pro 5'}
           price={'Rp 3.550.000'}

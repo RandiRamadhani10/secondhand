@@ -2,7 +2,7 @@ import React from 'react';
 
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
-import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
 
 import {Fonts} from './Fonts';
 
@@ -36,7 +36,9 @@ export const toastConfig = {
     <View style={styles.errorContainer}>
       {text2 ? (
         <View style={styles.contentContainer}>
-          <Text style={styles.errorText}>{text1}</Text>
+          <Text numberOfLines={2} style={styles.errorText}>
+            {text1}
+          </Text>
           <Text style={styles.errorDescription}>{text2}</Text>
         </View>
       ) : (
@@ -117,8 +119,5 @@ const styles = StyleSheet.create({
     color: Colors.WHITE,
     fontSize: moderateScale(10),
     fontFamily: Fonts.PRIMARY.REGULAR,
-  },
-  contentContainer: {
-    flexDirection: 'column',
   },
 });

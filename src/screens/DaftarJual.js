@@ -1,7 +1,7 @@
 import React, {Fragment, useEffect} from 'react';
 import {SafeAreaView, StyleSheet, Text, View, ScrollView} from 'react-native';
 import {Gap, CardUser, BaseNotif, CategoryButtonItem} from '../components';
-import {ICBox, ICDollarSign, ICLove, ICLoveActive, IMGDummyProduct} from '../assets';
+import {ICBox, ICDollarSign, ICLoveActive} from '../assets';
 import {Colors} from '../utils';
 import {moderateScale} from 'react-native-size-matters';
 import {Fonts} from '../utils';
@@ -14,6 +14,8 @@ const DaftarJual = () => {
 
   const buyerState = useSelector(state => state.buyer);
 
+  const usersState = useSelector(state => state.users);
+
   useEffect(() => {
     dispatch(getAllBidProducts());
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -24,7 +26,7 @@ const DaftarJual = () => {
       <ScrollView>
         <Text style={styles.header}>Daftar Jual Saya</Text>
         <Gap height={16} />
-        <CardUser name={'John Doe'} city={'Jakarta'} button={false} />
+        <CardUser name={usersState.profile?.full_name} city={usersState.profile?.city} button={false} />
         <Gap height={24} />
         <View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>

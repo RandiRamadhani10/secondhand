@@ -44,11 +44,10 @@ const Daftar = ({navigation}) => {
       ...data,
       phone_number: 0,
       address: '-',
-      image: '-',
-      city: '_',
+      image: 'test.png',
+      city: '-',
     };
 
-    console.log(payload);
     dispatch(authRegister(payload));
   };
 

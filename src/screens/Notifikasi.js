@@ -1,35 +1,70 @@
-import React from 'react';
-import {View, Text, SafeAreaView, StyleSheet} from 'react-native';
-import {BaseNotif, Gap} from '../components';
+import React, {Fragment, useEffect} from 'react';
+import {View, Text, SafeAreaView, StyleSheet, FlatList} from 'react-native';
+import {BaseNotif, EmptyContent, Gap, NotificationItemSkeleton} from '../components';
 import {Colors, Fonts} from '../utils';
 import {moderateScale} from 'react-native-size-matters';
-import {IMGDummyProduct} from '../assets';
+import {useSelector, useDispatch} from 'react-redux';
+import {getNotification} from '../store/actions/notification';
+import {useIsFocused} from '@react-navigation/native';
+import {getProductById} from '../store/actions/buyer';
 
 const Notif = ({navigation}) => {
+  const dispatch = useDispatch();
+
+  const isFocused = useIsFocused();
+  const usersState = useSelector(state => state.users.users);
+  const notificationState = useSelector(state => state.notification);
+  const buyerState = useSelector(state => state.buyerState);
+
+  useEffect(() => {
+    if (!usersState.hasOwnProperty('access_token')) {
+      navigation.navigate('Login');
+    } else {
+      dispatch(getNotification());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFocused]);
+
+  useEffect(() => {
+    if (notificationState.notification.length > 0) {
+      notificationState.notification.map(item => {
+        console.log(item);
+        // dispatch(getProductById(item.id));
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <SafeAreaView style={styles.screen}>
       <Text style={styles.header}>Notifikasi</Text>
       <Gap height={24} />
-      <BaseNotif
-        onPress={() => navigation.navigate('InfoPenawar')}
-        // image={IMGDummyProduct}
-        status={'Penawaran Produk'}
-        title={'Jam Tangan Casio'}
-        price={'Rp. 250.000'}
-        bid={'Ditawar Rp. 200.000'}
-        tanggal={'20 Apr, 14.04'}
-      />
-      <Gap height={16} />
-      <View style={styles.divider} />
-      <Gap height={16} />
-      <BaseNotif
-        onPress={() => navigation.navigate('InfoPenawar')}
-        // image={IMGDummyProduct}
-        status={'Penawaran Produk'}
-        title={'Jam Tangan Casio'}
-        price={'Rp. 250.000'}
-        bid={'Ditawar Rp. 200.000'}
-        tanggal={'20 Apr, 14.04'}
+      <FlatList
+        data={notificationState.notification}
+        keyExtractor={item => item.id}
+        ListEmptyComponent={<EmptyContent text="Belum ada Notifikasi" />}
+        renderItem={({item}) => {
+          return notificationState.isLoading ? (
+            <View>
+              <NotificationItemSkeleton />
+            </View>
+          ) : (
+            <Fragment key={item.id}>
+              <BaseNotif
+                image={item.image_url}
+                status={'Penawaran Produk'}
+                title={item.product_id}
+                price={item.product_id}
+                bid={item.bid_price}
+                tanggal={item.transaction_date}
+                onPress={() => navigation.navigate('InfoPenawar')}
+              />
+              <Gap height={16} />
+              <View style={styles.divider} />
+              <Gap height={16} />
+            </Fragment>
+          );
+        }}
       />
     </SafeAreaView>
   );

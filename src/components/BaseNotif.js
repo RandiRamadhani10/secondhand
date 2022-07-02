@@ -1,6 +1,6 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import {StyleSheet, Text, View, TouchableOpacity, Platform} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {ICNotifActive} from '../assets';
 import {Fonts} from '../utils';
 import Gap from './Gap';

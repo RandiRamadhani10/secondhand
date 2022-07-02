@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, Text, SafeAreaView, View, TouchableOpacity} from 'react-native';
-import {Colors, Fonts, showError} from '../utils';
+import {Colors, Fonts} from '../utils';
 import {moderateScale} from 'react-native-size-matters';
 import {Divider, Gap} from '../components';
 import CameraButton from '../components/CameraButton';
@@ -18,7 +18,6 @@ const Akun = ({navigation}) => {
 
   useEffect(() => {
     if (!usersState.hasOwnProperty('access_token')) {
-      showError({title: 'Akses Menu Tidak Diperkenankan', description: 'Silahkan Daftar & Login terlebih dahulu'});
       navigation.navigate('Login');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
