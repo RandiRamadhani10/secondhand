@@ -1,6 +1,6 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import apiClient from '../../services/api';
-import {ErrorCode, navigate, showError, showSuccess} from '../../utils';
+import {navigate, showError, showSuccess} from '../../utils';
 
 export const authRegister = createAsyncThunk('users/authRegister', async (payload, {rejectWithValue}) => {
   try {
@@ -22,14 +22,14 @@ export const authRegister = createAsyncThunk('users/authRegister', async (payloa
 
     showError({
       title: 'Register Gagal',
-      description: error.response.data,
+      description: error.response.data.message,
     });
 
     return rejectWithValue(error.response.data);
   }
 });
 
-export const authLogin = createAsyncThunk('users/authLogin', async (payload, {rejectWithValue}) => {
+export const authLogin = createAsyncThunk('users/authLogin', async (payload, {dispatch, rejectWithValue}) => {
   try {
     const response = await apiClient.post('auth/login', payload);
     if (response.data) {
@@ -37,6 +37,7 @@ export const authLogin = createAsyncThunk('users/authLogin', async (payload, {re
         title: 'Login Berhasil',
         description: `Halo, ${response?.data?.name}`,
       });
+      dispatch(authUser(response?.data?.access_token));
       navigate('Main', {screen: 'Home'});
     }
 
@@ -60,7 +61,7 @@ export const authUser = createAsyncThunk('auth/user', async (token, {getState, r
     const state = getState();
     const response = await apiClient.get('auth/user', {
       headers: {
-        access_token: state?.users?.users?.access_token,
+        access_token: token ? token : state?.users?.users?.access_token,
       },
     });
 
@@ -101,13 +102,9 @@ export const putAuthUser = createAsyncThunk('auth/user', async (payload, {getSta
       throw error;
     }
 
-    console.log(error?.response?.status);
-
-    const err = ErrorCode.filter(status => status.code === error?.response?.status);
-
     showError({
       title: 'Gagal Mengedit Data',
-      description: err.message,
+      description: error.response?.data?.message,
     });
 
     return rejectWithValue(error.response.data);

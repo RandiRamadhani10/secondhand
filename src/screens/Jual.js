@@ -3,7 +3,7 @@ import {View, Text, SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 import {Gap, BaseInput, BaseButton, BaseUploadPhoto} from '../components';
 import SelectDropdown from 'react-native-select-dropdown';
 import {ICArrowLeft, ICChevronDown, ICChevronUp} from '../assets';
-import {Colors, Fonts, showError} from '../utils';
+import {Colors, Fonts} from '../utils';
 import {moderateScale} from 'react-native-size-matters';
 import {useForm, Controller} from 'react-hook-form';
 import {useIsFocused} from '@react-navigation/native';
@@ -19,10 +19,8 @@ const Jual = ({navigation}) => {
 
   useEffect(() => {
     if (!usersState?.users?.hasOwnProperty('access_token')) {
-      showError({title: 'Akses Menu Tidak Diperkenankan', description: 'Silahkan Daftar & Login terlebih dahulu'});
       navigation.navigate('Login');
     } else if (usersState?.users?.hasOwnProperty('access_token')) {
-      console.log(usersState?.profile);
       for (const key in usersState?.profile) {
         if (usersState?.profile[key] === '-' || usersState?.profile[key] === '' || usersState?.profile[key] === 0) {
           navigation.navigate('Profile');

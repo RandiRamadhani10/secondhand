@@ -7,9 +7,9 @@ import {Colors} from '../utils/Colors';
 import {moderateScale} from 'react-native-size-matters';
 import FastImage from 'react-native-fast-image';
 
-const CardUser = ({avatar, name, city, button = true, isActive = false}) => {
+const CardUser = ({avatar, name, city, button = true, isActive = false, isHaveBorder = true}) => {
   return (
-    <View style={styles.mainCard}>
+    <View style={styles.mainCard(isHaveBorder)}>
       <View style={styles.icon}>
         {avatar ? (
           <FastImage style={styles.image} resizeMode="cover" source={{uri: avatar}} />
@@ -44,22 +44,22 @@ CardUser.propTypes = {
   name: propTypes.oneOfType([propTypes.string, propTypes.number]),
   city: propTypes.string,
   button: propTypes.bool,
+  isHaveBorder: propTypes.bool,
 };
 
 const styles = StyleSheet.create({
-  mainCard: {
+  mainCard: isHaveBorder => ({
     height: moderateScale(80),
     width: '100%',
     alignItems: 'center',
-    backgroundColor: Colors.WHITE,
     borderRadius: moderateScale(16),
-    shadowColor: Colors.shadow,
-    shadowOffset: {width: 0, height: 0},
-    shadowOpacity: moderateScale(1),
-    shadowRadius: moderateScale(8),
-    elevation: moderateScale(8),
+    backgroundColor: 'transparent',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: isHaveBorder ? 1 : 0,
     flexDirection: 'row',
-  },
+  }),
   icon: {
     marginLeft: moderateScale(18),
   },

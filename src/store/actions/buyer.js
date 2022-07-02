@@ -14,8 +14,10 @@ export const getProduct = createAsyncThunk('buyer/getProduct', async (params, {r
       throw error;
     }
 
+    console.log('err', error);
+
     showError({
-      title: 'Oops Terjadi kesalahan',
+      title: 'Gagal Mendapatkan Data Semua Produk',
       description: error.response?.data?.message,
     });
 
@@ -34,7 +36,7 @@ export const getProductById = createAsyncThunk('buyer/getProductById', async (id
     }
 
     showError({
-      title: 'Oops Terjadi kesalahan',
+      title: 'Gagal Mendapatkan Produk',
       description: error.response?.data?.message,
     });
 
@@ -53,7 +55,7 @@ export const getCategory = createAsyncThunk('buyer/getCategory', async (params, 
     }
 
     showError({
-      title: 'Oops Terjadi kesalahan',
+      title: 'Gagal Mendapatkan Category',
       description: error.response?.data?.message,
     });
 
@@ -79,7 +81,7 @@ export const getAllBidProducts = createAsyncThunk(
       }
 
       showError({
-        title: 'Oops Terjadi kesalahan',
+        title: 'Gagal Mendapatkan Data Semua Bid',
         description: error.response?.data?.message,
       });
 
@@ -111,7 +113,7 @@ export const bidProduct = createAsyncThunk(
       }
 
       showError({
-        title: 'Oops Terjadi kesalahan',
+        title: 'Gagal Mendapatkan Bid',
         description: error.response?.data?.message,
       });
 
@@ -138,7 +140,7 @@ export const getBidProductById = createAsyncThunk(
       }
 
       showError({
-        title: 'Oops Terjadi kesalahan',
+        title: 'Gagal Mendapatkan Data Detail Bid',
         description: error.response?.data?.message,
       });
 

@@ -220,12 +220,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
-  emptyText: {
-    fontFamily: Fonts.PRIMARY.REGULAR,
-    fontSize: moderateScale(12),
-    color: Colors.TEXT,
-    textAlign: 'center',
-  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
