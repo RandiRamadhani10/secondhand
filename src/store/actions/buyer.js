@@ -14,8 +14,6 @@ export const getProduct = createAsyncThunk('buyer/getProduct', async (params, {r
       throw error;
     }
 
-    console.log('err', error);
-
     showError({
       title: 'Gagal Mendapatkan Data Semua Produk',
       description: error.response?.data?.message,
@@ -127,7 +125,7 @@ export const getBidProductById = createAsyncThunk(
   async (id, {getState, rejectWithValue}) => {
     const state = getState();
     try {
-      const response = await apiClient.get(`buyer/order${id}`, {
+      const response = await apiClient.get(`buyer/order/${id}`, {
         headers: {
           access_token: state?.users.users?.access_token,
         },
@@ -148,3 +146,22 @@ export const getBidProductById = createAsyncThunk(
     }
   },
 );
+
+export const getBanners = createAsyncThunk('buyer/getBanners', async (id, {rejectWithValue}) => {
+  try {
+    const response = await apiClient.get('seller/banner');
+
+    return response.data;
+  } catch (error) {
+    if (!error.response) {
+      throw error;
+    }
+
+    showError({
+      title: 'Gagal Mendapatkan Data Banners',
+      description: error.response?.data?.message,
+    });
+
+    return rejectWithValue(error.response.data);
+  }
+});

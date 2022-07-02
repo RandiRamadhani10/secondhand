@@ -25,16 +25,6 @@ const Notif = ({navigation}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused]);
 
-  useEffect(() => {
-    if (notificationState.notification.length > 0) {
-      notificationState.notification.map(item => {
-        console.log(item);
-        // dispatch(getProductById(item.id));
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <SafeAreaView style={styles.screen}>
       <Text style={styles.header}>Notifikasi</Text>
@@ -57,7 +47,7 @@ const Notif = ({navigation}) => {
                 price={item.product_id}
                 bid={item.bid_price}
                 tanggal={item.transaction_date}
-                onPress={() => navigation.navigate('InfoPenawar')}
+                // onPress={() => navigation.navigate('InfoPenawar', {id: item.id})}
               />
               <Gap height={16} />
               <View style={styles.divider} />
