@@ -6,6 +6,7 @@ import {
   getAllBidProducts,
   getCategory,
   getBidProductById,
+  getBanners,
 } from './actions/buyer';
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   bidProducts: [],
   bidProductDetail: {},
   category: [],
+  banners: [],
   isLoading: false,
   isLoadingBid: false,
   error: null,
@@ -134,6 +136,25 @@ export const buyerSlice = createSlice({
         ...state,
         error: action.payload,
         isLoadingBid: false,
+      };
+    },
+
+    // Get Banners
+    [getBanners.pending]: state => {
+      return {...state, isLoading: true};
+    },
+    [getBanners.fulfilled]: (state, action) => {
+      return {
+        ...state,
+        banners: action.payload,
+        isLoading: false,
+      };
+    },
+    [getBanners.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
       };
     },
   },

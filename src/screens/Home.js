@@ -5,7 +5,7 @@ import {Colors, Fonts} from '../utils';
 
 import {moderateScale} from 'react-native-size-matters';
 
-import {SearchBar, Gap, CategoryButtonItem, ProductItem, ProductItemSkeleton} from '../components';
+import {SearchBar, Gap, CategoryButtonItem, ProductItem, ProductItemSkeleton, EmptyContent} from '../components';
 
 import {useForm, Controller} from 'react-hook-form';
 
@@ -16,7 +16,7 @@ import LinearGradient from 'react-native-linear-gradient';
 const {width} = Dimensions.get('window');
 
 import {useDispatch, useSelector} from 'react-redux';
-import {getCategory, getProduct} from '../store/actions/buyer';
+import {getBanners, getCategory, getProduct} from '../store/actions/buyer';
 import {IMGGift} from '../assets';
 import {authUser} from '../store/actions/users';
 
@@ -46,6 +46,7 @@ const Home = ({navigation}) => {
       }),
     );
     dispatch(getCategory());
+    dispatch(getBanners());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categorySelectedId, keyword]);
 
@@ -132,12 +133,6 @@ const Home = ({navigation}) => {
     </View>
   );
 
-  const emptyContent = (
-    <View style={styles.screen}>
-      <Text style={styles.emptyText}>Produk yang anda cari tidak ada</Text>
-    </View>
-  );
-
   return (
     <SafeAreaView style={styles.screen}>
       <FlatList
@@ -145,7 +140,7 @@ const Home = ({navigation}) => {
         numColumns={2}
         data={buyerState?.products}
         keyExtractor={item => item.id}
-        ListEmptyComponent={emptyContent}
+        ListEmptyComponent={<EmptyContent text="Produk yang anda cari tidak ada" />}
         renderItem={({item}) => {
           return buyerState.isLoading ? (
             <View style={styles.loadingContainer}>

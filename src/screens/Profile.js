@@ -177,7 +177,6 @@ const Profile = ({navigation}) => {
             isLoading={usersState?.isLoading}
             title="Simpan"
             onPress={() => {
-              console.log('triggered');
               onSubmit();
             }}
           />
