@@ -119,6 +119,7 @@ const DetailProduk = ({navigation, route}) => {
                   <View style={styles.title}>
                     <Text style={styles.txtTitle}>{stateBuyer?.productDetail?.name}</Text>
                     <Text style={styles.txtCat}>
+                      {/* {console.log(stateBuyer.productDetail.Categories)} */}
                       {stateBuyer?.productDetail?.Categories.length > 0 &&
                         stateBuyer?.productDetail?.Categories.map((item, index) => (
                           <Text key={item.id} style={styles.category}>

@@ -2,7 +2,7 @@ import React from 'react';
 
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
-import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
 
 import {Fonts} from './Fonts';
 
@@ -120,7 +120,4 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(10),
     fontFamily: Fonts.PRIMARY.REGULAR,
   },
-  // contentContainer: {
-  //   flexDirection: 'column',
-  // },
 });
