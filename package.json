@@ -1,6 +1,6 @@
 {
   "name": "secondhand",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -61,6 +61,20 @@
     "url": "git+https://github.com/RandiRamadhani10/secondhand.git"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "setupFiles": [
+      "<rootDir>/jest.setup.js",
+      "./node_modules/react-native-gesture-handler/jestSetup.js"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?@?react-native",
+      "|@react-native|react-native",
+      "|react-native-vector-icons",
+      "|@react-native-async-storage/async-storage",
+      "|react-native-push-notification",
+      "|react-native-flash-message",
+      "|@react-navigation/native",
+      "|@react-navigation/native-stack)"
+    ]
   }
 }
