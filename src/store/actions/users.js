@@ -86,6 +86,7 @@ export const putAuthUser = createAsyncThunk('auth/user', async (payload, {getSta
     const response = await apiClient.put('auth/user', payload, {
       headers: {
         access_token: state?.users?.users?.access_token,
+        'Content-Type': 'multipart/form-data',
       },
     });
 
@@ -93,7 +94,7 @@ export const putAuthUser = createAsyncThunk('auth/user', async (payload, {getSta
       showSuccess({
         title: 'Update Data Berhasil',
       });
-      navigate('Main', {screen: 'Home'});
+      navigate('Main', {screen: 'Akun'});
     }
 
     return response.data;
