@@ -101,7 +101,7 @@ const DetailProduk = ({navigation, route}) => {
       ) : (
         <SafeAreaView style={styles.screen}>
           <ScrollView style={styles.scrollScreen}>
-            <StatusBar backgroundColor="transparent" translucent={true} />
+            {/* <StatusBar backgroundColor="transparent" translucent={true} /> */}
             <View style={styles.btnBackContainer}>
               <TouchableOpacity style={styles.btnBack} activeOpacity={0.7} onPress={() => navigation.goBack()}>
                 <ICArrowLeft />
@@ -119,8 +119,7 @@ const DetailProduk = ({navigation, route}) => {
                   <View style={styles.title}>
                     <Text style={styles.txtTitle}>{stateBuyer?.productDetail?.name}</Text>
                     <Text style={styles.txtCat}>
-                      {/* {console.log(stateBuyer.productDetail.Categories)} */}
-                      {stateBuyer?.productDetail?.Categories.length > 0 &&
+                      {stateBuyer?.productDetail?.Categories?.length > 0 &&
                         stateBuyer?.productDetail?.Categories.map((item, index) => (
                           <Text key={item.id} style={styles.category}>
                             {index > 0 ? ',' : ''} {item.name}

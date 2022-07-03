@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, Text, View, ScrollView} from 'react-native';
 import {Gap, CardUser, BaseNotif, CategoryButtonItem} from '../components';
 import {ICBox, ICDollarSign, ICLoveActive} from '../assets';
@@ -7,19 +7,34 @@ import {moderateScale} from 'react-native-size-matters';
 import {Fonts} from '../utils';
 
 import {useDispatch, useSelector} from 'react-redux';
+import {getProduct} from '../store/actions/seller';
 import {getAllBidProducts} from '../store/actions/buyer';
 
-const DaftarJual = () => {
+const DaftarJual = ({navigation}) => {
   const dispatch = useDispatch();
+
+  const [categorySelected, setCategorySelected] = useState('produk');
+
+  const [listData, setListData] = useState([]);
 
   const buyerState = useSelector(state => state.buyer);
 
   const usersState = useSelector(state => state.users);
 
+  const getData = async tabSelected => {
+    if (tabSelected === 'diminati') {
+      const res = await dispatch(getAllBidProducts());
+
+      if (res) {
+        setListData(res?.payload);
+      }
+    }
+  };
+
   useEffect(() => {
-    dispatch(getAllBidProducts());
+    getData(categorySelected);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [categorySelected]);
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -30,18 +45,37 @@ const DaftarJual = () => {
         <Gap height={24} />
         <View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <CategoryButtonItem icon={<ICBox />} title="Semua" onPress={() => {}} />
+            <CategoryButtonItem
+              isActive={categorySelected === ''}
+              icon={<ICBox />}
+              title="Semua"
+              onPress={() => setCategorySelected('')}
+            />
             <Gap width={moderateScale(16)} />
-            <CategoryButtonItem icon={<ICLoveActive />} isActive={true} title="Produk" onPress={() => {}} />
+            <CategoryButtonItem
+              isActive={categorySelected === 'produk'}
+              icon={<ICLoveActive />}
+              title="Produk"
+              onPress={() => setCategorySelected('produk')}
+            />
             <Gap width={moderateScale(16)} />
-            <CategoryButtonItem icon={<ICDollarSign />} title="Diminati" onPress={() => {}} />
+            <CategoryButtonItem
+              isActive={categorySelected === 'diminati'}
+              icon={<ICDollarSign />}
+              title="Diminati"
+              onPress={() => setCategorySelected('diminati')}
+            />
             <Gap width={moderateScale(16)} />
-            <CategoryButtonItem title="Terjual" onPress={() => {}} />
+            <CategoryButtonItem
+              isActive={categorySelected === 'terjual'}
+              title="Terjual"
+              onPress={() => setCategorySelected('terjual')}
+            />
           </ScrollView>
         </View>
         <Gap height={24} />
-        {buyerState?.bidProducts?.length > 0 &&
-          buyerState?.bidProducts?.map(item => {
+        {listData.length > 0 &&
+          listData.map(item => {
             return (
               <Fragment key={item.id}>
                 <Gap height={16} />
@@ -52,6 +86,7 @@ const DaftarJual = () => {
                   price={item?.Product?.base_price}
                   bid={`Ditawar Rp. ${item?.price}`}
                   tanggal={'20 Apr, 14.04'}
+                  onPress={() => navigation.navigate('InfoPenawar', {id: item.id})}
                 />
                 <Gap height={16} />
                 <View style={styles.divider} />

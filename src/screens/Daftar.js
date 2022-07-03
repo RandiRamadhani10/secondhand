@@ -53,7 +53,7 @@ const Daftar = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <StatusBar backgroundColor={Colors.WHITE} />
+      {/* <StatusBar backgroundColor={Colors.WHITE} /> */}
       <View>
         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('Main', {screen: 'Home'})}>
           <ICArrowLeft />
