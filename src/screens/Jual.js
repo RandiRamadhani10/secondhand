@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {View, Text, SafeAreaView, ScrollView, StyleSheet} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import {Gap, BaseInput, BaseButton, BaseUploadPhoto} from '../components';
 import SelectDropdown from 'react-native-select-dropdown';
 import {ICArrowLeft, ICChevronDown, ICChevronUp} from '../assets';
@@ -14,8 +14,14 @@ import {useSelector, useDispatch} from 'react-redux';
 
 const Jual = ({navigation}) => {
   const dispatch = useDispatch();
+
   const isFocused = useIsFocused();
+
   const usersState = useSelector(state => state.users);
+
+  const categoryState = useSelector(state => state.buyer.category);
+
+  const [categoryList, setCategoryList] = useState([]);
 
   useEffect(() => {
     if (!usersState?.users?.hasOwnProperty('access_token')) {
@@ -28,6 +34,15 @@ const Jual = ({navigation}) => {
       }
     }
   }, [isFocused, navigation, usersState?.profile, usersState?.users]);
+
+  useEffect(() => {
+    if (categoryState?.length > 0) {
+      const filteredItem = [];
+      categoryState.map(item => filteredItem.push(item?.name));
+
+      return setCategoryList(filteredItem);
+    }
+  }, [categoryState]);
 
   const schema = yup
     .object()
@@ -58,13 +73,13 @@ const Jual = ({navigation}) => {
     console.log(data);
   };
 
-  const kategori = ['Elektronik', 'Fashion', 'Hobi', 'Kesehatan', 'Rumah Tangga'];
-
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.head}>
         <Gap height={16} />
-        <ICArrowLeft />
+        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('Main', {screen: 'Home'})}>
+          <ICArrowLeft />
+        </TouchableOpacity>
         <Text style={styles.header}>Lengkapi Detail Produk</Text>
         <Gap height={40} />
       </View>
@@ -112,7 +127,7 @@ const Jual = ({navigation}) => {
             rules={{required: true}}
             render={({field: {onBlur, value}}) => (
               <SelectDropdown
-                data={kategori}
+                data={categoryList}
                 defaultButtonText={'Pilih Kategori'}
                 buttonTextStyle={styles.buttonTextStyle}
                 renderDropdownIcon={isOpened => {

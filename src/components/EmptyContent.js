@@ -21,7 +21,7 @@ export default EmptyContent;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Colors.WHITE,
+    backgroundColor: 'transparent',
   },
   emptyText: {
     fontFamily: Fonts.PRIMARY.REGULAR,

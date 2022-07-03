@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment, useCallback, useEffect, useState} from 'react';
 import {StyleSheet, Text, View, SafeAreaView, Dimensions, ScrollView, FlatList} from 'react-native';
 
 import {Colors, Fonts} from '../utils';
@@ -13,11 +13,12 @@ import FastImage from 'react-native-fast-image';
 
 import LinearGradient from 'react-native-linear-gradient';
 
+import {SliderBox} from 'react-native-image-slider-box';
+
 const {width} = Dimensions.get('window');
 
 import {useDispatch, useSelector} from 'react-redux';
 import {getBanners, getCategory, getProduct} from '../store/actions/buyer';
-import {IMGGift} from '../assets';
 import {authUser} from '../store/actions/users';
 
 const Home = ({navigation}) => {
@@ -26,6 +27,8 @@ const Home = ({navigation}) => {
   const buyerState = useSelector(state => state.buyer);
 
   const usersState = useSelector(state => state.users.users);
+
+  const [listBanners, setListBanners] = useState([]);
 
   const [categorySelectedId, setCategorySelectedId] = useState(0);
 
@@ -37,6 +40,18 @@ const Home = ({navigation}) => {
 
   const keyword = watch('keyword');
 
+  const getListBanners = useCallback(async () => {
+    const response = await dispatch(getBanners());
+
+    if (response) {
+      const filteredBanners = [];
+      response?.payload.length > 0 && response?.payload?.map(item => filteredBanners.push(item?.image_url));
+
+      return setListBanners(filteredBanners);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     dispatch(
       getProduct({
@@ -46,7 +61,8 @@ const Home = ({navigation}) => {
       }),
     );
     dispatch(getCategory());
-    dispatch(getBanners());
+    // dispatch(getBanners());
+    getListBanners();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categorySelectedId, keyword]);
 
@@ -89,17 +105,25 @@ const Home = ({navigation}) => {
           name="keyword"
         />
         <Gap height={moderateScale(32)} />
-        <View style={styles.headerContent}>
-          <View style={styles.textHeaderContainer}>
-            <Text style={styles.textHeader}>Bulan Ramadhan Banyak diskon!</Text>
-            <Gap height={moderateScale(16)} />
-            <Text style={styles.textSubHeader}>Diskon hingga</Text>
-            <Text style={styles.textDiscHeader}>60%</Text>
-          </View>
-          <View style={styles.imageHeaderContainer}>
-            <FastImage source={IMGGift} style={styles.imageHeader} resizeMode="center" />
-          </View>
-        </View>
+        {listBanners.length > 0 ? (
+          <SliderBox
+            ImageComponent={FastImage}
+            images={listBanners}
+            onCurrentImagePressed={index => console.warn(`image ${index} pressed`)}
+            sliderBoxHeight={moderateScale(250)}
+            parentWidth={width * 0.9}
+            ImageComponentStyle={{borderRadius: moderateScale(16)}}
+            resizeMode={'center'}
+            imageLoadingColor={Colors.PRIMARY}
+            dotColor={Colors.PRIMARY}
+            inactiveDotColor={Colors.DISABLE}
+            autoplay
+            circleLoop
+          />
+        ) : (
+          <EmptyContent text="Belum Ada Banner Terbaru" />
+        )}
+
         <Gap height={moderateScale(40)} />
         <Text style={styles.textCategory}>Telusuri Kategori</Text>
         <Gap height={moderateScale(16)} />
