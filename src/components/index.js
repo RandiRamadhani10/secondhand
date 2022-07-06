@@ -6,6 +6,7 @@ import BaseNotif from './BaseNotif';
 import CardUser from './CardUser';
 import Gap from './Gap';
 import BaseUploadPhoto from './BaseUploadPhoto';
+import UploadPhotoItem from './UploadPhotoItem';
 import SearchBar from './SearchBar';
 import CategoryButtonItem from './CategoryButtonItem';
 import ProductItem from './ProductItem';
@@ -23,6 +24,7 @@ export {
   TabItem,
   BaseNotif,
   BaseUploadPhoto,
+  UploadPhotoItem,
   SearchBar,
   CategoryButtonItem,
   ProductItem,

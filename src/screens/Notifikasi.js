@@ -43,8 +43,8 @@ const Notif = ({navigation}) => {
               <BaseNotif
                 image={item.image_url}
                 status={'Penawaran Produk'}
-                title={item.product_id}
-                price={item.product_id}
+                title={item?.Product?.name}
+                price={item?.Product?.base_price}
                 bid={item.bid_price}
                 tanggal={item.transaction_date}
                 // onPress={() => navigation.navigate('InfoPenawar', {id: item.id})}

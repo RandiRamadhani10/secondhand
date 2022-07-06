@@ -6,12 +6,12 @@ import propTypes from 'prop-types';
 import {Fonts} from '../utils';
 import Gap from './Gap';
 import {moderateScale, scale} from 'react-native-size-matters';
-const BaseUploadPhoto = ({scale, label}) => {
+const BaseUploadPhoto = ({scale, label, onPress}) => {
   return (
     <View>
       <Text style={styles.label}>{label}</Text>
       <Gap height={4} />
-      <TouchableOpacity style={styles.parent}>
+      <TouchableOpacity activeOpacity={0.7} style={styles.parent} onPress={onPress}>
         <ICPlus />
       </TouchableOpacity>
     </View>
@@ -37,5 +37,6 @@ const styles = StyleSheet.create({
 BaseUploadPhoto.propTypes = {
   scale: propTypes.number,
   label: propTypes.string,
+  onPress: propTypes.func,
 };
 export default BaseUploadPhoto;
