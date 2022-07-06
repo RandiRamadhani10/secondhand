@@ -80,7 +80,7 @@ BaseInput.propTypes = {
   placeholder: propTypes.string,
   onChangeText: propTypes.func,
   onBlur: propTypes.func,
-  value: propTypes.string,
+  value: propTypes.oneOfType([propTypes.string, propTypes.number]),
   styles: propTypes.object,
   multiline: propTypes.bool,
   numberOfLines: propTypes.number,

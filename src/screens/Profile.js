@@ -17,7 +17,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {putAuthUser} from '../store/actions/users';
 
 const options = {
-  selectionLimit: 0,
+  selectionLimit: 1,
   mediaType: 'mixed',
   includeExtra: true,
 };
@@ -59,7 +59,7 @@ const Profile = ({navigation}) => {
   const handleCamera = async () => {
     const result = await launchImageLibrary(options);
     if (result?.assets) {
-      setImage(result);
+      setImage(result?.assets[0]);
     }
   };
 
@@ -67,7 +67,7 @@ const Profile = ({navigation}) => {
     // Dynamic Set Value
     for (const key in usersState?.profile) {
       if (key === 'image_url') {
-        setImage({assets: [{uri: usersState?.profile?.image_url}]});
+        setImage({uri: usersState?.profile?.image_url});
       }
       setValue(key, usersState?.profile[key]);
     }
@@ -85,7 +85,7 @@ const Profile = ({navigation}) => {
     formData.append('phone_number', phone_number);
 
     if (image !== null) {
-      formData.append('image', image?.assets[0].uri, image?.assets[0].fileName);
+      formData.append('image', {uri: image.uri, name: image.fileName, type: image.type});
     }
 
     dispatch(putAuthUser(formData));
@@ -111,7 +111,7 @@ const Profile = ({navigation}) => {
         <Gap height={24} />
         <View>
           <View style={styles.avatar}>
-            <CameraButton onPress={handleCamera} value={image != null ? image?.assets[0]?.uri : null} />
+            <CameraButton onPress={handleCamera} value={image != null ? image?.uri : null} />
           </View>
           <Gap height={24} />
           <Controller
