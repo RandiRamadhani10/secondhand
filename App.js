@@ -1,3 +1,5 @@
+// For Ignore Warning
+import './ignoreWarnings';
 import React from 'react';
 import Router from './src/router';
 

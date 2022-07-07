@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, Button} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import {Gap, BaseInput, BaseButton} from '../components';
 import SelectDropdown from 'react-native-select-dropdown';
 import {ICArrowLeft, ICChevronDown, ICChevronUp} from '../assets';
@@ -11,25 +11,34 @@ import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 import CameraButton from '../components/CameraButton';
 
+import {launchImageLibrary} from 'react-native-image-picker';
+
 import {useDispatch, useSelector} from 'react-redux';
-import {authUser, putAuthUser} from '../store/actions/users';
+import {putAuthUser} from '../store/actions/users';
+
+const options = {
+  selectionLimit: 0,
+  mediaType: 'mixed',
+  includeExtra: true,
+};
 
 const Profile = ({navigation}) => {
   const dispatch = useDispatch();
   const usersState = useSelector(state => state.users);
 
+  const [image, setImage] = useState(null);
+
   const schema = yup
     .object({
-      nama: yup.string().required('Silahkan Isi Nama'),
-      kota: yup.string().required('Silahkan Pilih Kota'),
-      alamat: yup.string().required('Silahkan Isi Alamat'),
-      nohp: yup.number().typeError('Silahkan isi dengan No Handphone').required('Silahkan Isi No Handphone'),
+      full_name: yup.string().required('Silahkan Isi Nama'),
+      city: yup.string().required('Silahkan Pilih Kota'),
+      address: yup.string().required('Silahkan Isi Alamat'),
+      phone_number: yup.number().typeError('Silahkan isi dengan No Handphone').required('Silahkan Isi No Handphone'),
     })
     .required();
 
   const {
     control,
-    handleSubmit,
     setValue,
     watch,
     formState: {errors},
@@ -47,13 +56,19 @@ const Profile = ({navigation}) => {
 
   const watchAllFields = watch();
 
-  // useEffect(() => {
-  //   dispatch(authUser());
-  // }, [dispatch]);
+  const handleCamera = async () => {
+    const result = await launchImageLibrary(options);
+    if (result?.assets) {
+      setImage(result);
+    }
+  };
 
   useEffect(() => {
     // Dynamic Set Value
     for (const key in usersState?.profile) {
+      if (key === 'image_url') {
+        setImage({assets: [{uri: usersState?.profile?.image_url}]});
+      }
       setValue(key, usersState?.profile[key]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -61,7 +76,19 @@ const Profile = ({navigation}) => {
 
   const onSubmit = () => {
     const {full_name, address, city, phone_number} = watchAllFields;
-    dispatch(putAuthUser({full_name, address, city, phone_number}));
+
+    const formData = new FormData();
+
+    formData.append('full_name', full_name);
+    formData.append('address', address);
+    formData.append('city', city);
+    formData.append('phone_number', phone_number);
+
+    if (image !== null) {
+      formData.append('image', image?.assets[0].uri, image?.assets[0].fileName);
+    }
+
+    dispatch(putAuthUser(formData));
   };
 
   const kota = ['Jakarta', 'Bandung', 'Surabaya', 'Malang', 'Yogyakarta'];
@@ -84,7 +111,7 @@ const Profile = ({navigation}) => {
         <Gap height={24} />
         <View>
           <View style={styles.avatar}>
-            <CameraButton onPress={() => {}} />
+            <CameraButton onPress={handleCamera} value={image != null ? image?.assets[0]?.uri : null} />
           </View>
           <Gap height={24} />
           <Controller

@@ -9,15 +9,16 @@ import {ICEdit, ICLogout, ICSettings} from '../assets';
 import {useIsFocused} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {clearUser} from '../store/usersSlice';
+import {version} from '../../package.json';
 
 const Akun = ({navigation}) => {
   const dispatch = useDispatch();
 
   const isFocused = useIsFocused();
-  const usersState = useSelector(state => state.users.users);
+  const usersState = useSelector(state => state.users);
 
   useEffect(() => {
-    if (!usersState.hasOwnProperty('access_token')) {
+    if (!usersState?.users.hasOwnProperty('access_token')) {
       navigation.navigate('Login');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -28,7 +29,7 @@ const Akun = ({navigation}) => {
       <Text style={styles.header}>Akun Saya</Text>
       <Gap height={moderateScale(24)} />
       <View style={styles.cameraContainer}>
-        <CameraButton onPress={() => {}} />
+        <CameraButton onPress={() => navigation.navigate('Profile')} value={usersState?.profile?.image_url} />
       </View>
       <Gap height={moderateScale(24)} />
 
@@ -70,7 +71,7 @@ const Akun = ({navigation}) => {
       <Divider />
 
       <Gap height={moderateScale(16)} />
-      <Text style={styles.version}>Version 1.0.0</Text>
+      <Text style={styles.version}>Version {version}</Text>
     </SafeAreaView>
   );
 };
