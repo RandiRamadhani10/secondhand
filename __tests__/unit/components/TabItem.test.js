@@ -3,7 +3,7 @@ import {render} from '@testing-library/react-native';
 import {TabItem} from '../../../src/components';
 
 describe('Component: TabItem', () => {
-  const title = 'Test Button';
+  const title = 'Home';
   const mockOnPress = jest.fn();
 
   it('should render button text', () => {
@@ -15,10 +15,10 @@ describe('Component: TabItem', () => {
   });
 
   it('should become disabled the button', () => {
-    const {getByTestId} = render(<BaseButton title={title} disable={true} onPress={mockOnPress} />);
+    const {getByTestId} = render(<TabItem title={title} isActive={false} onPress={mockOnPress} />);
 
-    const buttonElement = getByTestId('base-button');
+    const buttonElement = getByTestId('tab-item');
 
-    expect(buttonElement).toBeDisabled();
+    expect(buttonElement).toBeTruthy();
   });
 });
