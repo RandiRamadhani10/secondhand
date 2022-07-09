@@ -30,6 +30,7 @@ import ICBox from './ic-box.svg';
 import ICBoxActive from './ic-box-active.svg';
 import ICDollarSign from './ic-dollar-sign.svg';
 import ICWhatsApp from './ic-whatsapp.svg';
+import ICClosePrimary from './ic-close-primary.svg';
 
 export {
   ICArrowLeft,
@@ -64,4 +65,5 @@ export {
   ICBoxActive,
   ICDollarSign,
   ICWhatsApp,
+  ICClosePrimary,
 };

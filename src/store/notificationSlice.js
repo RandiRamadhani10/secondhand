@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {getNotification} from './actions/notification';
+import {getNotification, getNotificationById} from './actions/notification';
 
 const initialState = {
   notification: [],
@@ -12,7 +12,7 @@ export const notificationSlice = createSlice({
   name: 'notification',
   initialState,
   extraReducers: {
-    //   Get All Products
+    //   Get All Notification
     [getNotification.pending]: state => {
       return {...state, isLoading: true};
     },
@@ -24,6 +24,25 @@ export const notificationSlice = createSlice({
       };
     },
     [getNotification.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+      };
+    },
+
+    //   Get Notification By ID
+    [getNotificationById.pending]: state => {
+      return {...state, isLoading: true};
+    },
+    [getNotificationById.fulfilled]: (state, action) => {
+      return {
+        ...state,
+        detailNotification: action.payload,
+        isLoading: false,
+      };
+    },
+    [getNotificationById.rejected]: (state, action) => {
       return {
         ...state,
         error: action.payload,
