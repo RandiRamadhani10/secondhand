@@ -17,9 +17,7 @@ describe('Component: BaseButton', () => {
   });
 
   it('should become disabled the button', () => {
-    const {getByTestId} = render(
-      <BaseButton title={title} disable={true} onPress={mockOnPress} />,
-    );
+    const {getByTestId} = render(<BaseButton title={title} disable={true} onPress={mockOnPress} />);
 
     const buttonElement = getByTestId('base-button');
 
@@ -27,9 +25,7 @@ describe('Component: BaseButton', () => {
   });
 
   it('should render loading indicator', () => {
-    const {getByTestId, getByLabelText} = render(
-      <BaseButton disable={true} isLoading={true} onPress={mockOnPress} />,
-    );
+    const {getByTestId, getByLabelText} = render(<BaseButton disable={true} isLoading={true} onPress={mockOnPress} />);
 
     const buttonElement = getByTestId('base-button');
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import {CardUser} from '../../../src/components';
 import {render} from '@testing-library/react-native';
+import ICDummyAvatar from '../../../src/assets/icons/ic-dummy-avatar.svg';
 
 describe('Component: CardUser', () => {
   let wrapper;
@@ -9,7 +10,7 @@ describe('Component: CardUser', () => {
   const props = {
     name: 'Test Name',
     city: 'Test City',
-    avatar: 'https://via.placeholder.com/150',
+    avatar: '../../../src/assets/icons/ic-dummy-avatar.svg',
   };
 
   beforeEach(() => {
@@ -30,5 +31,13 @@ describe('Component: CardUser', () => {
     const titleElement = getByText(props.city);
 
     expect(titleElement).not.toBeNull();
+  });
+
+  it('uses correct src', () => {
+    const {getByTestId} = wrapper;
+
+    const imageElement = getByTestId('userava');
+
+    expect(imageElement).toHaveProp('source', {uri: props.avatar});
   });
 });

@@ -12,12 +12,14 @@ const CardUser = ({avatar, name, city, button = true, isActive = false, isHaveBo
     <View style={styles.mainCard(isHaveBorder)}>
       <View style={styles.icon}>
         {avatar ? (
-          <FastImage style={styles.image} resizeMode="cover" source={{uri: avatar}} />
+          <FastImage style={styles.image} resizeMode="cover" source={{uri: avatar}} alt="" testID="userava" />
         ) : (
           <FastImage
             style={styles.image}
             resizeMode="cover"
             source={require('../assets/images/img-placeholder-product.png')}
+            alt=""
+            testID="userava"
           />
         )}
       </View>

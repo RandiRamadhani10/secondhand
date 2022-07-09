@@ -5,13 +5,15 @@ import {ICBox, ICDollarSign, ICLoveActive} from '../assets';
 import {Colors} from '../utils';
 import {moderateScale} from 'react-native-size-matters';
 import {Fonts} from '../utils';
-
+import {useIsFocused} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {getProduct} from '../store/actions/seller';
 import {getAllBidProducts} from '../store/actions/buyer';
 
 const DaftarJual = ({navigation}) => {
   const dispatch = useDispatch();
+
+  const isFocused = useIsFocused();
 
   const [categorySelected, setCategorySelected] = useState('produk');
 
@@ -30,6 +32,13 @@ const DaftarJual = ({navigation}) => {
       }
     }
   };
+
+  useEffect(() => {
+    if (!usersState?.users.hasOwnProperty('access_token')) {
+      navigation.navigate('Login');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFocused]);
 
   useEffect(() => {
     getData(categorySelected);

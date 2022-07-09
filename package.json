@@ -1,6 +1,6 @@
 {
   "name": "secondhand",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -31,6 +31,8 @@
     "react-native": "0.68.2",
     "react-native-fast-image": "^8.5.11",
     "react-native-gesture-handler": "^2.4.2",
+    "react-native-image-picker": "^4.8.4",
+    "react-native-image-slider-box": "^1.1.24",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-reanimated": "^2.8.0",
     "react-native-safe-area-context": "^4.3.1",
@@ -68,7 +70,8 @@
       "./node_modules/react-native-gesture-handler/jestSetup.js"
     ],
     "moduleNameMapper": {
-      "\\.svg": "<rootDir>/__mocks__/svgMock.js"
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
     },
     "setupFilesAfterEnv": [
       "@testing-library/jest-native/extend-expect"

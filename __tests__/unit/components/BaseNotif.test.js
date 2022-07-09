@@ -9,7 +9,7 @@ describe('Component: BaseNotif', () => {
   const props = {
     status: 'success',
     title: 'Test Title',
-    image: 'https://via.placeholder.com/150',
+    image: '../../../src/assets/images/img-dummy-product.png',
     price: '$100',
     bid: '$200',
   };
@@ -40,5 +40,13 @@ describe('Component: BaseNotif', () => {
     const titleElement = getByText(props.bid);
 
     expect(titleElement).not.toBeNull();
+  });
+
+  it('uses correct src', () => {
+    const {getByTestId} = wrapper;
+
+    const imageElement = getByTestId('productava');
+
+    expect(imageElement).toHaveProp('source', {uri: props.image});
   });
 });
