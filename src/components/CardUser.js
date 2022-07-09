@@ -33,9 +33,7 @@ const CardUser = ({avatar, name, city, button = true, isActive = false, isHaveBo
             <Text style={styles.buttonText}>Edit</Text>
           </TouchableHighlight>
         </View>
-      ) : (
-        <></>
-      )}
+      ) : null}
     </View>
   );
 };

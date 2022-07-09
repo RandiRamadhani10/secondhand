@@ -1,6 +1,6 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import apiClient from '../../services/api';
-import {showError} from '../../utils';
+import {showError, showSuccess} from '../../utils';
 
 export const getProduct = createAsyncThunk('seller/getProduct', async (token, {getState, rejectWithValue}) => {
   try {
@@ -56,8 +56,15 @@ export const postProduct = createAsyncThunk('seller/postProduct', async (payload
     const response = await apiClient.post('seller/product', payload, {
       headers: {
         access_token: state?.users.users?.access_token,
+        'Content-Type': 'multipart/form-data',
       },
     });
+
+    if (response) {
+      showSuccess({
+        title: 'Berhasil Menambahkan Produk',
+      });
+    }
 
     return response.data;
   } catch (error) {

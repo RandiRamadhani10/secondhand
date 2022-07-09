@@ -50,7 +50,12 @@ const DaftarJual = ({navigation}) => {
       <ScrollView>
         <Text style={styles.header}>Daftar Jual Saya</Text>
         <Gap height={16} />
-        <CardUser name={usersState.profile?.full_name} city={usersState.profile?.city} button={false} />
+        <CardUser
+          avatar={usersState?.profile?.image_url}
+          name={usersState.profile?.full_name}
+          city={usersState.profile?.city}
+          button={false}
+        />
         <Gap height={24} />
         <View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>

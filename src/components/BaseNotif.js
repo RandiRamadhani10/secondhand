@@ -2,13 +2,14 @@ import React from 'react';
 import propTypes from 'prop-types';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {ICNotifActive} from '../assets';
-import {Fonts} from '../utils';
+import {Fonts, FormatDate} from '../utils';
 import Gap from './Gap';
 import {Colors} from '../utils/Colors';
 import {moderateScale} from 'react-native-size-matters';
 import FastImage from 'react-native-fast-image';
+import NumberFormat from 'react-number-format';
 
-const BaseNotif = ({status, image, title, price, bid, tanggal, onPress}) => {
+const BaseNotif = ({status, image, title, price, bid, tanggal, onPress, isRead}) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.card}>
@@ -17,14 +18,52 @@ const BaseNotif = ({status, image, title, price, bid, tanggal, onPress}) => {
           <FastImage source={{uri: image}} style={styles.image} resizeMode="center" alt="" testID="productava" />
         </View>
         <View style={styles.contents}>
-          <Text style={styles.statusText}>{status}</Text>
+          <View style={styles.statusContainer}>
+            <Text style={styles.statusText}>
+              {status === 'bid'
+                ? 'Penawaran Produk'
+                : status === 'declined'
+                ? 'Penolakan Penawaran'
+                : status === 'create'
+                ? 'Berhasil diterbitkan'
+                : 'Tidak Diketahui'}
+            </Text>
+            <View style={styles.status}>
+              <Text style={styles.statusText}>{tanggal ? FormatDate(tanggal) : '-'}</Text>
+              {!isRead ? (
+                <>
+                  <Gap width={5} />
+                  <ICNotifActive />
+                </>
+              ) : null}
+            </View>
+          </View>
           <Text style={styles.titleText}>{title}</Text>
-          <Text style={styles.Text}>{price}</Text>
-          <Text style={styles.Text}>{bid}</Text>
-        </View>
-        <View style={styles.status}>
-          <ICNotifActive />
-          <Text style={styles.statusText}>{tanggal}</Text>
+          <NumberFormat
+            value={price}
+            displayType={'text'}
+            thousandSeparator={'.'}
+            decimalSeparator={','}
+            prefix={'Rp. '}
+            renderText={formattedValue => <Text style={styles.Text}>{formattedValue}</Text>}
+          />
+
+          <NumberFormat
+            value={bid}
+            displayType={'text'}
+            thousandSeparator={'.'}
+            decimalSeparator={','}
+            prefix={'Rp. '}
+            renderText={formattedValue => (
+              <Text style={status === 'declined' ? styles.TextStripped : styles.Text}>
+                {status === 'accepted' && 'Berhasil Ditawar'}
+                {(status === 'bid' || status === 'declined') && 'Ditawar'} {formattedValue}
+              </Text>
+            )}
+          />
+          {status === 'accepted' && (
+            <Text style={styles.subTextBidSuccess}>Kamu akan segera dihubungi penjual via whatsapp</Text>
+          )}
         </View>
       </View>
     </TouchableOpacity>
@@ -36,16 +75,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   contents: {
-    paddingLeft: moderateScale(16),
+    flex: 1,
+    paddingLeft: moderateScale(14),
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  status: {
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   image: {
     borderRadius: moderateScale(12),
     width: moderateScale(48),
     height: moderateScale(48),
-  },
-  status: {
-    flex: 1,
-    flexDirection: 'row-reverse',
   },
   statusText: {
     fontFamily: Fonts.PRIMARY.LIGHT,
@@ -66,12 +111,17 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: Colors.DISABLE,
   },
-  bidSuccess: {
+  TextStripped: {
     fontFamily: Fonts.PRIMARY.REGULAR,
     color: Colors.TEXT,
     fontSize: moderateScale(14),
     textDecorationLine: 'line-through',
     textDecorationStyle: 'solid',
+  },
+  subTextBidSuccess: {
+    ontFamily: Fonts.PRIMARY.REGULAR,
+    color: Colors.SECONDARY,
+    fontSize: moderateScale(10),
   },
 });
 
@@ -80,9 +130,10 @@ BaseNotif.propTypes = {
   image: propTypes.any,
   title: propTypes.string,
   price: propTypes.oneOfType([propTypes.string, propTypes.number]),
-  bid: propTypes.string,
+  bid: propTypes.oneOfType([propTypes.string, propTypes.number]),
   tanggal: propTypes.string,
   onPress: propTypes.func,
+  isRead: propTypes.bool,
 };
 
 export default BaseNotif;

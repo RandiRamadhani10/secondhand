@@ -1,17 +1,22 @@
-import React, {Fragment, useCallback, useMemo, useRef, useState} from 'react';
+import React, {Fragment, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 import {Gap, CardUser, BaseNotif, BaseButton} from '../components';
 import {ICArrowLeft, ICWhatsApp} from '../assets';
-import {Colors} from '../utils';
+import {Colors, Fonts} from '../utils';
 import {moderateScale} from 'react-native-size-matters';
-import {Fonts} from '../utils';
 import FastImage from 'react-native-fast-image';
 import {Controller, useForm} from 'react-hook-form';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
+import {useDispatch, useSelector} from 'react-redux';
+import {getNotificationById} from '../store/actions/notification';
+import NumberFormat from 'react-number-format';
 
 const InfoPenawar = ({navigation, route}) => {
   const {id} = route.params;
+  const dispatch = useDispatch();
   const [isActive, setIsActive] = useState({id: 0, status: false});
+
+  const detailNotificationState = useSelector(state => state.notification.detailNotification);
 
   const {
     control,
@@ -22,6 +27,17 @@ const InfoPenawar = ({navigation, route}) => {
       bid_price: '',
     },
   });
+  // console.log('notificationState', notificationState);
+
+  useEffect(() => {
+    dispatch(getNotificationById(id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  useEffect(() => {
+    setIsActive({id: detailNotificationState?.Product?.id, status: false});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   // ref
   const bottomSheetRef = useRef(null);
@@ -49,21 +65,50 @@ const InfoPenawar = ({navigation, route}) => {
         <Text style={styles.cardWrapperTitle}>Product Match</Text>
         <Gap height={moderateScale(16)} />
 
-        <CardUser name={'Nama Pembeli'} city={'Malang'} button={false} isHaveBorder={false} />
+        <CardUser
+          avatar={detailNotificationState?.User?.image_url}
+          name={detailNotificationState?.User?.full_name}
+          city={detailNotificationState?.User?.city}
+          button={false}
+          isHaveBorder={false}
+        />
         <Gap height={moderateScale(16)} />
-        {/* Card For Dummy Product */}
+
+        {/* Card For Product */}
         <View style={styles.mainCard}>
           <View style={styles.icon}>
             <FastImage
-              // source={stateBuyer?.productDetail?.image_url}
+              source={{uri: detailNotificationState?.Product?.image_url}}
               style={styles.imageBtmSheet}
               resizeMode="cover"
             />
           </View>
           <View style={styles.contentText}>
-            <Text style={styles.name}>Jam Tangan Casio</Text>
-            <Text style={styles.basePrice}>Rp.250.000</Text>
-            <Text style={styles.discPrice}>Rp 200.000</Text>
+            <Text style={styles.name}>
+              {detailNotificationState?.Product?.name ? detailNotificationState?.Product?.name : '-'}
+            </Text>
+            <NumberFormat
+              value={detailNotificationState?.Product?.base_price ? detailNotificationState?.Product?.base_price : 0}
+              displayType={'text'}
+              thousandSeparator={'.'}
+              decimalSeparator={','}
+              prefix={'Rp. '}
+              renderText={formattedValue => <Text style={styles.basePrice}>{formattedValue}</Text>}
+            />
+            <NumberFormat
+              value={detailNotificationState?.bid_price ? detailNotificationState?.bid_price : 0}
+              displayType={'text'}
+              thousandSeparator={'.'}
+              decimalSeparator={','}
+              prefix={'Rp. '}
+              renderText={formattedValue => (
+                <Text style={styles.bidPrice}>
+                  {(detailNotificationState?.status === 'bid' || detailNotificationState?.status === 'declined') &&
+                    'Ditawar'}{' '}
+                  {formattedValue}
+                </Text>
+              )}
+            />
           </View>
         </View>
       </View>
@@ -105,22 +150,30 @@ const InfoPenawar = ({navigation, route}) => {
         <Gap height={40} />
       </View>
       <Gap height={24} />
-      <CardUser name={'Nama Pembeli'} city={'kota'} />
+      <CardUser
+        avatar={detailNotificationState?.User?.image_url}
+        name={detailNotificationState?.User?.full_name}
+        city={detailNotificationState?.User?.city}
+        button={false}
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Gap height={24} />
         <Text style={styles.title}>Daftar Produkmu yang Ditawar</Text>
         <Gap height={16} />
         <BaseNotif
-          image={'https://via.placeholder.com/48?text=Dummy'}
-          status={'Penawaran Produk'}
-          title={'Jam Tangan Casio'}
-          price={'Rp. 250.000'}
-          bid={'Ditawar Rp. 200.000'}
-          tanggal={'20 Apr, 14.04'}
-          onPress={() => setIsActive(prevState => ({id: 0, status: !prevState.status}))}
+          image={detailNotificationState?.Product?.image_url}
+          status={detailNotificationState?.status}
+          title={detailNotificationState?.Product?.name ? detailNotificationState?.Product?.name : '-'}
+          price={detailNotificationState?.Product?.base_price ? detailNotificationState?.Product?.base_price : '-'}
+          bid={detailNotificationState?.bid_price}
+          tanggal={detailNotificationState?.transaction_date}
+          isRead={true}
+          onPress={() =>
+            setIsActive(prevState => ({id: detailNotificationState?.Product?.id, status: !prevState.status}))
+          }
         />
         <Gap height={16} />
-        {isActive?.id === 0 && isActive.status === true ? (
+        {isActive?.id === detailNotificationState?.Product?.id && isActive.status === true ? (
           <View style={styles.buttons}>
             <View>
               <BaseButton title={'Tolak'} style={styles.decline} />
@@ -132,27 +185,6 @@ const InfoPenawar = ({navigation, route}) => {
         ) : null}
         <Gap height={16} />
         <View style={styles.divider} />
-        <Gap height={16} />
-        <BaseNotif
-          image={'https://via.placeholder.com/48?text=Dummy'}
-          status={'Penawaran Produk'}
-          title={'Smartwatch Samsung Galaxy Pro 5'}
-          price={'Rp 3.550.000'}
-          bid={'Ditawar Rp 2.000.000'}
-          tanggal={'1 Apr, 09:08'}
-          onPress={() => setIsActive(prevState => ({id: 1, status: !prevState.status}))}
-        />
-        <Gap height={16} />
-        {isActive?.id === 1 && isActive.status === true ? (
-          <View style={styles.buttons}>
-            <View>
-              <BaseButton title={'Tolak'} style={styles.decline} />
-            </View>
-            <View>
-              <BaseButton title={'Terima'} style={styles.accept} onPress={() => handleOpenPress()} />
-            </View>
-          </View>
-        ) : null}
       </ScrollView>
 
       <BottomSheet
@@ -288,7 +320,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
     textDecorationStyle: 'solid',
   },
-  discPrice: {
+  bidPrice: {
     fontFamily: Fonts.PRIMARY.REGULAR,
     fontSize: moderateScale(14),
     color: Colors.TEXT,
