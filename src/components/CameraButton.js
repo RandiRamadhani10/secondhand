@@ -10,7 +10,7 @@ const CameraButton = ({onPress, value}) => {
   return (
     <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
       <View style={styles.cameraCard}>
-        {value ? <FastImage source={{uri: value}} style={styles.cameraCard} resizeMode="center" /> : <ICCamera />}
+        {value ? <FastImage source={{uri: value}} style={styles.cameraCard} resizeMode="cover" /> : <ICCamera />}
       </View>
     </TouchableOpacity>
   );

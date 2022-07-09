@@ -60,11 +60,14 @@ const Home = ({navigation}) => {
         status: 'available',
       }),
     );
-    dispatch(getCategory());
-    // dispatch(getBanners());
-    getListBanners();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categorySelectedId, keyword]);
+
+  useEffect(() => {
+    dispatch(getCategory());
+    getListBanners();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (usersState.hasOwnProperty('access_token')) {

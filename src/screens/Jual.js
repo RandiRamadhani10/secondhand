@@ -17,7 +17,7 @@ import FastImage from 'react-native-fast-image';
 import {postProduct} from '../store/actions/seller';
 
 const options = {
-  selectionLimit: 0,
+  selectionLimit: 1,
   mediaType: 'mixed',
   includeExtra: true,
 };
@@ -42,6 +42,32 @@ const Jual = ({navigation}) => {
     }
   };
 
+  const schema = yup
+    .object()
+    .shape({
+      name: yup.string().required('Silahkan Isi Nama Produk'),
+      base_price: yup.number().required('Silahkan Isi Harga Produk'),
+      category_ids: yup.string().required('Silahkan Pilih Kategori'),
+      description: yup.string().required('Silahkan Isi Deskripsi Produk'),
+    })
+    .required();
+
+  const {
+    control,
+    setValue,
+    handleSubmit,
+    reset,
+    formState: {errors},
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      name: '',
+      base_price: 0,
+      category_ids: '',
+      description: '',
+    },
+  });
+
   useEffect(() => {
     if (!usersState?.users?.hasOwnProperty('access_token')) {
       navigation.navigate('Login');
@@ -63,31 +89,6 @@ const Jual = ({navigation}) => {
     }
   }, [categoryState]);
 
-  const schema = yup
-    .object()
-    .shape({
-      name: yup.string().required('Silahkan Isi Nama Produk'),
-      base_price: yup.number().required('Silahkan Isi Harga Produk'),
-      category_ids: yup.string().required('Silahkan Pilih Kategori'),
-      description: yup.string().required('Silahkan Isi Deskripsi Produk'),
-    })
-    .required();
-
-  const {
-    control,
-    setValue,
-    handleSubmit,
-    formState: {errors},
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      name: '',
-      base_price: 0,
-      category_ids: '',
-      description: '',
-    },
-  });
-
   const onSubmit = async data => {
     const formData = new FormData();
 
@@ -98,7 +99,6 @@ const Jual = ({navigation}) => {
     formData.append('location', 'Jakarta');
     formData.append('image', {uri: images[0].uri, name: images[0].fileName, type: images[0].type});
 
-    console.log('formData', formData);
     dispatch(postProduct(formData));
   };
 
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     color: Colors.TEXT,
   },
   header: {
-    fontFamily: Fonts.PRIMARY.REGULAR,
+    fontFamily: Fonts.PRIMARY.BOLD,
     fontSize: moderateScale(14),
     color: Colors.TEXT,
     paddingLeft: moderateScale(80),
@@ -309,6 +309,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   removePhotoItem: {
+    backgroundColor: Colors.WHITE,
+    padding: 5,
+    borderRadius: 100,
     zIndex: 11,
     alignSelf: 'flex-end',
     marginTop: 0,
