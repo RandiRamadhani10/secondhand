@@ -72,8 +72,6 @@ export const postProduct = createAsyncThunk('seller/postProduct', async (payload
       throw error;
     }
 
-    console.log('error post', error.response);
-
     showError({
       title: 'Gagal Menambahkan Data Produk',
       description: error.response?.data?.message,

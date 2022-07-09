@@ -5,6 +5,7 @@ import FastImage from 'react-native-fast-image';
 import {moderateScale} from 'react-native-size-matters';
 import {Colors, Fonts} from '../utils';
 import Gap from './Gap';
+import NumberFormat from 'react-number-format';
 
 import {IMGPlaceholderProduct} from '../assets';
 
@@ -42,7 +43,14 @@ const ProductItem = ({title, image, category, price, onPress}) => {
         </View>
 
         <Gap height={moderateScale(8)} />
-        <Text style={styles.price}>Rp. {price}</Text>
+        <NumberFormat
+          value={price}
+          displayType={'text'}
+          thousandSeparator={'.'}
+          decimalSeparator={','}
+          prefix={'Rp. '}
+          renderText={formattedValue => <Text style={styles.price}>{formattedValue}</Text>}
+        />
         <Gap height={moderateScale(8)} />
       </View>
     </TouchableOpacity>

@@ -42,12 +42,13 @@ const Notif = ({navigation}) => {
             <Fragment key={item.id}>
               <BaseNotif
                 image={item.image_url}
-                status={'Penawaran Produk'}
-                title={item?.Product?.name}
-                price={item?.Product?.base_price}
+                status={item.status}
+                title={item?.Product?.name ? item?.Product?.name : '-'}
+                price={item?.Product?.base_price ? item?.Product?.base_price : 0}
                 bid={item.bid_price}
-                tanggal={item.transaction_date}
-                // onPress={() => navigation.navigate('InfoPenawar', {id: item.id})}
+                tanggal={item.status === 'bid' ? item.transaction_date : item.createdAt}
+                isRead={item.read}
+                onPress={() => navigation.navigate('InfoPenawar', {id: item.id})}
               />
               <Gap height={16} />
               <View style={styles.divider} />
