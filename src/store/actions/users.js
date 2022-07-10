@@ -94,7 +94,6 @@ export const putAuthUser = createAsyncThunk('auth/user', async (payload, {getSta
       showSuccess({
         title: 'Update Data Berhasil',
       });
-      navigate('Main', {screen: 'Akun'});
     }
 
     return response.data;

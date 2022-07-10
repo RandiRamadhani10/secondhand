@@ -14,6 +14,7 @@ import ICListActive from './ic-list-active.svg';
 import ICLogout from './ic-log-out.svg';
 import ICPlusActive from './ic-plus-circle-active.svg';
 import ICPlus from './ic-plus-circle.svg';
+import ICPlusNoBorder from './ic-plus-no-border.svg';
 import ICSettings from './ic-settings.svg';
 import ICUserActive from './ic-user-active.svg';
 import ICUser from './ic-user.svg';
@@ -29,6 +30,7 @@ import ICLoveActive from './ic-love-active.svg';
 import ICBox from './ic-box.svg';
 import ICBoxActive from './ic-box-active.svg';
 import ICDollarSign from './ic-dollar-sign.svg';
+import ICDollarSignActive from './ic-dollar-sign-active.svg';
 import ICWhatsApp from './ic-whatsapp.svg';
 import ICClosePrimary from './ic-close-primary.svg';
 
@@ -46,6 +48,7 @@ export {
   ICList,
   ICListActive,
   ICLogout,
+  ICPlusNoBorder,
   ICPlus,
   ICPlusActive,
   ICSettings,
@@ -64,6 +67,7 @@ export {
   ICBox,
   ICBoxActive,
   ICDollarSign,
+  ICDollarSignActive,
   ICWhatsApp,
   ICClosePrimary,
 };
