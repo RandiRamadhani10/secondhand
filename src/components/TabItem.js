@@ -6,6 +6,7 @@ import {moderateScale} from 'react-native-size-matters';
 
 import {
   ICBell,
+  ICBellActive,
   ICBellActiveWithBadge,
   ICHome,
   ICHomeActive,
@@ -20,15 +21,21 @@ import {
 import {Colors, Fonts} from '../utils';
 import Gap from './Gap';
 
+import {useSelector} from 'react-redux';
+
 const TabItem = props => {
   const {title, isActive, onPress, onLongPress} = props;
 
+  const notificationState = useSelector(state => state.notification);
+
   const Icon = () => {
+    const isHaveNotification = notificationState?.notification.filter(notif => notif.read === false);
+
     switch (title) {
       case 'Home':
         return isActive ? <ICHomeActive /> : <ICHome />;
       case 'Notifikasi':
-        return isActive ? <ICBellActiveWithBadge /> : <ICBell />;
+        return isActive ? isHaveNotification?.length > 0 ? <ICBellActiveWithBadge /> : <ICBellActive /> : <ICBell />;
       case 'Jual':
         return isActive ? <ICPlusActive /> : <ICPlus />;
       case 'DaftarJual':
@@ -68,11 +75,7 @@ const TabItem = props => {
   };
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.7}
-      style={styles.container}
-      onPress={onPress}
-      onLongPress={onLongPress}>
+    <TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={onPress} onLongPress={onLongPress}>
       <Icon />
       <Gap height={moderateScale(4)} />
       <Text style={styles.title(isActive)}>{titleShow()}</Text>

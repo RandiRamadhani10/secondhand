@@ -27,7 +27,6 @@ const InfoPenawar = ({navigation, route}) => {
       bid_price: '',
     },
   });
-  // console.log('notificationState', notificationState);
 
   useEffect(() => {
     dispatch(getNotificationById(id));
@@ -38,6 +37,8 @@ const InfoPenawar = ({navigation, route}) => {
     setIsActive({id: detailNotificationState?.Product?.id, status: false});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  const handleDecline = async (id, payload) => {};
 
   // ref
   const bottomSheetRef = useRef(null);
@@ -176,7 +177,13 @@ const InfoPenawar = ({navigation, route}) => {
         {isActive?.id === detailNotificationState?.Product?.id && isActive.status === true ? (
           <View style={styles.buttons}>
             <View>
-              <BaseButton title={'Tolak'} style={styles.decline} />
+              <BaseButton
+                title={'Tolak'}
+                style={styles.decline}
+                onPress={() =>
+                  handleDecline(detailNotificationState?.id, {...detailNotificationState, status: 'declined'})
+                }
+              />
             </View>
             <View>
               <BaseButton title={'Terima'} style={styles.accept} onPress={() => handleOpenPress()} />
