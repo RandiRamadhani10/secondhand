@@ -1,7 +1,6 @@
 import React from 'react';
 import {CardUser} from '../../../src/components';
 import {render} from '@testing-library/react-native';
-import ICDummyAvatar from '../../../src/assets/icons/ic-dummy-avatar.svg';
 
 describe('Component: CardUser', () => {
   let wrapper;

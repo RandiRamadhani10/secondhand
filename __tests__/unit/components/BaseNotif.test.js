@@ -7,7 +7,7 @@ describe('Component: BaseNotif', () => {
   const mockOnPress = jest.fn();
 
   const props = {
-    status: 'success',
+    status: 'bid',
     title: 'Test Title',
     image: '../../../src/assets/images/img-dummy-product.png',
     price: '$100',
@@ -18,26 +18,10 @@ describe('Component: BaseNotif', () => {
     wrapper = render(<BaseNotif {...props} onPress={mockOnPress} />);
   });
 
-  it('should render status', () => {
+  it('should render title', () => {
     const {getByText} = wrapper;
 
-    const titleElement = getByText(props.status);
-
-    expect(titleElement).not.toBeNull();
-  });
-
-  it('should render price', () => {
-    const {getByText} = wrapper;
-
-    const titleElement = getByText(props.price);
-
-    expect(titleElement).not.toBeNull();
-  });
-
-  it('should render bid', () => {
-    const {getByText} = wrapper;
-
-    const titleElement = getByText(props.bid);
+    const titleElement = getByText(props.title);
 
     expect(titleElement).not.toBeNull();
   });
