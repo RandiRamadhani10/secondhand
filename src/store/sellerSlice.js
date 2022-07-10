@@ -1,9 +1,12 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {getProduct, getProductById} from './actions/seller';
+import {getDetailOrderProductById, getOrder, getOrderById, getProduct, getProductById} from './actions/seller';
 
 const initialState = {
   products: [],
   productDetail: {},
+  bidProducts: [],
+  bidProductDetail: {},
+  bidProductOrderDetail: {},
   isLoading: false,
   error: null,
 };
@@ -31,18 +34,56 @@ export const sellerSlice = createSlice({
       };
     },
 
-    // Get Product By ID
-    [getProductById.pending]: state => {
+    // Get All Bid Product
+    [getOrder.pending]: state => {
       return {...state, isLoading: true};
     },
-    [getProductById.fulfilled]: (state, action) => {
+    [getOrder.fulfilled]: (state, action) => {
       return {
         ...state,
-        productDetail: action.payload,
+        bidProducts: action.payload,
         isLoading: false,
       };
     },
-    [getProductById.rejected]: (state, action) => {
+    [getOrder.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+      };
+    },
+
+    // Get Bid Product By ID
+    [getOrderById.pending]: state => {
+      return {...state, isLoading: true};
+    },
+    [getOrderById.fulfilled]: (state, action) => {
+      return {
+        ...state,
+        bidProductDetail: action.payload,
+        isLoading: false,
+      };
+    },
+    [getOrderById.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+      };
+    },
+
+    // Get Detail Bid Product Detail By ID
+    [getDetailOrderProductById.pending]: state => {
+      return {...state, isLoading: true};
+    },
+    [getDetailOrderProductById.fulfilled]: (state, action) => {
+      return {
+        ...state,
+        bidProductOrderDetail: action.payload,
+        isLoading: false,
+      };
+    },
+    [getDetailOrderProductById.rejected]: (state, action) => {
       return {
         ...state,
         error: action.payload,

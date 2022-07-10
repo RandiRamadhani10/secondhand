@@ -17,13 +17,6 @@ const Akun = ({navigation}) => {
   const isFocused = useIsFocused();
   const usersState = useSelector(state => state.users);
 
-  useEffect(() => {
-    if (!usersState?.users.hasOwnProperty('access_token')) {
-      navigation.navigate('Login');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFocused]);
-
   return (
     <SafeAreaView style={styles.screen}>
       <Text style={styles.header}>Akun Saya</Text>

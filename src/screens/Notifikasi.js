@@ -1,10 +1,10 @@
-import React, {Fragment, useEffect} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {View, Text, SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import {BaseNotif, EmptyContent, Gap, NotificationItemSkeleton} from '../components';
 import {Colors, Fonts} from '../utils';
 import {moderateScale} from 'react-native-size-matters';
 import {useSelector, useDispatch} from 'react-redux';
-import {getNotification} from '../store/actions/notification';
+import {getNotification, patchNotificationById} from '../store/actions/notification';
 import {useIsFocused} from '@react-navigation/native';
 import {getProductById} from '../store/actions/buyer';
 
@@ -16,20 +16,32 @@ const Notif = ({navigation}) => {
   const notificationState = useSelector(state => state.notification);
   const buyerState = useSelector(state => state.buyerState);
 
-  useEffect(() => {
-    if (!usersState.hasOwnProperty('access_token')) {
-      navigation.navigate('Login');
-    } else {
-      dispatch(getNotification());
+  const [isChangedReadStatus, setIsChangedReadStatus] = useState(false);
+
+  const handleClickItem = async (id, payload) => {
+    const response = await dispatch(patchNotificationById({id: id, payload: {...payload, read: true}}));
+
+    if (response?.payload && payload?.notification_type === null) {
+      setIsChangedReadStatus(true);
+      navigation.navigate('InfoPenawar', {id: id});
     }
+
+    setIsChangedReadStatus(true);
+  };
+
+  useEffect(() => {
+    dispatch(getNotification());
+    setIsChangedReadStatus(false);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFocused]);
+  }, [isFocused, isChangedReadStatus]);
 
   return (
     <SafeAreaView style={styles.screen}>
       <Text style={styles.header}>Notifikasi</Text>
       <Gap height={24} />
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={notificationState.notification}
         keyExtractor={item => item.id}
         ListEmptyComponent={<EmptyContent text="Belum ada Notifikasi" />}
@@ -48,7 +60,7 @@ const Notif = ({navigation}) => {
                 bid={item.bid_price}
                 tanggal={item.status === 'bid' ? item.transaction_date : item.createdAt}
                 isRead={item.read}
-                onPress={() => navigation.navigate('InfoPenawar', {id: item.id})}
+                onPress={async () => await handleClickItem(item.id, item)}
               />
               <Gap height={16} />
               <View style={styles.divider} />

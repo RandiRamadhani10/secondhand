@@ -20,7 +20,7 @@ const BaseNotif = ({status, image, title, price, bid, tanggal, onPress, isRead})
         <View style={styles.contents}>
           <View style={styles.statusContainer}>
             <Text style={styles.statusText}>
-              {status === 'bid'
+              {status === 'bid' || status === 'pending'
                 ? 'Penawaran Produk'
                 : status === 'declined'
                 ? 'Penolakan Penawaran'
@@ -56,8 +56,9 @@ const BaseNotif = ({status, image, title, price, bid, tanggal, onPress, isRead})
             prefix={'Rp. '}
             renderText={formattedValue => (
               <Text style={status === 'declined' ? styles.TextStripped : styles.Text}>
-                {status === 'accepted' && 'Berhasil Ditawar'}
-                {(status === 'bid' || status === 'declined') && 'Ditawar'} {formattedValue}
+                {status === 'accepted' && 'Berhasil Ditawar '}
+                {(status === 'bid' || status === 'pending' || status === 'declined') && 'Ditawar '}
+                {formattedValue}
               </Text>
             )}
           />
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
     textDecorationStyle: 'solid',
   },
   subTextBidSuccess: {
-    ontFamily: Fonts.PRIMARY.REGULAR,
+    fontFamily: Fonts.PRIMARY.REGULAR,
     color: Colors.SECONDARY,
     fontSize: moderateScale(10),
   },

@@ -134,3 +134,108 @@ export const deleteProductById = createAsyncThunk(
     }
   },
 );
+
+export const getOrder = createAsyncThunk('seller/getOrder', async ({token, status}, {getState, rejectWithValue}) => {
+  try {
+    const state = getState();
+    const response = await apiClient.get(`seller/order${status ? `?status=${status}` : ''}`, {
+      headers: {
+        access_token: token ? token : state?.users?.users?.access_token,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    if (!error.response) {
+      throw error;
+    }
+
+    showError({
+      title: 'Gagal Mendapatkan Data Order',
+      description: error.response?.data?.message,
+    });
+
+    return rejectWithValue(error.response.data);
+  }
+});
+
+export const getOrderById = createAsyncThunk(
+  'seller/getOrderById',
+  async ({id, token}, {getState, rejectWithValue}) => {
+    try {
+      const state = getState();
+      const response = await apiClient.get(`seller/order/${id}`, {
+        headers: {
+          access_token: token ? token : state?.users?.users?.access_token,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+
+      showError({
+        title: 'Gagal Mendapatkan Data Order By ID',
+        description: error.response?.data?.message,
+      });
+
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const patchOrderById = createAsyncThunk(
+  'seller/getOrderById',
+  async ({id, token, payload}, {getState, rejectWithValue}) => {
+    try {
+      const state = getState();
+      const response = await apiClient.patch(`seller/order/${id}`, payload, {
+        headers: {
+          access_token: token ? token : state?.users?.users?.access_token,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+
+      showError({
+        title: 'Gagal Melakukan Patch Order By ID',
+        description: error.response?.data?.message,
+      });
+
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const getDetailOrderProductById = createAsyncThunk(
+  'seller/getOrderById',
+  async ({id, token}, {getState, rejectWithValue}) => {
+    try {
+      const state = getState();
+      const response = await apiClient.get(`seller/order/product/${id}`, {
+        headers: {
+          access_token: token ? token : state?.users?.users?.access_token,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+
+      showError({
+        title: 'Gagal Mendapatkan Data Order Produk',
+        description: error.response?.data?.message,
+      });
+
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
