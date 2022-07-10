@@ -15,7 +15,7 @@ const BaseNotif = ({status, image, title, price, bid, tanggal, onPress, isRead})
       <View style={styles.card}>
         <View>
           <Gap height={5} />
-          <FastImage source={{uri: image}} style={styles.image} resizeMode="center" />
+          <FastImage source={{uri: image}} style={styles.image} resizeMode="center" alt="" testID="productava" />
         </View>
         <View style={styles.contents}>
           <View style={styles.statusContainer}>
