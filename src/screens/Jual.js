@@ -69,16 +69,12 @@ const Jual = ({navigation}) => {
   });
 
   useEffect(() => {
-    if (!usersState?.users?.hasOwnProperty('access_token')) {
-      navigation.navigate('Login');
-    } else if (usersState?.users?.hasOwnProperty('access_token')) {
-      for (const key in usersState?.profile) {
-        if (usersState?.profile[key] === '-' || usersState?.profile[key] === '' || usersState?.profile[key] === 0) {
-          navigation.navigate('Profile');
-        }
+    for (const key in usersState?.profile) {
+      if (usersState?.profile[key] === '-' || usersState?.profile[key] === '' || usersState?.profile[key] === 0) {
+        navigation.navigate('Profile');
       }
     }
-  }, [isFocused, navigation, usersState?.profile, usersState?.users]);
+  }, [isFocused, navigation, usersState?.profile]);
 
   useEffect(() => {
     if (categoryState?.length > 0) {

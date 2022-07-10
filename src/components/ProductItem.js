@@ -7,8 +7,6 @@ import {Colors, Fonts} from '../utils';
 import Gap from './Gap';
 import NumberFormat from 'react-number-format';
 
-import {IMGPlaceholderProduct} from '../assets';
-
 // Alternative for choose width & height
 const {width, height} = Dimensions.get('window');
 
@@ -34,7 +32,8 @@ const ProductItem = ({title, image, category, price, onPress}) => {
           ) : Array.isArray(category) ? (
             category.map((item, index) => (
               <Text key={item.id} style={styles.category}>
-                {index > 0 ? ',' : ''} {item.name}
+                {index > 0 ? ',' : ''}
+                {item.name}
               </Text>
             ))
           ) : (

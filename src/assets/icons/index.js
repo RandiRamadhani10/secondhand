@@ -29,6 +29,7 @@ import ICLoveActive from './ic-love-active.svg';
 import ICBox from './ic-box.svg';
 import ICBoxActive from './ic-box-active.svg';
 import ICDollarSign from './ic-dollar-sign.svg';
+import ICDollarSignActive from './ic-dollar-sign-active.svg';
 import ICWhatsApp from './ic-whatsapp.svg';
 import ICClosePrimary from './ic-close-primary.svg';
 
@@ -64,6 +65,7 @@ export {
   ICBox,
   ICBoxActive,
   ICDollarSign,
+  ICDollarSignActive,
   ICWhatsApp,
   ICClosePrimary,
 };

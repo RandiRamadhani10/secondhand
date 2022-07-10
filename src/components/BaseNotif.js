@@ -56,8 +56,9 @@ const BaseNotif = ({status, image, title, price, bid, tanggal, onPress, isRead})
             prefix={'Rp. '}
             renderText={formattedValue => (
               <Text style={status === 'declined' ? styles.TextStripped : styles.Text}>
-                {status === 'accepted' && 'Berhasil Ditawar'}
-                {(status === 'bid' || status === 'declined') && 'Ditawar'} {formattedValue}
+                {status === 'accepted' && 'Berhasil Ditawar '}
+                {(status === 'bid' || status === 'declined') && 'Ditawar '}
+                {formattedValue}
               </Text>
             )}
           />

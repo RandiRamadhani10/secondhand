@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   Dimensions,
-  StatusBar,
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
@@ -49,13 +48,9 @@ const DetailProduk = ({navigation, route}) => {
   }, [stateBuyer?.bidProducts, id]);
 
   useEffect(() => {
-    if (id) {
-      dispatch(getProductById(id));
-
-      checkStatusBid();
-    }
+    checkStatusBid();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFocused, id]);
+  }, [isFocused]);
 
   // ref
   const bottomSheetRef = useRef(null);

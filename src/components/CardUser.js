@@ -7,7 +7,7 @@ import {Colors} from '../utils/Colors';
 import {moderateScale} from 'react-native-size-matters';
 import FastImage from 'react-native-fast-image';
 
-const CardUser = ({avatar, name, city, button = true, isActive = false, isHaveBorder = true}) => {
+const CardUser = ({avatar, name, city, button = true, isActive = false, isHaveBorder = true, onPressEdit}) => {
   return (
     <View style={styles.mainCard(isHaveBorder)}>
       <View style={styles.icon}>
@@ -27,7 +27,11 @@ const CardUser = ({avatar, name, city, button = true, isActive = false, isHaveBo
       </View>
       {button ? (
         <View style={styles.buttonPlace}>
-          <TouchableHighlight style={styles.button(isActive)}>
+          <TouchableHighlight
+            activeOpacity={0.7}
+            underlayColor={Colors.CATEGORY}
+            style={styles.button(isActive)}
+            onPress={onPressEdit}>
             <Text style={styles.buttonText}>Edit</Text>
           </TouchableHighlight>
         </View>
@@ -43,6 +47,7 @@ CardUser.propTypes = {
   city: propTypes.string,
   button: propTypes.bool,
   isHaveBorder: propTypes.bool,
+  onPressEdit: propTypes.func,
 };
 
 const styles = StyleSheet.create({

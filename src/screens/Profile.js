@@ -106,7 +106,7 @@ const Profile = ({navigation}) => {
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => {
-            navigation.navigate('Main', {screen: 'Akun'});
+            navigation.goBack();
           }}>
           <ICArrowLeft />
         </TouchableOpacity>
