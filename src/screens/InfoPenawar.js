@@ -27,7 +27,6 @@ const InfoPenawar = ({navigation, route}) => {
       bid_price: '',
     },
   });
-  // console.log('notificationState', notificationState);
 
   useEffect(() => {
     dispatch(getNotificationById(id));

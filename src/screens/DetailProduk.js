@@ -20,6 +20,7 @@ import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import FastImage from 'react-native-fast-image';
 import {useDispatch, useSelector} from 'react-redux';
 import {bidProduct, getProductById} from '../store/actions/buyer';
+import NumberFormat from 'react-number-format';
 
 const screen = Dimensions.get('screen');
 
@@ -29,6 +30,8 @@ const DetailProduk = ({navigation, route}) => {
   const isFocused = useIsFocused();
 
   const dispatch = useDispatch();
+
+  const profileUsersState = useSelector(state => state.users.profile);
 
   const stateBuyer = useSelector(state => state.buyer);
 
@@ -117,19 +120,28 @@ const DetailProduk = ({navigation, route}) => {
                       {stateBuyer?.productDetail?.Categories?.length > 0 &&
                         stateBuyer?.productDetail?.Categories.map((item, index) => (
                           <Text key={item.id} style={styles.category}>
-                            {index > 0 ? ',' : ''} {item.name}
+                            {index > 0 ? ',' : ''}
+                            {item.name}
                           </Text>
                         ))}
                     </Text>
-                    <Text style={styles.txtTitle}>{stateBuyer?.productDetail?.base_price}</Text>
+                    <NumberFormat
+                      value={stateBuyer?.productDetail?.base_price}
+                      displayType={'text'}
+                      thousandSeparator={'.'}
+                      decimalSeparator={','}
+                      prefix={'Rp. '}
+                      renderText={formattedValue => <Text style={styles.txtTitle}>{formattedValue}</Text>}
+                    />
                   </View>
                 </View>
               </View>
             </View>
             <View style={styles.card}>
               <CardUser
-                name={stateBuyer?.productDetail?.user_id}
-                city={stateBuyer?.productDetail?.location}
+                avatar={stateBuyer?.productDetail?.User?.image_url}
+                name={stateBuyer?.productDetail?.User?.full_name}
+                city={stateBuyer?.productDetail?.User?.city}
                 button={false}
               />
             </View>
@@ -139,16 +151,19 @@ const DetailProduk = ({navigation, route}) => {
             </View>
             <Gap height={60} />
           </ScrollView>
-          <View style={styles.btnNego}>
-            <BaseButton
-              disable={isAlreadyBid}
-              isLoading={stateBuyer?.isLoadingBid}
-              onPress={() => {
-                handleOpenPress();
-              }}
-              title={isAlreadyBid ? 'Menunggu respon penjual' : 'Saya Tertarik dan ingin Nego'}
-            />
-          </View>
+
+          {profileUsersState?.id !== stateBuyer.productDetail?.User?.id ? (
+            <View style={styles.btnNego}>
+              <BaseButton
+                disable={isAlreadyBid}
+                isLoading={stateBuyer?.isLoadingBid}
+                onPress={() => {
+                  handleOpenPress();
+                }}
+                title={isAlreadyBid ? 'Menunggu respon penjual' : 'Saya Tertarik dan ingin Nego'}
+              />
+            </View>
+          ) : null}
 
           <BottomSheet
             enablePanDownToClose

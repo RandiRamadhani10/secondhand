@@ -14,6 +14,7 @@ import ICListActive from './ic-list-active.svg';
 import ICLogout from './ic-log-out.svg';
 import ICPlusActive from './ic-plus-circle-active.svg';
 import ICPlus from './ic-plus-circle.svg';
+import ICPlusNoBorder from './ic-plus-no-border.svg';
 import ICSettings from './ic-settings.svg';
 import ICUserActive from './ic-user-active.svg';
 import ICUser from './ic-user.svg';
@@ -47,6 +48,7 @@ export {
   ICList,
   ICListActive,
   ICLogout,
+  ICPlusNoBorder,
   ICPlus,
   ICPlusActive,
   ICSettings,

@@ -56,7 +56,6 @@ const Jual = ({navigation}) => {
     control,
     setValue,
     handleSubmit,
-    reset,
     formState: {errors},
   } = useForm({
     resolver: yupResolver(schema),
@@ -85,6 +84,10 @@ const Jual = ({navigation}) => {
     }
   }, [categoryState]);
 
+  const onPreview = async params => {
+    navigation.navigate('PreviewJual', {data: {...params, image: images[0]}});
+  };
+
   const onSubmit = async data => {
     const formData = new FormData();
 
@@ -92,7 +95,7 @@ const Jual = ({navigation}) => {
     formData.append('base_price', +data.base_price);
     formData.append('category_ids', +data.category_ids);
     formData.append('description', data.description);
-    formData.append('location', 'Jakarta');
+    formData.append('location', usersState?.profile?.city);
     formData.append('image', {uri: images[0].uri, name: images[0].fileName, type: images[0].type});
 
     dispatch(postProduct(formData));
@@ -160,6 +163,7 @@ const Jual = ({navigation}) => {
                 }}
                 onSelect={selectedItem => {
                   setValue('category_ids', selectedItem.id);
+                  setValue('category_name', selectedItem.name);
                 }}
                 buttonTextAfterSelection={selectedItem => {
                   return selectedItem.name;
@@ -224,7 +228,7 @@ const Jual = ({navigation}) => {
           </ScrollView>
           <Gap height={24} />
           <View style={styles.btnContainer}>
-            <BaseButton style={styles.btnPreview} title="Preview" onPress={handleSubmit(onSubmit)} />
+            <BaseButton style={styles.btnPreview} title="Preview" onPress={handleSubmit(onPreview)} />
             <BaseButton style={styles.btnTerbitkan} title="Terbitkan" onPress={handleSubmit(onSubmit)} />
           </View>
         </View>

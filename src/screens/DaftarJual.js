@@ -8,6 +8,7 @@ import {
   ProductItem,
   ProductItemSkeleton,
   NotificationItemSkeleton,
+  BaseTambahProduk,
 } from '../components';
 import {ICBox, ICBoxActive, ICDollarSign, ICDollarSignActive, ICLove, ICLoveActive, ILPeople} from '../assets';
 import {Colors} from '../utils';
@@ -33,8 +34,6 @@ const DaftarJual = ({navigation}) => {
   });
 
   const usersState = useSelector(state => state.users);
-
-  const isLoadingBuyerState = useSelector(state => state.buyer.isLoading);
 
   const isLoadingSellerState = useSelector(state => state.seller.isLoading);
 
@@ -63,7 +62,7 @@ const DaftarJual = ({navigation}) => {
   useEffect(() => {
     getData(categorySelected);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorySelected]);
+  }, [categorySelected, isFocused]);
 
   const renderList = tabSelected => {
     if (tabSelected === 'produk') {
@@ -71,17 +70,20 @@ const DaftarJual = ({navigation}) => {
         <FlatList
           key={numColumns.produk}
           numColumns={numColumns.produk}
-          data={listData}
+          data={[{}, ...listData]}
           showsVerticalScrollIndicator={false}
           keyExtractor={item => item.id}
+          ListEmptyComponent={<BaseTambahProduk />}
           renderItem={({item, index}) => {
             return isLoadingSellerState ? (
               <View key={index} style={styles.loadingContainer}>
                 <ProductItemSkeleton />
               </View>
+            ) : index === 0 ? (
+              <BaseTambahProduk onPress={() => navigation.navigate('Jual')} />
             ) : (
               <ProductItem
-                key={item.id}
+                key={index}
                 title={item?.name}
                 image={item?.image_url}
                 category={item.Categories}
@@ -125,7 +127,7 @@ const DaftarJual = ({navigation}) => {
                   title={item?.Product?.name}
                   price={item?.Product?.base_price}
                   bid={`${item?.price}`}
-                  tanggal={item?.transact}
+                  tanggal={item?.transaction_date}
                   onPress={() => navigation.navigate('InfoPenawar', {id: item.id})}
                   isRead={true}
                 />

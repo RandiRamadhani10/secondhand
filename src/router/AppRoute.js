@@ -2,7 +2,7 @@ import React from 'react';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import {Login, Notifikasi, Profile, Daftar, Splash, DetailProduk, InfoPenawar} from '../screens';
+import {Login, Notifikasi, Profile, Daftar, Splash, DetailProduk, InfoPenawar, PreviewJual} from '../screens';
 
 import {getProductById} from '../store/actions/buyer';
 
@@ -32,6 +32,7 @@ const AppRoute = () => {
         })}
       />
       <Stack.Screen name="InfoPenawar" component={InfoPenawar} />
+      <Stack.Screen name="PreviewJual" component={PreviewJual} />
     </Stack.Navigator>
   );
 };
