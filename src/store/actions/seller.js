@@ -187,15 +187,22 @@ export const getOrderById = createAsyncThunk(
 );
 
 export const patchOrderById = createAsyncThunk(
-  'seller/getOrderById',
+  'seller/patchOrderById',
   async ({id, token, payload}, {getState, rejectWithValue}) => {
     try {
       const state = getState();
       const response = await apiClient.patch(`seller/order/${id}`, payload, {
         headers: {
           access_token: token ? token : state?.users?.users?.access_token,
+          'Content-Type': 'multipart/form-data',
         },
       });
+
+      if (response) {
+        showSuccess({
+          title: 'Berhasil Merubah Status Penawaran',
+        });
+      }
 
       return response.data;
     } catch (error) {

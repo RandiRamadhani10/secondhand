@@ -1,5 +1,5 @@
 import React, {Fragment, useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity, Share} from 'react-native';
 import {Gap, CardUser, BaseNotif, BaseButton} from '../components';
 import {ICArrowLeft, ICWhatsApp} from '../assets';
 import {Colors, Fonts} from '../utils';
@@ -10,13 +10,14 @@ import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import {useDispatch, useSelector} from 'react-redux';
 import {getNotificationById} from '../store/actions/notification';
 import NumberFormat from 'react-number-format';
+import {getOrderById, getProductById, patchOrderById} from '../store/actions/seller';
 
 const InfoPenawar = ({navigation, route}) => {
   const {id} = route.params;
   const dispatch = useDispatch();
   const [isActive, setIsActive] = useState({id: 0, status: false});
 
-  const detailNotificationState = useSelector(state => state.notification.detailNotification);
+  const detailProdukState = useSelector(state => state.seller.bidProductOrderDetail);
 
   const {
     control,
@@ -29,16 +30,39 @@ const InfoPenawar = ({navigation, route}) => {
   });
 
   useEffect(() => {
-    dispatch(getNotificationById(id));
+    dispatch(getOrderById({id}));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {
-    setIsActive({id: detailNotificationState?.Product?.id, status: false});
+    setIsActive({id: detailProdukState?.Product?.id, status: false});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  const handleDecline = async (id, payload) => {};
+  const handleDecline = async (paramsId, paramsPayload) => {
+    dispatch(patchOrderById({id: paramsId, payload: paramsPayload}));
+  };
+
+  const handleAccept = async paramsId => {
+    const response = await dispatch(
+      patchOrderById({id: paramsId, payload: {...detailProdukState, status: 'accepted'}}),
+    );
+
+    if (response) {
+      handleOpenPress();
+    }
+  };
+
+  const handleShare = () => {
+    const shareOptions = {
+      title: `Penawaran Produk ${detailProdukState?.Product?.name}`,
+      message: `Penawaran Produk ${detailProdukState?.Product?.name} yang telah kamu tawar berhasil diterima`,
+      url: `https://api.whatsapp.com/send?phone=${detailProdukState?.User?.phone_number}&text=Penawaran%20Produk%20%${detailProdukState?.Product?.name}%20yang%20telah%20kamu%20tawar%20berhasil%20diterima`,
+      subject: 'Penawaran Produk',
+    };
+
+    Share.share(shareOptions);
+  };
 
   // ref
   const bottomSheetRef = useRef(null);
@@ -67,9 +91,9 @@ const InfoPenawar = ({navigation, route}) => {
         <Gap height={moderateScale(16)} />
 
         <CardUser
-          avatar={detailNotificationState?.User?.image_url}
-          name={detailNotificationState?.User?.full_name}
-          city={detailNotificationState?.User?.city}
+          avatar={detailProdukState?.User?.image_url}
+          name={detailProdukState?.User?.full_name}
+          city={detailProdukState?.User?.city}
           button={false}
           isHaveBorder={false}
         />
@@ -79,17 +103,15 @@ const InfoPenawar = ({navigation, route}) => {
         <View style={styles.mainCard}>
           <View style={styles.icon}>
             <FastImage
-              source={{uri: detailNotificationState?.Product?.image_url}}
+              source={{uri: detailProdukState?.Product?.image_url}}
               style={styles.imageBtmSheet}
               resizeMode="cover"
             />
           </View>
           <View style={styles.contentText}>
-            <Text style={styles.name}>
-              {detailNotificationState?.Product?.name ? detailNotificationState?.Product?.name : '-'}
-            </Text>
+            <Text style={styles.name}>{detailProdukState?.Product?.name ? detailProdukState?.Product?.name : '-'}</Text>
             <NumberFormat
-              value={detailNotificationState?.Product?.base_price ? detailNotificationState?.Product?.base_price : 0}
+              value={detailProdukState?.Product?.base_price ? detailProdukState?.Product?.base_price : 0}
               displayType={'text'}
               thousandSeparator={'.'}
               decimalSeparator={','}
@@ -97,15 +119,14 @@ const InfoPenawar = ({navigation, route}) => {
               renderText={formattedValue => <Text style={styles.basePrice}>{formattedValue}</Text>}
             />
             <NumberFormat
-              value={detailNotificationState?.bid_price ? detailNotificationState?.bid_price : 0}
+              value={detailProdukState?.bid_price ? detailProdukState?.bid_price : 0}
               displayType={'text'}
               thousandSeparator={'.'}
               decimalSeparator={','}
               prefix={'Rp. '}
               renderText={formattedValue => (
                 <Text style={styles.bidPrice}>
-                  {(detailNotificationState?.status === 'bid' || detailNotificationState?.status === 'declined') &&
-                    'Ditawar'}{' '}
+                  {(detailProdukState?.status === 'bid' || detailProdukState?.status === 'declined') && 'Ditawar'}{' '}
                   {formattedValue}
                 </Text>
               )}
@@ -115,7 +136,14 @@ const InfoPenawar = ({navigation, route}) => {
       </View>
 
       <Gap height={moderateScale(24)} />
-      <BaseButton title="Hubungi Via Whatsapp" icon={<ICWhatsApp />} onPress={() => handleClosePress()} />
+      <BaseButton
+        title="Hubungi Via Whatsapp"
+        icon={<ICWhatsApp />}
+        onPress={() => {
+          handleShare();
+          handleClosePress();
+        }}
+      />
     </Fragment>
   );
 
@@ -143,7 +171,7 @@ const InfoPenawar = ({navigation, route}) => {
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => {
-            navigation.navigate('Main', {screen: 'Notifikasi'});
+            navigation.navigate('Main', {screen: 'DaftarJual'});
           }}>
           <ICArrowLeft />
         </TouchableOpacity>
@@ -152,9 +180,9 @@ const InfoPenawar = ({navigation, route}) => {
       </View>
       <Gap height={24} />
       <CardUser
-        avatar={detailNotificationState?.User?.image_url}
-        name={detailNotificationState?.User?.full_name}
-        city={detailNotificationState?.User?.city}
+        avatar={detailProdukState?.User?.image_url}
+        name={detailProdukState?.User?.full_name}
+        city={detailProdukState?.User?.city}
         button={false}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -162,31 +190,27 @@ const InfoPenawar = ({navigation, route}) => {
         <Text style={styles.title}>Daftar Produkmu yang Ditawar</Text>
         <Gap height={16} />
         <BaseNotif
-          image={detailNotificationState?.Product?.image_url}
-          status={detailNotificationState?.status}
-          title={detailNotificationState?.Product?.name ? detailNotificationState?.Product?.name : '-'}
-          price={detailNotificationState?.Product?.base_price ? detailNotificationState?.Product?.base_price : '-'}
-          bid={detailNotificationState?.bid_price}
-          tanggal={detailNotificationState?.transaction_date}
+          image={detailProdukState?.Product?.image_url}
+          status={detailProdukState?.status}
+          title={detailProdukState?.Product?.name ? detailProdukState?.Product?.name : '-'}
+          price={detailProdukState?.Product?.base_price ? detailProdukState?.Product?.base_price : '-'}
+          bid={detailProdukState?.bid_price}
+          tanggal={detailProdukState?.transaction_date}
           isRead={true}
-          onPress={() =>
-            setIsActive(prevState => ({id: detailNotificationState?.Product?.id, status: !prevState.status}))
-          }
+          onPress={() => setIsActive(prevState => ({id: detailProdukState?.Product?.id, status: !prevState.status}))}
         />
         <Gap height={16} />
-        {isActive?.id === detailNotificationState?.Product?.id && isActive.status === true ? (
+        {isActive?.id === detailProdukState?.Product?.id && isActive.status === true ? (
           <View style={styles.buttons}>
             <View>
               <BaseButton
                 title={'Tolak'}
                 style={styles.decline}
-                onPress={() =>
-                  handleDecline(detailNotificationState?.id, {...detailNotificationState, status: 'declined'})
-                }
+                onPress={() => handleDecline(detailProdukState?.id, {...detailProdukState, status: 'declined'})}
               />
             </View>
             <View>
-              <BaseButton title={'Terima'} style={styles.accept} onPress={() => handleOpenPress()} />
+              <BaseButton title={'Terima'} style={styles.accept} onPress={() => handleAccept(detailProdukState?.id)} />
             </View>
           </View>
         ) : null}
