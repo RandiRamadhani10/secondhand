@@ -1,21 +1,23 @@
 import React, {Fragment, useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity, Share} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity, Share, Linking} from 'react-native';
 import {Gap, CardUser, BaseNotif, BaseButton} from '../components';
 import {ICArrowLeft, ICWhatsApp} from '../assets';
-import {Colors, Fonts} from '../utils';
+import {Colors, Fonts, showError} from '../utils';
 import {moderateScale} from 'react-native-size-matters';
 import FastImage from 'react-native-fast-image';
 import {Controller, useForm} from 'react-hook-form';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import {useDispatch, useSelector} from 'react-redux';
-import {getNotificationById} from '../store/actions/notification';
 import NumberFormat from 'react-number-format';
-import {getOrderById, getProductById, patchOrderById} from '../store/actions/seller';
+import {getOrderById, patchOrderById} from '../store/actions/seller';
 
 const InfoPenawar = ({navigation, route}) => {
   const {id} = route.params;
   const dispatch = useDispatch();
+
   const [isActive, setIsActive] = useState({id: 0, status: false});
+
+  const [renderBottomSheet, setRenderBottomSheet] = useState('');
 
   const detailProdukState = useSelector(state => state.seller.bidProductOrderDetail);
 
@@ -49,26 +51,37 @@ const InfoPenawar = ({navigation, route}) => {
     );
 
     if (response) {
-      handleOpenPress();
+      setRenderBottomSheet('hubungi');
+      handleOpenPress(1);
     }
   };
 
   const handleShare = () => {
+    // Optional for Share
     const shareOptions = {
       title: `Penawaran Produk ${detailProdukState?.Product?.name}`,
       message: `Penawaran Produk ${detailProdukState?.Product?.name} yang telah kamu tawar berhasil diterima`,
       url: `https://api.whatsapp.com/send?phone=${detailProdukState?.User?.phone_number}&text=Penawaran%20Produk%20%${detailProdukState?.Product?.name}%20yang%20telah%20kamu%20tawar%20berhasil%20diterima`,
       subject: 'Penawaran Produk',
     };
+    // Share.share(shareOptions);
 
-    Share.share(shareOptions);
+    // Direct Share to Whatsapp
+    let url = `https://api.whatsapp.com/send?phone=${detailProdukState?.User?.phone_number}&text=Penawaran%20Produk%20%${detailProdukState?.Product?.name}%20yang%20telah%20kamu%20tawar%20berhasil%20diterima`;
+    Linking.openURL(url)
+      .then(data => {
+        console.log('WhatsApp Opened');
+      })
+      .catch(() => {
+        showError({title: 'Share WhatsApp Gagal'});
+      });
   };
 
   // ref
   const bottomSheetRef = useRef(null);
 
   //   variables
-  const snapPoints = useMemo(() => ['1%', '80%'], []);
+  const snapPoints = useMemo(() => ['1%', '80%', '60%'], []);
 
   // callbacks
   const handleSheetChanges = useCallback(index => {
@@ -77,9 +90,11 @@ const InfoPenawar = ({navigation, route}) => {
 
   const handleClosePress = () => bottomSheetRef.current?.close();
 
-  const handleOpenPress = () => bottomSheetRef.current?.expand();
+  const handleOpenPress = snapPoint => {
+    bottomSheetRef.current?.snapToIndex(snapPoint);
+  };
 
-  const renderContentBottomSheet1 = (
+  const renderContentBottomSheetHubungi = (
     <Fragment>
       <Text style={styles.titleBtmSheet}>Yeay kamu berhasil mendapat harga yang sesuai</Text>
       <Gap height={moderateScale(16)} />
@@ -147,7 +162,7 @@ const InfoPenawar = ({navigation, route}) => {
     </Fragment>
   );
 
-  const renderContentBottomSheet2 = (
+  const renderContentBottomSheetPerbaruiStatus = (
     <Fragment>
       <Text style={styles.titleBtmSheet}>Perbarui status penjualan produkmu</Text>
       <Gap height={moderateScale(24)} />
@@ -200,7 +215,9 @@ const InfoPenawar = ({navigation, route}) => {
           onPress={() => setIsActive(prevState => ({id: detailProdukState?.Product?.id, status: !prevState.status}))}
         />
         <Gap height={16} />
-        {isActive?.id === detailProdukState?.Product?.id && isActive.status === true ? (
+        {isActive?.id === detailProdukState?.Product?.id &&
+        detailProdukState?.status === 'pending' &&
+        isActive.status === true ? (
           <View style={styles.buttons}>
             <View>
               <BaseButton
@@ -211,6 +228,32 @@ const InfoPenawar = ({navigation, route}) => {
             </View>
             <View>
               <BaseButton title={'Terima'} style={styles.accept} onPress={() => handleAccept(detailProdukState?.id)} />
+            </View>
+          </View>
+        ) : isActive?.id === detailProdukState?.Product?.id &&
+          detailProdukState?.status === 'accepted' &&
+          isActive.status === true ? (
+          <View style={styles.buttons}>
+            <View>
+              <BaseButton
+                title={'Status'}
+                style={styles.decline}
+                onPress={() => {
+                  setRenderBottomSheet('perbaruiStatus');
+                  handleOpenPress(2);
+                }}
+              />
+            </View>
+            <View>
+              <BaseButton
+                title={'Hubungi'}
+                icon={<ICWhatsApp />}
+                style={styles.accept}
+                onPress={() => {
+                  setRenderBottomSheet('hubungi');
+                  handleOpenPress(1);
+                }}
+              />
             </View>
           </View>
         ) : null}
@@ -231,7 +274,13 @@ const InfoPenawar = ({navigation, route}) => {
           <BottomSheetBackdrop {...props} pressBehavior={'close'} appearsOnIndex={0} disappearsOnIndex={-1} />
         )}
         onChange={handleSheetChanges}>
-        <View style={styles.contentContainer}>{renderContentBottomSheet1}</View>
+        <View style={styles.contentContainer}>
+          {renderBottomSheet === 'hubungi'
+            ? renderContentBottomSheetHubungi
+            : renderBottomSheet === 'perbaruiStatus'
+            ? renderContentBottomSheetPerbaruiStatus
+            : null}
+        </View>
       </BottomSheet>
     </SafeAreaView>
   );

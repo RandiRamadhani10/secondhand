@@ -25,7 +25,7 @@ const BaseNotif = ({status, image, title, price, bid, tanggal, onPress, isRead})
                 : status === 'accepted'
                 ? 'Berhasil terjual'
                 : status === 'declined'
-                ? 'Penolakan Penawaran'
+                ? 'Penawaran Ditolak'
                 : status === 'create'
                 ? 'Berhasil diterbitkan'
                 : 'Tidak Diketahui'}
