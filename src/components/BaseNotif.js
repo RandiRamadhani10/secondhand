@@ -22,6 +22,8 @@ const BaseNotif = ({status, image, title, price, bid, tanggal, onPress, isRead})
             <Text style={styles.statusText}>
               {status === 'bid' || status === 'pending'
                 ? 'Penawaran Produk'
+                : status === 'accepted'
+                ? 'Berhasil terjual'
                 : status === 'declined'
                 ? 'Penolakan Penawaran'
                 : status === 'create'

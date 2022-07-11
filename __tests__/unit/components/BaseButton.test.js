@@ -7,9 +7,7 @@ describe('Component: BaseButton', () => {
   const mockOnPress = jest.fn();
 
   it('should render button text', () => {
-    const {getByText} = render(
-      <BaseButton title={title} onPress={mockOnPress} />,
-    );
+    const {getByText} = render(<BaseButton title={title} onPress={mockOnPress} />);
 
     const buttonElement = getByText(title);
 
