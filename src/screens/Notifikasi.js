@@ -19,14 +19,41 @@ const Notif = ({navigation}) => {
   const [isChangedReadStatus, setIsChangedReadStatus] = useState(false);
 
   const handleClickItem = async (id, payload) => {
-    const response = await dispatch(patchNotificationById({id: id, payload: {...payload, read: true}}));
+    // If Navigate to InfoPenawar
+    // const response = await dispatch(patchNotificationById({id: id, payload: {...payload, read: true}}));
 
-    if (response?.payload && payload?.notification_type === null) {
-      setIsChangedReadStatus(true);
-      navigation.navigate('InfoPenawar', {id: id});
+    // if (response?.payload && payload?.notification_type === null) {
+    //   setIsChangedReadStatus(true);
+    //   navigation.navigate('InfoPenawar', {id: id});
+    // }
+
+    // setIsChangedReadStatus(true);
+
+    // Just Change Status Read
+    let payloadBody = {
+      id: id,
+      payload: {
+        id: payload.id,
+        product_id: payload.product_id,
+        bid_price: payload.bid_price,
+        transaction_date: payload.transaction_date,
+        status: payload.status,
+        seller_name: payload.seller_name,
+        buyer_name: payload.buyer_name,
+        receiver_id: payload.receiver_id,
+        image_url: payload.image_url,
+        created_at: payload.created_at,
+        updated_at: payload.updated_at,
+        read: true,
+      },
+    };
+
+    // console.log('payloadBody', payloadBody);
+    const response = await dispatch(patchNotificationById({id: id, payload: payloadBody}));
+
+    if (response) {
+      dispatch(getNotification());
     }
-
-    setIsChangedReadStatus(true);
   };
 
   useEffect(() => {
@@ -55,8 +82,14 @@ const Notif = ({navigation}) => {
               <BaseNotif
                 image={item.image_url}
                 status={item.status}
-                title={item?.Product?.name ? item?.Product?.name : '-'}
-                price={item?.Product?.base_price ? item?.Product?.base_price : 0}
+                title={item?.status === 'create' ? item?.product_name : item?.Product?.name ? item?.Product?.name : '-'}
+                price={
+                  item?.status === 'create'
+                    ? item?.base_price
+                    : item?.Product?.base_price
+                    ? item?.Product?.base_price
+                    : 0
+                }
                 bid={item.bid_price}
                 tanggal={item.status === 'bid' ? item.transaction_date : item.createdAt}
                 isRead={item.read}

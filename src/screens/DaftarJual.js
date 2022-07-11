@@ -171,7 +171,7 @@ const DaftarJual = ({navigation}) => {
                   title={item?.Product?.name}
                   price={item?.Product?.base_price}
                   bid={`${item?.price}`}
-                  tanggal={item?.transact}
+                  tanggal={item?.transaction_date}
                   onPress={() => navigation.navigate('InfoPenawar', {id: item.id})}
                   isRead={true}
                 />
