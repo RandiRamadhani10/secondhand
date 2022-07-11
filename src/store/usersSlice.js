@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {authLogin, authRegister, authUser, putAuthUser} from './actions/users';
+import {authChangePassword, authLogin, authRegister, authUser, putAuthUser} from './actions/users';
 
 const initialState = {
   users: {},
@@ -62,6 +62,24 @@ export const userSlice = createSlice({
       };
     },
     [authUser.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+      };
+    },
+
+    // Change Password
+    [authChangePassword.pending]: state => {
+      return {...state, isLoading: true};
+    },
+    [authChangePassword.fulfilled]: state => {
+      return {
+        ...state,
+        isLoading: false,
+      };
+    },
+    [authChangePassword.rejected]: (state, action) => {
       return {
         ...state,
         error: action.payload,
