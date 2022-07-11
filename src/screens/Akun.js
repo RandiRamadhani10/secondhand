@@ -40,7 +40,10 @@ const Akun = ({navigation}) => {
       <Divider />
 
       <Gap height={moderateScale(16)} />
-      <TouchableOpacity style={styles.menuAkunItem} activeOpacity={0.7} onPress={() => {}}>
+      <TouchableOpacity
+        style={styles.menuAkunItem}
+        activeOpacity={0.7}
+        onPress={() => navigation.navigate('PengaturanAkun')}>
         <ICSettings />
         <Gap width={moderateScale(16)} />
         <Text style={styles.menuAkunItemTitle}>Pengaturan Akun</Text>

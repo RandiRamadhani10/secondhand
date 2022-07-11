@@ -6,14 +6,13 @@ import {useForm, Controller} from 'react-hook-form';
 import {BaseButton, BaseInput, Gap} from '../components';
 import {Colors} from '../utils/Colors';
 import {ICArrowLeft} from '../assets';
+import {authChangePassword} from '../store/actions/users';
 import {Fonts} from '../utils';
 import {useDispatch, useSelector} from 'react-redux';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-import {authLogin} from '../store/actions/users';
-
-const Login = ({navigation}) => {
+const PengaturanAkun = ({navigation}) => {
   const dispatch = useDispatch();
 
   const isLoading = useSelector(state => state.users.isLoading);
@@ -21,8 +20,16 @@ const Login = ({navigation}) => {
   const schema = yup
     .object()
     .shape({
-      email: yup.string().email().required('Please input your email'),
-      password: yup.string().min(5, 'Password minimal 5 karakter').required(),
+      current_password: yup.string().min(5).required('Silahkan isi password yang sekarang'),
+      new_password: yup.string().min(5, 'Password minimal 5 karakter').required('Silahkan isi password yang baru'),
+      confirm_password: yup
+        .string()
+        .min(5, 'Password minimal 5 karakter')
+        .required('Silahkan isi konfirmasi password yang baru')
+        .when('new_password', {
+          is: val => (val && val.length > 0 ? true : false),
+          then: yup.string().oneOf([yup.ref('new_password')], ' Password harus sesuai'),
+        }),
     })
     .required();
 
@@ -33,45 +40,30 @@ const Login = ({navigation}) => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      email: '',
-      password: '',
+      current_password: '',
+      new_password: '',
+      confirm_password: '',
     },
   });
 
   const onSubmit = async data => {
-    dispatch(authLogin(data));
+    dispatch(authChangePassword(data));
   };
 
   return (
     <SafeAreaView style={styles.screen}>
-      {/* <StatusBar backgroundColor={Colors.WHITE} /> */}
       <View>
-        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('Main', {screen: 'Home'})}>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('Main', {screen: 'Akun'})}>
           <ICArrowLeft />
         </TouchableOpacity>
         <Gap height={40} />
-        <Text style={styles.header}>Masuk</Text>
+        <Text style={styles.header}>Pengaturan Akun</Text>
         <Gap height={24} />
         <Controller
           control={control}
           render={({field: {onChange, onBlur, value}}) => (
             <BaseInput
-              label="Email"
-              type="text"
-              placeholder="Contoh: johndee@gmail.com"
-              onChangeText={onChange}
-              onBlur={onBlur}
-              value={value}
-            />
-          )}
-          name="email"
-        />
-        {errors?.email && <Text style={styles.errors}>{errors.email.message}</Text>}
-        <Controller
-          control={control}
-          render={({field: {onChange, onBlur, value}}) => (
-            <BaseInput
-              label="Password"
+              label="Password Lama"
               type="password"
               placeholder="Masukkan Password"
               onChangeText={onChange}
@@ -79,29 +71,49 @@ const Login = ({navigation}) => {
               value={value}
             />
           )}
-          name="password"
+          name="current_password"
         />
-        {errors.password && <Text style={styles.errors}>{errors.password.message}</Text>}
+        {errors?.current_password && <Text style={styles.errors}>{errors.current_password.message}</Text>}
         <Gap height={16} />
-        <BaseButton disable={isLoading} isLoading={isLoading} title="Masuk" onPress={handleSubmit(onSubmit)} />
-      </View>
-      <View style={styles.registerContainer}>
-        <View style={styles.registerWrapper}>
-          <Text style={styles.registerSub}>Belum punya Akun? </Text>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => {
-              navigation.navigate('Daftar');
-            }}>
-            <Text style={styles.registerCTA}>Daftar disini</Text>
-          </TouchableOpacity>
-        </View>
+        <Controller
+          control={control}
+          render={({field: {onChange, onBlur, value}}) => (
+            <BaseInput
+              label="Password Baru"
+              type="password"
+              placeholder="Masukkan Password"
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+            />
+          )}
+          name="new_password"
+        />
+        {errors.new_password && <Text style={styles.errors}>{errors.new_password.message}</Text>}
+        <Gap height={16} />
+        <Controller
+          control={control}
+          render={({field: {onChange, onBlur, value}}) => (
+            <BaseInput
+              label="Konfirmasi Password Baru"
+              type="password"
+              placeholder="Masukkan Konfirmasi Password"
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+            />
+          )}
+          name="confirm_password"
+        />
+        {errors.confirm_password && <Text style={styles.errors}>{errors.confirm_password.message}</Text>}
+        <Gap height={16} />
+        <BaseButton disable={isLoading} isLoading={isLoading} title="Ubah Password" onPress={handleSubmit(onSubmit)} />
       </View>
     </SafeAreaView>
   );
 };
 
-export default Login;
+export default PengaturanAkun;
 
 const styles = StyleSheet.create({
   screen: {
@@ -113,24 +125,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.PRIMARY.BOLD,
     fontSize: moderateScale(24),
     color: Colors.TEXT,
-  },
-  registerContainer: {
-    flex: moderateScale(1),
-    justifyContent: 'flex-end',
-  },
-  registerWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  registerSub: {
-    fontFamily: Fonts.PRIMARY.REGULAR,
-    fontSize: moderateScale(14),
-    color: Colors.TEXT,
-  },
-  registerCTA: {
-    fontFamily: Fonts.PRIMARY.BOLD,
-    fontSize: moderateScale(14),
-    color: Colors.PRIMARY,
   },
   errors: {
     fontFamily: Fonts.PRIMARY.REGULAR,
