@@ -10,6 +10,7 @@ import Splash from './Splash';
 import DetailProduk from './DetailProduk';
 import InfoPenawar from './InfoPenawar';
 import PreviewJual from './PreviewJual';
+import PengaturanAkun from './PengaturanAkun';
 
 export {
   Login,
@@ -24,4 +25,5 @@ export {
   DetailProduk,
   InfoPenawar,
   PreviewJual,
+  PengaturanAkun,
 };

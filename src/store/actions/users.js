@@ -110,3 +110,40 @@ export const putAuthUser = createAsyncThunk('auth/user', async (payload, {getSta
     return rejectWithValue(error.response.data);
   }
 });
+
+export const authChangePassword = createAsyncThunk(
+  'auth/changePassword',
+  async (payload, {getState, dispatch, rejectWithValue}) => {
+    try {
+      const state = getState();
+      const response = await apiClient.put('auth/change-password', payload, {
+        headers: {
+          access_token: state?.users?.users?.access_token,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response) {
+        showSuccess({
+          title: 'Ubah Password Berhasil',
+        });
+
+        dispatch(authUser(response?.data?.access_token));
+        navigate('Main', {screen: 'Akun'});
+      }
+
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+
+      showError({
+        title: 'Gagal Mengubah Password',
+        description: error.response?.data?.message,
+      });
+
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
