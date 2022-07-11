@@ -75,7 +75,12 @@ const TabItem = props => {
   };
 
   return (
-    <TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={onPress} onLongPress={onLongPress}>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={styles.container}
+      onPress={onPress}
+      onLongPress={onLongPress}
+      testID="tab-item">
       <Icon />
       <Gap height={moderateScale(4)} />
       <Text style={styles.title(isActive)}>{titleShow()}</Text>
