@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, ScrollView} from 'react-native';
 
 import {moderateScale} from 'react-native-size-matters';
 import {useForm, Controller} from 'react-hook-form';
@@ -49,41 +49,43 @@ const Login = ({navigation}) => {
         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('Main', {screen: 'Home'})}>
           <ICArrowLeft />
         </TouchableOpacity>
-        <Gap height={40} />
-        <Text style={styles.header}>Masuk</Text>
-        <Gap height={24} />
-        <Controller
-          control={control}
-          render={({field: {onChange, onBlur, value}}) => (
-            <BaseInput
-              label="Email"
-              type="text"
-              placeholder="Contoh: johndee@gmail.com"
-              onChangeText={onChange}
-              onBlur={onBlur}
-              value={value}
-            />
-          )}
-          name="email"
-        />
-        {errors?.email && <Text style={styles.errors}>{errors.email.message}</Text>}
-        <Controller
-          control={control}
-          render={({field: {onChange, onBlur, value}}) => (
-            <BaseInput
-              label="Password"
-              type="password"
-              placeholder="Masukkan Password"
-              onChangeText={onChange}
-              onBlur={onBlur}
-              value={value}
-            />
-          )}
-          name="password"
-        />
-        {errors.password && <Text style={styles.errors}>{errors.password.message}</Text>}
-        <Gap height={16} />
-        <BaseButton disable={isLoading} isLoading={isLoading} title="Masuk" onPress={handleSubmit(onSubmit)} />
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Gap height={40} />
+          <Text style={styles.header}>Masuk</Text>
+          <Gap height={24} />
+          <Controller
+            control={control}
+            render={({field: {onChange, onBlur, value}}) => (
+              <BaseInput
+                label="Email"
+                type="text"
+                placeholder="Contoh: johndee@gmail.com"
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+            name="email"
+          />
+          {errors?.email && <Text style={styles.errors}>{errors.email.message}</Text>}
+          <Controller
+            control={control}
+            render={({field: {onChange, onBlur, value}}) => (
+              <BaseInput
+                label="Password"
+                type="password"
+                placeholder="Masukkan Password"
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+            name="password"
+          />
+          {errors.password && <Text style={styles.errors}>{errors.password.message}</Text>}
+          <Gap height={16} />
+          <BaseButton disable={isLoading} isLoading={isLoading} title="Masuk" onPress={handleSubmit(onSubmit)} />
+        </ScrollView>
       </View>
       <View style={styles.registerContainer}>
         <View style={styles.registerWrapper}>

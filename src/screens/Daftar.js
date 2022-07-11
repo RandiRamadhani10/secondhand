@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, ScrollView} from 'react-native';
 import {Colors, Fonts} from '../utils';
 
 import {moderateScale} from 'react-native-size-matters';
@@ -58,61 +58,63 @@ const Daftar = ({navigation}) => {
         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('Main', {screen: 'Home'})}>
           <ICArrowLeft />
         </TouchableOpacity>
-        <Gap height={40} />
-        <Text style={styles.header}>Daftar</Text>
-        <Gap height={24} />
-        <Controller
-          control={control}
-          rules={{required: true}}
-          render={({field: {onChange, onBlur, value}}) => (
-            <BaseInput
-              label="Nama"
-              type="text"
-              placeholder="Nama Lengkap"
-              onChangeText={onChange}
-              onBlur={onBlur}
-              value={value}
-            />
-          )}
-          name="full_name"
-        />
-        {errors?.full_name && <Text style={styles.errors}>{errors.full_name.message}</Text>}
-        <Gap height={16} />
-        <Controller
-          control={control}
-          rules={{required: true}}
-          render={({field: {onChange, onBlur, value}}) => (
-            <BaseInput
-              label="Email"
-              type="text"
-              placeholder="Contoh: johndee@gmail.com"
-              onChangeText={onChange}
-              onBlur={onBlur}
-              value={value}
-            />
-          )}
-          name="email"
-        />
-        {errors?.email && <Text style={styles.errors}>{errors.email.message}</Text>}
-        <Gap height={16} />
-        <Controller
-          control={control}
-          rules={{required: true}}
-          render={({field: {onChange, onBlur, value}}) => (
-            <BaseInput
-              label="Buat Password"
-              type="password"
-              placeholder="Buat Password"
-              onChangeText={onChange}
-              onBlur={onBlur}
-              value={value}
-            />
-          )}
-          name="password"
-        />
-        {errors?.password && <Text style={styles.errors}>{errors.password.message}</Text>}
-        <Gap height={16} />
-        <BaseButton disable={isLoading} isLoading={isLoading} title="Daftar" onPress={handleSubmit(onSubmit)} />
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Gap height={40} />
+          <Text style={styles.header}>Daftar</Text>
+          <Gap height={24} />
+          <Controller
+            control={control}
+            rules={{required: true}}
+            render={({field: {onChange, onBlur, value}}) => (
+              <BaseInput
+                label="Nama"
+                type="text"
+                placeholder="Nama Lengkap"
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+            name="full_name"
+          />
+          {errors?.full_name && <Text style={styles.errors}>{errors.full_name.message}</Text>}
+          <Gap height={16} />
+          <Controller
+            control={control}
+            rules={{required: true}}
+            render={({field: {onChange, onBlur, value}}) => (
+              <BaseInput
+                label="Email"
+                type="text"
+                placeholder="Contoh: johndee@gmail.com"
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+            name="email"
+          />
+          {errors?.email && <Text style={styles.errors}>{errors.email.message}</Text>}
+          <Gap height={16} />
+          <Controller
+            control={control}
+            rules={{required: true}}
+            render={({field: {onChange, onBlur, value}}) => (
+              <BaseInput
+                label="Buat Password"
+                type="password"
+                placeholder="Buat Password"
+                onChangeText={onChange}
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+            name="password"
+          />
+          {errors?.password && <Text style={styles.errors}>{errors.password.message}</Text>}
+          <Gap height={16} />
+          <BaseButton disable={isLoading} isLoading={isLoading} title="Daftar" onPress={handleSubmit(onSubmit)} />
+        </ScrollView>
       </View>
       <View style={styles.loginContainer}>
         <View style={styles.loginWrapper}>
