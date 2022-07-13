@@ -51,9 +51,6 @@ jobs:
             ${{ runner.os }}-gradle-caches-
       - name: Make Gradlew Executable
         run: cd android && chmod +x ./gradlew
-        
-      - name: Cleaning Gradle
-        run: cd android && ./gradlew clean
 
       - name: Generate App APK
         run: |
