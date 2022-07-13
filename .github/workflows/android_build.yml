@@ -42,6 +42,9 @@ jobs:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
 
+      - name: Installation modules
+        run: npm install --legacy-peer-deps
+
       - name: Cache Gradle Dependencies
         uses: actions/cache@v2
         with:
@@ -50,11 +53,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-caches-
       - name: Make Gradlew Executable
-        run: cd android && chmod +x ./gradlew
+        run: cd android && chmod +x ./gradlew    
 
       - name: Generate App APK
         run: |
-          cd android && ./gradlew assembleRelease --no-daemon
+          cd android && ./gradlew bundleRelease
 
       ## sign generated apk
       - name: Sign APK
