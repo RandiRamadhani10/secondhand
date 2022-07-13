@@ -20,7 +20,7 @@ const InfoPenawar = ({navigation, route}) => {
   const [renderBottomSheet, setRenderBottomSheet] = useState('');
 
   const detailProdukState = useSelector(state => state.seller.bidProductOrderDetail);
-
+  const [status, setStatus] = useState('');
   const {
     control,
     handleSubmit,
@@ -105,60 +105,67 @@ const InfoPenawar = ({navigation, route}) => {
         <Text style={styles.cardWrapperTitle}>Product Match</Text>
         <Gap height={moderateScale(16)} />
 
-        <CardUser
-          avatar={detailProdukState?.User?.image_url}
-          name={detailProdukState?.User?.full_name}
-          city={detailProdukState?.User?.city}
-          button={false}
-          isHaveBorder={false}
-        />
-        <Gap height={moderateScale(16)} />
+        <View style={styles.cardWrapper}>
+          <Text style={styles.cardWrapperTitle}>Product Match</Text>
+          <Gap height={moderateScale(16)} />
 
-        {/* Card For Product */}
-        <View style={styles.mainCard}>
-          <View style={styles.icon}>
-            <FastImage
-              source={{uri: detailProdukState?.Product?.image_url}}
-              style={styles.imageBtmSheet}
-              resizeMode="cover"
-            />
-          </View>
-          <View style={styles.contentText}>
-            <Text style={styles.name}>{detailProdukState?.Product?.name ? detailProdukState?.Product?.name : '-'}</Text>
-            <NumberFormat
-              value={detailProdukState?.Product?.base_price ? detailProdukState?.Product?.base_price : 0}
-              displayType={'text'}
-              thousandSeparator={'.'}
-              decimalSeparator={','}
-              prefix={'Rp. '}
-              renderText={formattedValue => <Text style={styles.basePrice}>{formattedValue}</Text>}
-            />
-            <NumberFormat
-              value={detailProdukState?.bid_price ? detailProdukState?.bid_price : 0}
-              displayType={'text'}
-              thousandSeparator={'.'}
-              decimalSeparator={','}
-              prefix={'Rp. '}
-              renderText={formattedValue => (
-                <Text style={styles.bidPrice}>
-                  {(detailProdukState?.status === 'bid' || detailProdukState?.status === 'declined') && 'Ditawar'}{' '}
-                  {formattedValue}
-                </Text>
-              )}
-            />
+          <CardUser
+            avatar={detailProdukState?.User?.image_url}
+            name={detailProdukState?.User?.full_name}
+            city={detailProdukState?.User?.city}
+            button={false}
+            isHaveBorder={false}
+          />
+          <Gap height={moderateScale(16)} />
+
+          {/* Card For Product */}
+          <View style={styles.mainCard}>
+            <View style={styles.icon}>
+              <FastImage
+                source={{uri: detailProdukState?.Product?.image_url}}
+                style={styles.imageBtmSheet}
+                resizeMode="cover"
+              />
+            </View>
+            <View style={styles.contentText}>
+              <Text style={styles.name}>
+                {detailProdukState?.Product?.name ? detailProdukState?.Product?.name : '-'}
+              </Text>
+              <NumberFormat
+                value={detailProdukState?.Product?.base_price ? detailProdukState?.Product?.base_price : 0}
+                displayType={'text'}
+                thousandSeparator={'.'}
+                decimalSeparator={','}
+                prefix={'Rp. '}
+                renderText={formattedValue => <Text style={styles.basePrice}>{formattedValue}</Text>}
+              />
+              <NumberFormat
+                value={detailProdukState?.bid_price ? detailProdukState?.bid_price : 0}
+                displayType={'text'}
+                thousandSeparator={'.'}
+                decimalSeparator={','}
+                prefix={'Rp. '}
+                renderText={formattedValue => (
+                  <Text style={styles.bidPrice}>
+                    {(detailProdukState?.status === 'bid' || detailProdukState?.status === 'declined') && 'Ditawar'}{' '}
+                    {formattedValue}
+                  </Text>
+                )}
+              />
+            </View>
           </View>
         </View>
-      </View>
 
-      <Gap height={moderateScale(24)} />
-      <BaseButton
-        title="Hubungi Via Whatsapp"
-        icon={<ICWhatsApp />}
-        onPress={() => {
-          handleShare();
-          handleClosePress();
-        }}
-      />
+        <Gap height={moderateScale(24)} />
+        <BaseButton
+          title="Hubungi Via Whatsapp"
+          icon={<ICWhatsApp />}
+          onPress={() => {
+            handleShare();
+            handleClosePress();
+          }}
+        />
+      </View>
     </Fragment>
   );
 
@@ -191,6 +198,7 @@ const InfoPenawar = ({navigation, route}) => {
           <ICArrowLeft />
         </TouchableOpacity>
         <Text style={styles.header}>Info Penawar</Text>
+
         <Gap height={40} />
       </View>
       <Gap height={24} />
@@ -221,13 +229,39 @@ const InfoPenawar = ({navigation, route}) => {
           <View style={styles.buttons}>
             <View>
               <BaseButton
-                title={'Tolak'}
+                title={
+                  detailProdukState?.status == 'declined' || detailProdukState?.status == 'avalaible'
+                    ? 'Tolak'
+                    : 'Status'
+                }
+                // handleDecline(detailProdukState?.id, {...detailProdukState, status: 'declined'}
                 style={styles.decline}
-                onPress={() => handleDecline(detailProdukState?.id, {...detailProdukState, status: 'declined'})}
+                onPress={() =>
+                  detailProdukState?.status == 'declined' || detailProdukState?.status == 'avalaible'
+                    ? handleDecline(detailProdukState?.id, {...detailProdukState, status: 'declined'})
+                    : handleOpenPress()
+                }
               />
             </View>
             <View>
-              <BaseButton title={'Terima'} style={styles.accept} onPress={() => handleAccept(detailProdukState?.id)} />
+              {console.log(detailProdukState?.status)}
+              {detailProdukState?.status == 'declined' || detailProdukState?.status == 'avalaible' ? (
+                <BaseButton
+                  title={'Terima'}
+                  style={styles.accept}
+                  onPress={() => {
+                    handleDecline(detailProdukState?.id, {...detailProdukState, status: 'accepted'});
+                    handleOpenPress();
+                  }}
+                />
+              ) : (
+                <BaseButton
+                  icon={<ICWhatsApp />}
+                  title={'Hubungi'}
+                  style={styles.accept}
+                  onPress={() => handleShare()}
+                />
+              )}
             </View>
           </View>
         ) : isActive?.id === detailProdukState?.Product?.id &&
@@ -323,6 +357,7 @@ const styles = StyleSheet.create({
     paddingVertical: moderateScale(7),
     width: moderateScale(156),
     borderRadius: moderateScale(16),
+    borderWidth: moderateScale(1.5),
   },
   decline: {
     width: moderateScale(156),
