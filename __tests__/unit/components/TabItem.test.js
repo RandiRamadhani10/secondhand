@@ -1,21 +1,35 @@
 import React from 'react';
 import {render} from '@testing-library/react-native';
 import {TabItem} from '../../../src/components';
+import {Provider} from 'react-redux';
+import {store} from '../../../src/store';
 
 describe('Component: TabItem', () => {
-  const title = 'Home';
+  let wrapper;
   const mockOnPress = jest.fn();
 
-  it('should render button text', () => {
-    const {getByText} = render(<TabItem title={title} onPress={mockOnPress} />);
+  const props = {
+    title: 'Home',
+  };
 
-    const buttonElement = getByText(title);
+  beforeEach(() => {
+    wrapper = render(
+      <Provider store={store}>
+        <TabItem {...props} onPress={mockOnPress} />
+      </Provider>,
+    );
+  });
+
+  it('should render button text', () => {
+    const {getByText} = wrapper;
+
+    const buttonElement = getByText(props.title);
 
     expect(buttonElement).not.toBeNull();
   });
 
   it('should become disabled the button', () => {
-    const {getByTestId} = render(<TabItem title={title} isActive={false} onPress={mockOnPress} />);
+    const {getByTestId} = wrapper;
 
     const buttonElement = getByTestId('tab-item');
 
