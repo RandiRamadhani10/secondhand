@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {getDetailOrderProductById, getOrder, getOrderById, getProduct, getProductById} from './actions/seller';
+import {getDetailOrderProductById, getOrder, getOrderById, getProduct, patchOrderById} from './actions/seller';
 
 const initialState = {
   products: [],
@@ -84,6 +84,24 @@ export const sellerSlice = createSlice({
       };
     },
     [getDetailOrderProductById.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+      };
+    },
+
+    // Patch Order Product By ID
+    [patchOrderById.pending]: state => {
+      return {...state, isLoading: true};
+    },
+    [patchOrderById.fulfilled]: state => {
+      return {
+        ...state,
+        isLoading: false,
+      };
+    },
+    [patchOrderById.rejected]: (state, action) => {
       return {
         ...state,
         error: action.payload,

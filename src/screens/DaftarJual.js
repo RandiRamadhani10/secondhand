@@ -122,6 +122,7 @@ const DaftarJual = ({navigation}) => {
               <Fragment key={item.id}>
                 <Gap height={16} />
                 <BaseNotif
+                  type={'seller'}
                   image={item?.Product?.image_url}
                   status={item?.status}
                   title={item?.Product?.name}
@@ -166,6 +167,7 @@ const DaftarJual = ({navigation}) => {
               <Fragment key={item.id}>
                 <Gap height={16} />
                 <BaseNotif
+                  type={'seller'}
                   image={item?.Product?.image_url}
                   status={item?.status}
                   title={item?.Product?.name}

@@ -16,8 +16,6 @@ const Notif = ({navigation}) => {
   const notificationState = useSelector(state => state.notification);
   const buyerState = useSelector(state => state.buyerState);
 
-  const [isChangedReadStatus, setIsChangedReadStatus] = useState(false);
-
   const handleClickItem = async (id, payload) => {
     // If Navigate to InfoPenawar
     // const response = await dispatch(patchNotificationById({id: id, payload: {...payload, read: true}}));
@@ -26,8 +24,6 @@ const Notif = ({navigation}) => {
     //   setIsChangedReadStatus(true);
     //   navigation.navigate('InfoPenawar', {id: id});
     // }
-
-    // setIsChangedReadStatus(true);
 
     // Just Change Status Read
     let payloadBody = {
@@ -48,20 +44,22 @@ const Notif = ({navigation}) => {
       },
     };
 
-    // console.log('payloadBody', payloadBody);
-    const response = await dispatch(patchNotificationById({id: id, payload: payloadBody}));
+    // Loading is Show Every Dispatch
+    // const response = await dispatch(patchNotificationById({id: id, payload: payloadBody}));
 
-    if (response) {
-      dispatch(getNotification());
-    }
+    // if (response) {
+    //   dispatch(getNotification());
+    // }
+
+    // Just PatchData
+    dispatch(patchNotificationById({id: id, payload: payloadBody}));
   };
 
   useEffect(() => {
     dispatch(getNotification());
-    setIsChangedReadStatus(false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFocused, isChangedReadStatus]);
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.screen}>
