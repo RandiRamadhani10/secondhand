@@ -9,7 +9,7 @@ import {moderateScale} from 'react-native-size-matters';
 import FastImage from 'react-native-fast-image';
 import NumberFormat from 'react-number-format';
 
-const BaseNotif = ({status, image, title, price, bid, tanggal, onPress, isRead}) => {
+const BaseNotif = ({status, image, title, price, bid, tanggal, onPress, isRead, type = 'buyer'}) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.card}>
@@ -41,14 +41,17 @@ const BaseNotif = ({status, image, title, price, bid, tanggal, onPress, isRead})
             </View>
           </View>
           <Text style={styles.titleText}>{title}</Text>
-          <NumberFormat
-            value={price}
-            displayType={'text'}
-            thousandSeparator={'.'}
-            decimalSeparator={','}
-            prefix={'Rp. '}
-            renderText={formattedValue => <Text style={styles.Text}>{formattedValue}</Text>}
-          />
+
+          {status !== 'accepted' ? (
+            <NumberFormat
+              value={price}
+              displayType={'text'}
+              thousandSeparator={'.'}
+              decimalSeparator={','}
+              prefix={'Rp. '}
+              renderText={formattedValue => <Text style={styles.Text}>{formattedValue}</Text>}
+            />
+          ) : null}
 
           <NumberFormat
             value={bid}
@@ -58,13 +61,13 @@ const BaseNotif = ({status, image, title, price, bid, tanggal, onPress, isRead})
             prefix={'Rp. '}
             renderText={formattedValue => (
               <Text style={status === 'declined' ? styles.TextStripped : styles.Text}>
-                {status === 'accepted' && 'Berhasil Ditawar '}
+                {status === 'accepted' && type === 'buyer' && 'Berhasil Ditawar '}
                 {(status === 'bid' || status === 'pending' || status === 'declined') && 'Ditawar '}
                 {formattedValue}
               </Text>
             )}
           />
-          {status === 'accepted' && (
+          {status === 'accepted' && type === 'buyer' && (
             <Text style={styles.subTextBidSuccess}>Kamu akan segera dihubungi penjual via whatsapp</Text>
           )}
         </View>
@@ -137,6 +140,7 @@ BaseNotif.propTypes = {
   tanggal: propTypes.string,
   onPress: propTypes.func,
   isRead: propTypes.bool,
+  type: propTypes.string,
 };
 
 export default BaseNotif;
