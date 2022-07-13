@@ -11,14 +11,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getNotificationById} from '../store/actions/notification';
 import NumberFormat from 'react-number-format';
 import {getOrderById, getProductById, patchOrderById} from '../store/actions/seller';
-
 const InfoPenawar = ({navigation, route}) => {
   const {id} = route.params;
   const dispatch = useDispatch();
   const [isActive, setIsActive] = useState({id: 0, status: false});
 
   const detailProdukState = useSelector(state => state.seller.bidProductOrderDetail);
-
+  const [status, setStatus] = useState('');
   const {
     control,
     handleSubmit,
@@ -79,91 +78,97 @@ const InfoPenawar = ({navigation, route}) => {
 
   const handleOpenPress = () => bottomSheetRef.current?.expand();
 
-  const renderContentBottomSheet1 = (
-    <Fragment>
-      <Text style={styles.titleBtmSheet}>Yeay kamu berhasil mendapat harga yang sesuai</Text>
-      <Gap height={moderateScale(16)} />
-      <Text style={styles.descBtmSheet}>Segera hubungi pembeli melalui whatsapp untuk transaksi selanjutnya</Text>
-      <Gap height={moderateScale(16)} />
-
-      <View style={styles.cardWrapper}>
-        <Text style={styles.cardWrapperTitle}>Product Match</Text>
+  const renderContentBottomSheet1 = () => {
+    return (
+      <Fragment>
+        <Text style={styles.titleBtmSheet}>Yeay kamu berhasil mendapat harga yang sesuai</Text>
+        <Gap height={moderateScale(16)} />
+        <Text style={styles.descBtmSheet}>Segera hubungi pembeli melalui whatsapp untuk transaksi selanjutnya</Text>
         <Gap height={moderateScale(16)} />
 
-        <CardUser
-          avatar={detailProdukState?.User?.image_url}
-          name={detailProdukState?.User?.full_name}
-          city={detailProdukState?.User?.city}
-          button={false}
-          isHaveBorder={false}
-        />
-        <Gap height={moderateScale(16)} />
+        <View style={styles.cardWrapper}>
+          <Text style={styles.cardWrapperTitle}>Product Match</Text>
+          <Gap height={moderateScale(16)} />
 
-        {/* Card For Product */}
-        <View style={styles.mainCard}>
-          <View style={styles.icon}>
-            <FastImage
-              source={{uri: detailProdukState?.Product?.image_url}}
-              style={styles.imageBtmSheet}
-              resizeMode="cover"
-            />
-          </View>
-          <View style={styles.contentText}>
-            <Text style={styles.name}>{detailProdukState?.Product?.name ? detailProdukState?.Product?.name : '-'}</Text>
-            <NumberFormat
-              value={detailProdukState?.Product?.base_price ? detailProdukState?.Product?.base_price : 0}
-              displayType={'text'}
-              thousandSeparator={'.'}
-              decimalSeparator={','}
-              prefix={'Rp. '}
-              renderText={formattedValue => <Text style={styles.basePrice}>{formattedValue}</Text>}
-            />
-            <NumberFormat
-              value={detailProdukState?.bid_price ? detailProdukState?.bid_price : 0}
-              displayType={'text'}
-              thousandSeparator={'.'}
-              decimalSeparator={','}
-              prefix={'Rp. '}
-              renderText={formattedValue => (
-                <Text style={styles.bidPrice}>
-                  {(detailProdukState?.status === 'bid' || detailProdukState?.status === 'declined') && 'Ditawar'}{' '}
-                  {formattedValue}
-                </Text>
-              )}
-            />
+          <CardUser
+            avatar={detailProdukState?.User?.image_url}
+            name={detailProdukState?.User?.full_name}
+            city={detailProdukState?.User?.city}
+            button={false}
+            isHaveBorder={false}
+          />
+          <Gap height={moderateScale(16)} />
+
+          {/* Card For Product */}
+          <View style={styles.mainCard}>
+            <View style={styles.icon}>
+              <FastImage
+                source={{uri: detailProdukState?.Product?.image_url}}
+                style={styles.imageBtmSheet}
+                resizeMode="cover"
+              />
+            </View>
+            <View style={styles.contentText}>
+              <Text style={styles.name}>
+                {detailProdukState?.Product?.name ? detailProdukState?.Product?.name : '-'}
+              </Text>
+              <NumberFormat
+                value={detailProdukState?.Product?.base_price ? detailProdukState?.Product?.base_price : 0}
+                displayType={'text'}
+                thousandSeparator={'.'}
+                decimalSeparator={','}
+                prefix={'Rp. '}
+                renderText={formattedValue => <Text style={styles.basePrice}>{formattedValue}</Text>}
+              />
+              <NumberFormat
+                value={detailProdukState?.bid_price ? detailProdukState?.bid_price : 0}
+                displayType={'text'}
+                thousandSeparator={'.'}
+                decimalSeparator={','}
+                prefix={'Rp. '}
+                renderText={formattedValue => (
+                  <Text style={styles.bidPrice}>
+                    {(detailProdukState?.status === 'bid' || detailProdukState?.status === 'declined') && 'Ditawar'}{' '}
+                    {formattedValue}
+                  </Text>
+                )}
+              />
+            </View>
           </View>
         </View>
-      </View>
 
-      <Gap height={moderateScale(24)} />
-      <BaseButton
-        title="Hubungi Via Whatsapp"
-        icon={<ICWhatsApp />}
-        onPress={() => {
-          handleShare();
-          handleClosePress();
-        }}
-      />
-    </Fragment>
-  );
+        <Gap height={moderateScale(24)} />
+        <BaseButton
+          title="Hubungi Via Whatsapp"
+          icon={<ICWhatsApp />}
+          onPress={() => {
+            handleShare();
+            handleClosePress();
+          }}
+        />
+      </Fragment>
+    );
+  };
 
-  const renderContentBottomSheet2 = (
-    <Fragment>
-      <Text style={styles.titleBtmSheet}>Perbarui status penjualan produkmu</Text>
-      <Gap height={moderateScale(24)} />
-      <View style={styles.choiceContainer}>
-        <Text style={styles.choiceTitle}>Berhasil Terjual</Text>
-        <Text style={styles.choiceDesc}>Kamu telah sepakat menjual produk ini kepada pembeli</Text>
-      </View>
-      <Gap height={moderateScale(24)} />
-      <View style={styles.choiceContainer}>
-        <Text style={styles.choiceTitle}>Batalkan Transaksi</Text>
-        <Text style={styles.choiceDesc}>Kamu membatalkan transaksi produk ini dengan pembeli</Text>
-      </View>
-      <Gap height={moderateScale(24)} />
-      <BaseButton title="Kirim" onPress={() => handleClosePress()} />
-    </Fragment>
-  );
+  const renderContentBottomSheet2 = () => {
+    return (
+      <Fragment>
+        <Text style={styles.titleBtmSheet}>Perbarui status penjualan produkmu</Text>
+        <Gap height={moderateScale(24)} />
+        <View style={styles.choiceContainer}>
+          <Text style={styles.choiceTitle}>Berhasil Terjual</Text>
+          <Text style={styles.choiceDesc}>Kamu telah sepakat menjual produk ini kepada pembeli</Text>
+        </View>
+        <Gap height={moderateScale(24)} />
+        <View style={styles.choiceContainer}>
+          <Text style={styles.choiceTitle}>Batalkan Transaksi</Text>
+          <Text style={styles.choiceDesc}>Kamu membatalkan transaksi produk ini dengan pembeli</Text>
+        </View>
+        <Gap height={moderateScale(24)} />
+        <BaseButton title="Kirim" onPress={() => handleClosePress()} />
+      </Fragment>
+    );
+  };
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.head}>
@@ -176,6 +181,7 @@ const InfoPenawar = ({navigation, route}) => {
           <ICArrowLeft />
         </TouchableOpacity>
         <Text style={styles.header}>Info Penawar</Text>
+
         <Gap height={40} />
       </View>
       <Gap height={24} />
@@ -204,13 +210,39 @@ const InfoPenawar = ({navigation, route}) => {
           <View style={styles.buttons}>
             <View>
               <BaseButton
-                title={'Tolak'}
+                title={
+                  detailProdukState?.status == 'declined' || detailProdukState?.status == 'avalaible'
+                    ? 'Tolak'
+                    : 'Status'
+                }
+                // handleDecline(detailProdukState?.id, {...detailProdukState, status: 'declined'}
                 style={styles.decline}
-                onPress={() => handleDecline(detailProdukState?.id, {...detailProdukState, status: 'declined'})}
+                onPress={() =>
+                  detailProdukState?.status == 'declined' || detailProdukState?.status == 'avalaible'
+                    ? handleDecline(detailProdukState?.id, {...detailProdukState, status: 'declined'})
+                    : handleOpenPress()
+                }
               />
             </View>
             <View>
-              <BaseButton title={'Terima'} style={styles.accept} onPress={() => handleAccept(detailProdukState?.id)} />
+              {console.log(detailProdukState?.status)}
+              {detailProdukState?.status == 'declined' || detailProdukState?.status == 'avalaible' ? (
+                <BaseButton
+                  title={'Terima'}
+                  style={styles.accept}
+                  onPress={() => {
+                    handleDecline(detailProdukState?.id, {...detailProdukState, status: 'accepted'});
+                    handleOpenPress();
+                  }}
+                />
+              ) : (
+                <BaseButton
+                  icon={<ICWhatsApp />}
+                  title={'Hubungi'}
+                  style={styles.accept}
+                  onPress={() => handleShare()}
+                />
+              )}
             </View>
           </View>
         ) : null}
@@ -231,7 +263,11 @@ const InfoPenawar = ({navigation, route}) => {
           <BottomSheetBackdrop {...props} pressBehavior={'close'} appearsOnIndex={0} disappearsOnIndex={-1} />
         )}
         onChange={handleSheetChanges}>
-        <View style={styles.contentContainer}>{renderContentBottomSheet1}</View>
+        <View style={styles.contentContainer}>
+          {detailProdukState?.status == 'available' || detailProdukState?.status == 'declined'
+            ? renderContentBottomSheet1()
+            : renderContentBottomSheet2()}
+        </View>
       </BottomSheet>
     </SafeAreaView>
   );
@@ -274,6 +310,7 @@ const styles = StyleSheet.create({
     paddingVertical: moderateScale(7),
     width: moderateScale(156),
     borderRadius: moderateScale(16),
+    borderWidth: moderateScale(1.5),
   },
   decline: {
     width: moderateScale(156),
