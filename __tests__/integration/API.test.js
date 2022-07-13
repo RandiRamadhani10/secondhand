@@ -4,43 +4,53 @@ import {userData} from '../../src/utils/LoginData';
 import {productsData} from '../../src/utils/ProductData';
 
 describe('API Integration Test', () => {
-    const dataUser = {
-        email: 'johndoe@mail.com',
-        password: '123456',
-    }
+  const dataUser = {
+    email: 'johndoe@mail.com',
+    password: '123456',
+  };
 
-    const URL = 'https://market-final-project.herokuapp.com/';
+  const URL = 'https://market-final-project.herokuapp.com/';
 
-    it('Auth Register', async () => {
-        const mock = new MockAdapter(apiClient);
-        mock.onPost(`${URL}auth/register`).reply(200, userData);
+  it('Auth Register', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock.onPost(`${URL}auth/register`).reply(200, userData);
 
-        const response = await apiClient.post(`${URL}auth/register`, dataUser);
+    const response = await apiClient.post(`${URL}auth/register`, dataUser);
 
-        expect(response.status).toBe(200);
-        expect(response.data).toEqual(userData);
+    expect(response.status).toBe(200);
+    expect(response.data).toEqual(userData);
+  });
+
+  it('Auth Login', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock.onPost(`${URL}auth/login`).reply(200, userData);
+
+    const response = await apiClient.post(`${URL}auth/login`, {
+      email: dataUser.email,
+      password: dataUser.password,
     });
 
-    it('Auth Login', async () => {
-        const mock = new MockAdapter(apiClient);
-        mock.onPost(`${URL}auth/login`).reply(200, userData);
+    expect(response.status).toBe(200);
+    expect(response.data).toEqual(userData);
+  });
 
-        const response = await apiClient.post(`${URL}auth/login`, {
-            email: dataUser.email,
-            password: dataUser.password,
-        });
+  it('Product List', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock.onGet(`${URL}seller/product`).reply(200, productsData);
 
-        expect(response.status).toBe(200);
-        expect(response.data).toEqual(userData);
-    })
+    const response = await apiClient.get(`${URL}seller/product`);
 
-    it('Product List', async () => {
-        const mock = new MockAdapter(apiClient);
-        mock.onGet(`${URL}seller/product`).reply(200, productsData);
+    expect(response.status).toBe(200);
+    expect(response.data).toEqual(productsData);
+  });
 
-        const response = await apiClient.get(`${URL}seller/product`);
+  it('Get Product Name Sepatu', async () => {
+    let mock = new MockAdapter(apiClient);
 
-        expect(response.status).toBe(200);
-        expect(response.data).toEqual(productsData);
-    })
+    mock.onGet(`${URL}seller/product?name=sepatu&limit=1`).reply(200, productsData[0]);
+    const response = await apiClient.get('/seller/product?name=sepatu&limit=1');
+
+    expect(response.status).toEqual(200);
+    expect(response.data).toEqual(productsData[0]);
+  });
 });
