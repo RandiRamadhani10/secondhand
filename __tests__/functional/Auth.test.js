@@ -1,15 +1,12 @@
 import React from 'react';
 import {fireEvent, render, cleanup} from '@testing-library/react-native';
-import * as ReactRedux from 'react-redux';
+import {Provider} from 'react-redux';
+import {store} from '../../src/store';
 import {Login, Daftar} from '../../src/screens';
+import '../../ignoreWarnings';
 
 describe('Functional: Auth Daftar & Login', () => {
   const mockOnPress = jest.fn();
-
-  const useDispatchSpy = jest.spyOn(ReactRedux, 'useDispatch');
-  const useSelectorSpy = jest.spyOn(ReactRedux, 'useSelector');
-  useDispatchSpy.mockReturnValue(jest.fn());
-  useSelectorSpy.mockReturnValue(jest.fn());
 
   const userData = {
     name: 'binarusers',
@@ -18,16 +15,20 @@ describe('Functional: Auth Daftar & Login', () => {
   };
 
   afterEach(() => {
-    cleanup();
+    cleanup;
   });
 
   it('should be able to fill out the form', async () => {
-    const {getByLabelText} = render(<Daftar navigation={mockOnPress} />);
+    const wrapper = render(
+      <Provider store={store}>
+        <Daftar navigation={mockOnPress} />
+      </Provider>,
+    );
 
     const component = {
-      name: getByLabelText('Nama'),
-      email: getByLabelText('Email'),
-      password: getByLabelText('Buat Password'),
+      name: wrapper.getByPlaceholderText('Nama Lengkap'),
+      email: wrapper.getByPlaceholderText('Contoh: johndee@gmail.com'),
+      password: wrapper.getByPlaceholderText('Buat Password'),
     };
 
     fireEvent.changeText(component.name, userData.name);
@@ -40,11 +41,15 @@ describe('Functional: Auth Daftar & Login', () => {
   });
 
   it('should be able to fill input "Email" and "Password" for login', async () => {
-    const {getByLabelText} = render(<Login navigation={mockOnPress} />);
+    const wrapper = render(
+      <Provider store={store}>
+        <Login navigation={mockOnPress} />
+      </Provider>,
+    );
 
     const component = {
-      email: getByLabelText('Email'),
-      password: getByLabelText('Password'),
+      email: wrapper.getByPlaceholderText('Contoh: johndee@gmail.com'),
+      password: wrapper.getByPlaceholderText('Masukkan Password'),
     };
 
     fireEvent.changeText(component.email, userData.email);
