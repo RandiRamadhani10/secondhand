@@ -15,7 +15,7 @@ describe('Functional: Auth Daftar & Login', () => {
   };
 
   afterEach(() => {
-    cleanup;
+    cleanup();
   });
 
   it('should be able to fill out the form', async () => {
