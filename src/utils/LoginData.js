@@ -1,6 +1,6 @@
 export const userData = {
-    user : {
+  user: {
     email: 'johndoe@mail.com',
     password: '123456',
-    }
+  },
 };

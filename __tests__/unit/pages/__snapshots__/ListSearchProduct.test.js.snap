@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Unit: List Search Product should render empty list search product with length 0 1`] = `null`;
+
+exports[`Unit: List Search Product should render list search product with length 2 1`] = `null`;
