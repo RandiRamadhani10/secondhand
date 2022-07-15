@@ -2,14 +2,15 @@ import MockAdapter from 'axios-mock-adapter';
 import apiClient from '../../src/services/api';
 import {userData} from '../../src/utils/LoginData';
 import {productsData} from '../../src/utils/ProductData';
+import {NotifData} from '../../src/utils/NotificationData';
 
 describe('API Integration Test', () => {
+  const URL = 'https://market-final-project.herokuapp.com/';
+
   const dataUser = {
     email: 'johndoe@mail.com',
     password: '123456',
   };
-
-  const URL = 'https://market-final-project.herokuapp.com/';
 
   it('Auth Register', async () => {
     const mock = new MockAdapter(apiClient);
@@ -52,5 +53,15 @@ describe('API Integration Test', () => {
 
     expect(response.status).toEqual(200);
     expect(response.data).toEqual(productsData[0]);
+  });
+
+  it('Notification List', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock.onGet(`${URL}notification`).reply(200, NotifData);
+
+    const response = await apiClient.get(`${URL}notification`);
+
+    expect(response.status).toBe(200);
+    expect(response.data).toEqual(NotifData);
   });
 });
