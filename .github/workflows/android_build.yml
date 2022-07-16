@@ -20,22 +20,10 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Restore node_modules from cache
-        uses: actions/cache@v2
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
       - name: Install dependencies # install project deps with --frozen-lockfile to make sure we will have the same packages version ( very recommended  on running yarn install on ci)
         run: npm install --legacy-peer-deps
 
-      ## configure cash for gradle : will help to reduce build time
+      ## configure cache for gradle : will help to reduce build time
       - name: Cache Gradle Wrapper
         uses: actions/cache@v2
         with:
@@ -49,15 +37,17 @@ jobs:
           key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-caches-
+
       - name: Make Gradlew Executable
         run: cd android && chmod +x ./gradlew
 
       - name: Generate App APK
         run: |
-          cd android && ./gradlew bundleRelease
+          cd android && ./gradlew assembleRelease 
+          cd ..
 
       - name: Upload Generated APK
         uses: actions/upload-artifact@v3
         with:
           name: bundle
-          path: app/build/outputs/bundle/release/*.aab
+          path: android/app/build/outputs/bundle/release/
