@@ -56,9 +56,8 @@ jobs:
         run: |
           cd android && ./gradlew bundleRelease
 
-      ## sign generated apk
-      - name: Sign APK
-        id: sign_app
-        uses: r0adkll/sign-android-release@v1
+      - name: Upload Generated APK
+        uses: actions/upload-artifact@v3
         with:
-          releaseDirectory: android/app/build/outputs/bundle/release/*.aab
+          name: bundle
+          path: app/build/outputs/bundle/release/*.aab
