@@ -3,7 +3,6 @@ import propTypes from 'prop-types';
 import {StyleSheet, TextInput, View} from 'react-native';
 import {ICSearch} from '../assets';
 import {Colors, Fonts} from '../utils';
-import Gap from './Gap';
 
 import {moderateScale} from 'react-native-size-matters';
 
@@ -17,6 +16,7 @@ const SearchBar = props => {
         onChangeText={onChangeText}
         style={styles.searchInput}
         placeholder={placeholder}
+        placeholderTextColor={Colors.SECONDARY}
         onSubmitEditing={onSubmit}
         onBlur={onBlur}
       />

@@ -15,7 +15,6 @@ import {Colors} from '../utils';
 import {Gap, BaseButton, CardUser} from '../components';
 import {Fonts} from '../utils';
 import {ICArrowLeft} from '../assets';
-import {useForm} from 'react-hook-form';
 import FastImage from 'react-native-fast-image';
 import {useDispatch, useSelector} from 'react-redux';
 import {postProduct} from '../store/actions/seller';
@@ -100,7 +99,12 @@ const PreviewJual = ({navigation, route}) => {
         </ScrollView>
 
         <View style={styles.btnNego}>
-          <BaseButton isLoading={isLoadingSeller} onPress={() => onSubmit()} title={'Terbitkan'} />
+          <BaseButton
+            isLoading={isLoadingSeller}
+            disable={isLoadingSeller}
+            onPress={() => onSubmit()}
+            title={'Terbitkan'}
+          />
         </View>
       </SafeAreaView>
     </>
@@ -157,13 +161,14 @@ const styles = StyleSheet.create({
   txtTitle: {
     fontFamily: Fonts.PRIMARY.REGULAR,
     fontSize: moderateScale(14),
-    color: 'black',
+    color: Colors.TEXT,
   },
   txtCat: {
     fontFamily: Fonts.PRIMARY.REGULAR,
     fontSize: moderateScale(10),
   },
   des: {
+    color: Colors.SECONDARY,
     fontFamily: Fonts.PRIMARY.REGULAR,
     fontSize: moderateScale(14),
   },
@@ -181,7 +186,11 @@ const styles = StyleSheet.create({
     width: '100%',
     bottom: 1,
   },
-
+  category: {
+    fontFamily: Fonts.PRIMARY.REGULAR,
+    fontSize: moderateScale(14),
+    color: Colors.SECONDARY,
+  },
   container: {
     flex: 1,
     padding: moderateScale(24),

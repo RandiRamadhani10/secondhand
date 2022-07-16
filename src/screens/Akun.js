@@ -1,12 +1,11 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {StyleSheet, Text, SafeAreaView, View, TouchableOpacity} from 'react-native';
-import {Colors, Fonts} from '../utils';
+import {Colors, Fonts, showSuccess} from '../utils';
 import {moderateScale} from 'react-native-size-matters';
 import {Divider, Gap} from '../components';
 import CameraButton from '../components/CameraButton';
 import {ICEdit, ICLogout, ICSettings} from '../assets';
 
-import {useIsFocused} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {clearUser} from '../store/usersSlice';
 import {version} from '../../package.json';
@@ -14,7 +13,6 @@ import {version} from '../../package.json';
 const Akun = ({navigation}) => {
   const dispatch = useDispatch();
 
-  const isFocused = useIsFocused();
   const usersState = useSelector(state => state.users);
 
   return (
@@ -57,6 +55,7 @@ const Akun = ({navigation}) => {
         activeOpacity={0.7}
         onPress={() => {
           dispatch(clearUser());
+          showSuccess({title: 'Berhasil Logout'});
           navigation.navigate('Main', {screen: 'Home'});
         }}>
         <ICLogout />

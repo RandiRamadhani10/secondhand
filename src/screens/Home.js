@@ -21,8 +21,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getBanners, getCategory, getProduct} from '../store/actions/buyer';
 import {authUser} from '../store/actions/users';
 
+import {useIsFocused} from '@react-navigation/native';
+
 const Home = ({navigation}) => {
   const dispatch = useDispatch();
+
+  const isFocused = useIsFocused();
 
   const buyerState = useSelector(state => state.buyer);
 
@@ -50,7 +54,7 @@ const Home = ({navigation}) => {
       return setListBanners(filteredBanners);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isFocused]);
 
   useEffect(() => {
     dispatch(
@@ -60,14 +64,21 @@ const Home = ({navigation}) => {
         status: 'available',
       }),
     );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorySelectedId, keyword]);
+  }, [categorySelectedId, keyword, isFocused]);
 
   useEffect(() => {
-    dispatch(getCategory());
-    getListBanners();
+    if (buyerState?.category?.length < 1) {
+      dispatch(getCategory());
+    }
+
+    if (buyerState?.banners?.length < 1) {
+      getListBanners();
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isFocused]);
 
   useEffect(() => {
     if (usersState.hasOwnProperty('access_token')) {
@@ -107,7 +118,7 @@ const Home = ({navigation}) => {
           )}
           name="keyword"
         />
-        <Gap height={moderateScale(32)} />
+        <Gap height={moderateScale(24)} />
         {listBanners.length > 0 ? (
           <SliderBox
             ImageComponent={FastImage}
@@ -127,7 +138,7 @@ const Home = ({navigation}) => {
           <EmptyContent text="Belum Ada Banner Terbaru" />
         )}
 
-        <Gap height={moderateScale(40)} />
+        <Gap height={moderateScale(32)} />
         <Text style={styles.textCategory}>Telusuri Kategori</Text>
         <Gap height={moderateScale(16)} />
         <View>

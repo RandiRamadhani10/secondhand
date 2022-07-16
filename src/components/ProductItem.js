@@ -8,7 +8,7 @@ import Gap from './Gap';
 import NumberFormat from 'react-number-format';
 
 // Alternative for choose width & height
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const ProductItem = ({title, image, category, price, onPress}) => {
   return (
@@ -59,18 +59,17 @@ const ProductItem = ({title, image, category, price, onPress}) => {
 const styles = StyleSheet.create({
   containerShadow: {
     margin: moderateScale(12),
-    width: '44%',
+    width: width * 0.42,
     borderRadius: 8,
-    backgroundColor: 'transparent',
-    shadowColor: Colors.SECONDARY,
+    backgroundColor: Colors.BACKGROUND,
     shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 1,
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
   },
   container: {
     width: '100%',
-    borderRadius: 4,
+    borderRadius: 8,
     padding: moderateScale(10),
   },
   image: {

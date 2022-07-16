@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import {View, Text, SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import {BaseNotif, EmptyContent, Gap, NotificationItemSkeleton} from '../components';
 import {Colors, Fonts} from '../utils';
@@ -6,15 +6,13 @@ import {moderateScale} from 'react-native-size-matters';
 import {useSelector, useDispatch} from 'react-redux';
 import {getNotification, patchNotificationById} from '../store/actions/notification';
 import {useIsFocused} from '@react-navigation/native';
-import {getProductById} from '../store/actions/buyer';
 
 const Notif = ({navigation}) => {
   const dispatch = useDispatch();
 
   const isFocused = useIsFocused();
-  const usersState = useSelector(state => state.users.users);
+
   const notificationState = useSelector(state => state.notification);
-  const buyerState = useSelector(state => state.buyerState);
 
   const handleClickItem = async (id, payload) => {
     // If Navigate to InfoPenawar
