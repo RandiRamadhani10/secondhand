@@ -50,4 +50,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: bundle
-          path: android/app/build/outputs/bundle/release/
+          path: android/app/build/outputs/apk/release
