@@ -56,20 +56,11 @@ jobs:
 
       - name: Generate App APK
         run: |
-          cd android && ./gradlew assembleRelease
+          cd android && ./gradlew bundleRelease
 
       ## sign generated apk
       - name: Sign APK
         id: sign_app
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: android/app/build/outputs/apk/release
-
-      ## Distribute app to Firebase App Distribution for testing / use google play internal track if you have a google play account
-      - name: upload artifact to Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
-        with:
-          appId: ${{secrets.ANDROID_FIREBASE_APP_ID}}
-          token: ${{secrets.ANDROID_FIREBASE_TOKEN}}
-          groups: testers
-          file: ${{steps.sign_app.outputs.signedReleaseFile}}
+          releaseDirectory: android/app/build/outputs/bundle/release/*.aab
