@@ -274,4 +274,18 @@ const styles = StyleSheet.create({
     color: Colors.SECONDARY,
     textAlign: 'center',
   },
+
+  // Delete Icon Style
+  // productItemContainer: {
+  //   position: 'relative',
+  // },
+  // productItemX: {
+  //   position: 'absolute',
+  //   backgroundColor: Colors.PRIMARY,
+  //   padding: moderateScale(5),
+  //   borderRadius: 100,
+  //   zIndex: 15,
+  //   top: moderateScale(25),
+  //   right: moderateScale(25),
+  // },
 });

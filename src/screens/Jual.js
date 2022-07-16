@@ -3,7 +3,7 @@ import {View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity} from
 import {Gap, BaseInput, BaseButton, BaseUploadPhoto} from '../components';
 import SelectDropdown from 'react-native-select-dropdown';
 import {ICArrowLeft, ICChevronDown, ICChevronUp, ICClosePrimary} from '../assets';
-import {Colors, Fonts} from '../utils';
+import {Colors, Fonts, showSuccess} from '../utils';
 import {moderateScale} from 'react-native-size-matters';
 import {useForm, Controller} from 'react-hook-form';
 import {useIsFocused} from '@react-navigation/native';
@@ -15,6 +15,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {useSelector, useDispatch} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import {postProduct} from '../store/actions/seller';
+import {getCategory} from '../store/actions/buyer';
 
 const options = {
   selectionLimit: 1,
@@ -31,7 +32,11 @@ const Jual = ({navigation}) => {
 
   const [images, setImages] = useState([]);
 
+  const buyerState = useSelector(state => state.buyer);
+
   const categoryState = useSelector(state => state.buyer.category);
+
+  const isLoadingSeller = useSelector(state => state.seller.isLoading);
 
   const [categoryList, setCategoryList] = useState([]);
 
@@ -39,29 +44,30 @@ const Jual = ({navigation}) => {
     const result = await launchImageLibrary(options);
     if (result?.assets) {
       setImages(result?.assets);
+      setValue('images', result?.assets);
+      clearErrors('images');
     }
   };
 
-  const schema = yup
-    .object()
-    .shape({
-      name: yup.string().required('Silahkan Isi Nama Produk'),
-      base_price: yup.number().required('Silahkan Isi Harga Produk'),
-      category_ids: yup.string().required('Silahkan Pilih Kategori'),
-      description: yup.string().required('Silahkan Isi Deskripsi Produk'),
-    })
-    .required();
+  const schema = yup.object().shape({
+    name: yup.string().required('Silahkan Isi Nama Produk'),
+    base_price: yup.number().typeError('Silahkan Isi dengan Angka').required('Silahkan Isi Harga Produk'),
+    category_ids: yup.string().required('Silahkan Pilih Kategori'),
+    description: yup.string().required('Silahkan Isi Deskripsi Produk'),
+    images: yup.mixed().typeError('Silahkan Upload Foto yang Valid').required('Silahkan Upload Foto Produk'),
+  });
 
   const {
     control,
     setValue,
     handleSubmit,
+    clearErrors,
+    reset,
     formState: {errors},
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       name: '',
-      base_price: 0,
       category_ids: '',
       description: '',
     },
@@ -70,10 +76,19 @@ const Jual = ({navigation}) => {
   useEffect(() => {
     for (const key in usersState?.profile) {
       if (usersState?.profile[key] === '-' || usersState?.profile[key] === '' || usersState?.profile[key] === 0) {
+        showSuccess({title: 'Lengkapi Profile', description: ' Silahkan lengkapi profile terlebih dahulu'});
         navigation.navigate('Profile');
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused, navigation, usersState?.profile]);
+
+  useEffect(() => {
+    if (buyerState?.category?.length < 1) {
+      dispatch(getCategory());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFocused]);
 
   useEffect(() => {
     if (categoryState?.length > 0) {
@@ -98,7 +113,12 @@ const Jual = ({navigation}) => {
     formData.append('location', usersState?.profile?.city);
     formData.append('image', {uri: images[0].uri, name: images[0].fileName, type: images[0].type});
 
-    dispatch(postProduct(formData));
+    const response = await dispatch(postProduct(formData));
+
+    if (response?.payload) {
+      reset();
+      setImages([]);
+    }
   };
 
   return (
@@ -164,6 +184,7 @@ const Jual = ({navigation}) => {
                 onSelect={selectedItem => {
                   setValue('category_ids', selectedItem.id);
                   setValue('category_name', selectedItem.name);
+                  clearErrors('category_ids');
                 }}
                 buttonTextAfterSelection={selectedItem => {
                   return selectedItem.name;
@@ -187,8 +208,8 @@ const Jual = ({navigation}) => {
             rules={{required: true}}
             render={({field: {onChange, onBlur, value}}) => (
               <BaseInput
+                type="text_area"
                 label="Deskripsi"
-                type="text"
                 placeholder="Contoh: Jalan ikan pari"
                 multiline={true}
                 numberOfLines={5}
@@ -226,10 +247,18 @@ const Jual = ({navigation}) => {
                 );
               })}
           </ScrollView>
+          <Gap height={12} />
+          {errors?.images && <Text style={styles.errors}>{errors.images.message}</Text>}
           <Gap height={24} />
           <View style={styles.btnContainer}>
             <BaseButton style={styles.btnPreview} title="Preview" onPress={handleSubmit(onPreview)} />
-            <BaseButton style={styles.btnTerbitkan} title="Terbitkan" onPress={handleSubmit(onSubmit)} />
+            <BaseButton
+              style={styles.btnTerbitkan}
+              title="Terbitkan"
+              disable={isLoadingSeller}
+              isLoading={isLoadingSeller}
+              onPress={handleSubmit(onSubmit)}
+            />
           </View>
         </View>
       </ScrollView>

@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
   statusText: {
     fontFamily: Fonts.PRIMARY.LIGHT,
     fontSize: moderateScale(10),
+    color: Colors.TEXT,
   },
   titleText: {
     fontFamily: Fonts.PRIMARY.REGULAR,

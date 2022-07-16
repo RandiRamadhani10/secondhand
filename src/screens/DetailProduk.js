@@ -11,16 +11,17 @@ import {
 } from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {moderateScale} from 'react-native-size-matters';
-import {Colors} from '../utils';
+import {Colors, showSuccess} from '../utils';
 import {Gap, BaseButton, CardUser, BaseInput} from '../components';
 import {Fonts} from '../utils';
-import {ICArrowLeft} from '../assets';
+import {ICArrowLeft, ICEdit} from '../assets';
 import {Controller, useForm} from 'react-hook-form';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import FastImage from 'react-native-fast-image';
 import {useDispatch, useSelector} from 'react-redux';
-import {bidProduct, getProductById} from '../store/actions/buyer';
+import {bidProduct} from '../store/actions/buyer';
 import NumberFormat from 'react-number-format';
+import {deleteProductById} from '../store/actions/seller';
 
 const screen = Dimensions.get('screen');
 
@@ -34,6 +35,8 @@ const DetailProduk = ({navigation, route}) => {
   const profileUsersState = useSelector(state => state.users.profile);
 
   const stateBuyer = useSelector(state => state.buyer);
+
+  const isLoadingSubmit = useSelector(state => state.seller.isLoading);
 
   const [isAlreadyBid, setIsAlreadyBid] = useState(false);
 
@@ -82,11 +85,22 @@ const DetailProduk = ({navigation, route}) => {
 
   const onSubmit = async data => {
     try {
-      await dispatch(bidProduct({product_id: id, bid_price: Number(data?.bid_price)}));
+      const response = await dispatch(bidProduct({product_id: id, bid_price: Number(data?.bid_price)}));
+      if (response?.payload) {
+        setIsAlreadyBid(true);
+      }
       handleClosePress();
-      setIsAlreadyBid(true);
     } catch (err) {
       setIsAlreadyBid(false);
+    }
+  };
+
+  const onDelete = async productId => {
+    const response = await dispatch(deleteProductById(productId));
+
+    if (response?.payload) {
+      showSuccess({title: 'Berhasil Menghapus Produk'});
+      navigation.navigate('Main', {screen: 'DaftarJual'});
     }
   };
 
@@ -99,7 +113,6 @@ const DetailProduk = ({navigation, route}) => {
       ) : (
         <SafeAreaView style={styles.screen}>
           <ScrollView style={styles.scrollScreen}>
-            {/* <StatusBar backgroundColor="transparent" translucent={true} /> */}
             <View style={styles.btnBackContainer}>
               <TouchableOpacity style={styles.btnBack} activeOpacity={0.7} onPress={() => navigation.goBack()}>
                 <ICArrowLeft />
@@ -161,6 +174,28 @@ const DetailProduk = ({navigation, route}) => {
                   handleOpenPress();
                 }}
                 title={isAlreadyBid ? 'Menunggu respon penjual' : 'Saya Tertarik dan ingin Nego'}
+              />
+            </View>
+          ) : null}
+
+          {profileUsersState?.id === stateBuyer.productDetail?.User?.id ? (
+            <View style={styles.btnActionContainer}>
+              {/* Edit Product */}
+              {/* <BaseButton
+                style={styles.editAction}
+                disable={isLoadingSubmit}
+                isLoading={isLoadingSubmit}
+                onPress={() => navigation.navigate('Main', {screen: 'Jual', params: {id: id}})}
+                title={'Edit Produk'}
+              /> */}
+              {/* <Gap height={moderateScale(10)} /> */}
+
+              <BaseButton
+                style={styles.deleteAction}
+                disable={isLoadingSubmit}
+                isLoading={isLoadingSubmit}
+                onPress={() => onDelete(id)}
+                title={'Hapus Produk'}
               />
             </View>
           ) : null}
@@ -267,13 +302,18 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 24,
     borderRadius: 16,
-    backgroundColor: Colors.WHITE,
+    backgroundColor: Colors.BACKGROUND,
     marginHorizontal: 16,
     marginBottom: 30,
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.15,
     shadowRadius: 4,
-    elevation: 2,
+    elevation: 1,
+  },
+  category: {
+    fontFamily: Fonts.PRIMARY.REGULAR,
+    fontSize: moderateScale(14),
+    color: Colors.SECONDARY,
   },
   card: {
     marginHorizontal: 16,
@@ -282,13 +322,14 @@ const styles = StyleSheet.create({
   txtTitle: {
     fontFamily: Fonts.PRIMARY.REGULAR,
     fontSize: moderateScale(14),
-    color: 'black',
+    color: Colors.TEXT,
   },
   txtCat: {
     fontFamily: Fonts.PRIMARY.REGULAR,
     fontSize: moderateScale(10),
   },
   des: {
+    color: Colors.SECONDARY,
     fontFamily: Fonts.PRIMARY.REGULAR,
     fontSize: moderateScale(14),
   },
@@ -305,6 +346,34 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     bottom: 1,
+  },
+
+  btnActionContainer: {
+    padding: 16,
+    position: 'absolute',
+    width: '100%',
+    bottom: 1,
+    justifyContent: 'space-between',
+  },
+  btnAction: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
+  editAction: {
+    width: '100%',
+    paddingVertical: moderateScale(14),
+    borderRadius: moderateScale(16),
+    alignItems: 'center',
+  },
+  deleteAction: {
+    width: '100%',
+    paddingVertical: moderateScale(14),
+    borderWidth: moderateScale(1.5),
+    borderRadius: moderateScale(16),
+    backgroundColor: Colors.WHITE,
+    borderColor: Colors.PRIMARY,
+    color: Colors.PRIMARY,
+    alignItems: 'center',
   },
 
   container: {

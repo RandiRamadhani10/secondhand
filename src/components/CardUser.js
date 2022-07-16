@@ -2,7 +2,6 @@ import React from 'react';
 import propTypes from 'prop-types';
 import {StyleSheet, Text, View, TouchableHighlight} from 'react-native';
 import {Fonts} from '../utils';
-import {Gap} from './Gap';
 import {Colors} from '../utils/Colors';
 import {moderateScale} from 'react-native-size-matters';
 import FastImage from 'react-native-fast-image';
@@ -25,7 +24,7 @@ const CardUser = ({avatar, name, city, button = true, isActive = false, isHaveBo
       </View>
       <View style={styles.contentText}>
         <Text style={styles.name}>{name}</Text>
-        <Text>{city}</Text>
+        <Text style={styles.city}>{city}</Text>
       </View>
       {button ? (
         <View style={styles.buttonPlace}>
@@ -58,11 +57,11 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     borderRadius: moderateScale(16),
-    backgroundColor: 'transparent',
+    backgroundColor: Colors.BACKGROUND,
     shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: isHaveBorder ? 1 : 0,
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: isHaveBorder ? 2 : 0,
     flexDirection: 'row',
   }),
   icon: {
@@ -72,6 +71,11 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.PRIMARY.BOLD,
     fontSize: moderateScale(14),
     color: Colors.TEXT,
+  },
+  city: {
+    fontFamily: Fonts.PRIMARY.REGULAR,
+    fontSize: moderateScale(10),
+    color: Colors.SECONDARY,
   },
   contentText: {
     marginLeft: moderateScale(16),

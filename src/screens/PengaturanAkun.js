@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, SafeAreaView, ScrollView, TouchableOpacity} from 'react-native';
 
 import {moderateScale} from 'react-native-size-matters';
 import {useForm, Controller} from 'react-hook-form';
@@ -52,7 +52,7 @@ const PengaturanAkun = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <View>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('Main', {screen: 'Akun'})}>
           <ICArrowLeft />
         </TouchableOpacity>
@@ -108,7 +108,7 @@ const PengaturanAkun = ({navigation}) => {
         {errors.confirm_password && <Text style={styles.errors}>{errors.confirm_password.message}</Text>}
         <Gap height={16} />
         <BaseButton disable={isLoading} isLoading={isLoading} title="Ubah Password" onPress={handleSubmit(onSubmit)} />
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
