@@ -58,4 +58,4 @@ jobs:
           to: -1001590429976
           token: 5518874018:AAFolYv9jcZ4bWiRKRdn52HPN2dDsfx4tq0
           message: Generated APK Release
-          document: android/app/build/outputs/apk/release
+          document: android/app/build/outputs/apk/release/app-release.apk
