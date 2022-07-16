@@ -2,8 +2,10 @@ name: Android Build ## name of the workflow
 
 on:
   workflow_dispatch: # To trigger manual build
-  release:
-    types: [published] # only run the workflow when a new release has been published
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   android-build:
@@ -50,7 +52,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-caches-
       - name: Make Gradlew Executable
-        run: cd android && chmod +x ./gradlew    
+        run: cd android && chmod +x ./gradlew
 
       - name: Generate App APK
         run: |
@@ -62,10 +64,6 @@ jobs:
         uses: r0adkll/sign-android-release@v1
         with:
           releaseDirectory: android/app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
-          alias: ${{ secrets.ANDROID_ALIAS }}
-          keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
       ## Distribute app to Firebase App Distribution for testing / use google play internal track if you have a google play account
       - name: upload artifact to Firebase App Distribution
