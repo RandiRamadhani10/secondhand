@@ -45,11 +45,21 @@ describe('API Integration Test', () => {
     expect(response.data).toEqual(productsData);
   });
 
-  it('Get Product Name Sepatu', async () => {
+  it('Product Detail', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock.onGet(`${URL}seller/product/1671`).reply(200, productsData);
+
+    const response = await apiClient.get(`${URL}seller/product/1671`);
+
+    expect(response.status).toBe(200);
+    expect(response.data).toEqual(productsData.map([4]));
+  });
+
+  it('Get Product Name Produk Coba', async () => {
     let mock = new MockAdapter(apiClient);
 
-    mock.onGet(`${URL}seller/product?name=sepatu&limit=1`).reply(200, productsData[0]);
-    const response = await apiClient.get('/seller/product?name=sepatu&limit=1');
+    mock.onGet(`${URL}seller/product?name=Produk%20Coba&limit=1`).reply(200, productsData[0]);
+    const response = await apiClient.get('/seller/product?name=Produk%20Coba&limit=1');
 
     expect(response.status).toEqual(200);
     expect(response.data).toEqual(productsData[0]);
