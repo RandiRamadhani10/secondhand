@@ -20,6 +20,6 @@ const styles = StyleSheet.create({
   divider: {
     flex: 1,
     height: 1,
-    backgroundColor: Colors.SECONDARY,
+    backgroundColor: Colors.DISABLE,
   },
 });

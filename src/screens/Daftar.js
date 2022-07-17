@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity} from 'react-native';
 import {Colors, Fonts} from '../utils';
 
 import {moderateScale} from 'react-native-size-matters';
@@ -53,8 +53,7 @@ const Daftar = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.screen}>
-      {/* <StatusBar backgroundColor={Colors.WHITE} /> */}
-      <View>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('Main', {screen: 'Home'})}>
           <ICArrowLeft />
         </TouchableOpacity>
@@ -113,7 +112,7 @@ const Daftar = ({navigation}) => {
         {errors?.password && <Text style={styles.errors}>{errors.password.message}</Text>}
         <Gap height={16} />
         <BaseButton disable={isLoading} isLoading={isLoading} title="Daftar" onPress={handleSubmit(onSubmit)} />
-      </View>
+      </ScrollView>
       <View style={styles.loginContainer}>
         <View style={styles.loginWrapper}>
           <Text style={styles.loginSub}>Sudah punya Akun? </Text>

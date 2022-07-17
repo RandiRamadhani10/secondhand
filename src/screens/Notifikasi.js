@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import {View, Text, SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import {BaseNotif, EmptyContent, Gap, NotificationItemSkeleton} from '../components';
 import {Colors, Fonts} from '../utils';
@@ -6,17 +6,13 @@ import {moderateScale} from 'react-native-size-matters';
 import {useSelector, useDispatch} from 'react-redux';
 import {getNotification, patchNotificationById} from '../store/actions/notification';
 import {useIsFocused} from '@react-navigation/native';
-import {getProductById} from '../store/actions/buyer';
 
 const Notif = ({navigation}) => {
   const dispatch = useDispatch();
 
   const isFocused = useIsFocused();
-  const usersState = useSelector(state => state.users.users);
-  const notificationState = useSelector(state => state.notification);
-  const buyerState = useSelector(state => state.buyerState);
 
-  const [isChangedReadStatus, setIsChangedReadStatus] = useState(false);
+  const notificationState = useSelector(state => state.notification);
 
   const handleClickItem = async (id, payload) => {
     // If Navigate to InfoPenawar
@@ -26,8 +22,6 @@ const Notif = ({navigation}) => {
     //   setIsChangedReadStatus(true);
     //   navigation.navigate('InfoPenawar', {id: id});
     // }
-
-    // setIsChangedReadStatus(true);
 
     // Just Change Status Read
     let payloadBody = {
@@ -48,20 +42,22 @@ const Notif = ({navigation}) => {
       },
     };
 
-    // console.log('payloadBody', payloadBody);
-    const response = await dispatch(patchNotificationById({id: id, payload: payloadBody}));
+    // Loading is Show Every Dispatch
+    // const response = await dispatch(patchNotificationById({id: id, payload: payloadBody}));
 
-    if (response) {
-      dispatch(getNotification());
-    }
+    // if (response) {
+    //   dispatch(getNotification());
+    // }
+
+    // Just PatchData
+    dispatch(patchNotificationById({id: id, payload: payloadBody}));
   };
 
   useEffect(() => {
     dispatch(getNotification());
-    setIsChangedReadStatus(false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFocused, isChangedReadStatus]);
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.screen}>

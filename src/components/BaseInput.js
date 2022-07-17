@@ -23,6 +23,7 @@ const BaseInput = ({label, type, placeholder, onChangeText, onBlur, value, multi
         style={styles.formInput(type)}
         value={value}
         placeholder={placeholder}
+        placeholderTextColor={Colors.SECONDARY}
         onBlur={onBlur}
         multiline={multiline === undefined ? false : multiline}
         numberOfLines={numberOfLines === undefined ? 1 : numberOfLines}
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
     color: Colors.TEXT,
   },
   formInput: type => ({
-    textAlignVertical: 'top',
+    textAlignVertical: type === 'text_area' ? 'top' : null,
     fontFamily: Fonts.PRIMARY.REGULAR,
     fontSize: moderateScale(14),
     color: Colors.TEXT,
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
   eyeIcon: {
     position: 'absolute',
     top: moderateScale(0),
-    right: moderateScale(24),
+    right: moderateScale(20),
     bottom: moderateScale(-10),
     justifyContent: 'center',
     color: Colors.TEXT,

@@ -1,5 +1,15 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {getDetailOrderProductById, getOrder, getOrderById, getProduct, getProductById} from './actions/seller';
+import {
+  getDetailOrderProductById,
+  getOrder,
+  getOrderById,
+  getProduct,
+  patchOrderById,
+  deleteProductById,
+  getProductById,
+  postProduct,
+  putProductById,
+} from './actions/seller';
 
 const initialState = {
   products: [],
@@ -84,6 +94,96 @@ export const sellerSlice = createSlice({
       };
     },
     [getDetailOrderProductById.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+      };
+    },
+
+    // Patch Order Product By ID
+    [patchOrderById.pending]: state => {
+      return {...state, isLoading: true};
+    },
+    [patchOrderById.fulfilled]: state => {
+      return {
+        ...state,
+        isLoading: false,
+      };
+    },
+    [patchOrderById.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+      };
+    },
+
+    // Get Product By ID
+    [getProductById.pending]: state => {
+      return {...state, isLoading: true};
+    },
+    [getProductById.fulfilled]: state => {
+      return {
+        ...state,
+        isLoading: false,
+      };
+    },
+    [getProductById.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+      };
+    },
+
+    // Post Product
+    [postProduct.pending]: state => {
+      return {...state, isLoading: true};
+    },
+    [postProduct.fulfilled]: state => {
+      return {
+        ...state,
+        isLoading: false,
+      };
+    },
+    [postProduct.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+      };
+    },
+
+    // Put Product By Id
+    [putProductById.pending]: state => {
+      return {...state, isLoading: true};
+    },
+    [putProductById.fulfilled]: state => {
+      return {
+        ...state,
+        isLoading: false,
+      };
+    },
+    [putProductById.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+      };
+    },
+
+    // Delete Product By ID
+    [deleteProductById.pending]: state => {
+      return {...state, isLoading: true};
+    },
+    [deleteProductById.fulfilled]: state => {
+      return {
+        ...state,
+        isLoading: false,
+      };
+    },
+    [deleteProductById.rejected]: (state, action) => {
       return {
         ...state,
         error: action.payload,
