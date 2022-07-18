@@ -9,7 +9,11 @@
     "test": "jest",
     "lint": "eslint .",
     "np": "np --no-publish",
-    "postversion": "react-native-version"
+    "postversion": "react-native-version",
+    "e2e:build-ios": "detox build --configuration ios",
+    "e2e:build-android": "detox build --configuration android.attached.release",
+    "e2e:run-ios": "detox test --configuration ios",
+    "e2e:run-android": "detox test --configuration android.attached.release"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4.3.2",
