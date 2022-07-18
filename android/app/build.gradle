@@ -274,6 +274,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation "androidx.appcompat:appcompat:1.0.0"
 
+    androidTestImplementation('com.wix:detox:+')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
