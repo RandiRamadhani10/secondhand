@@ -8,8 +8,8 @@ describe('API Integration Test', () => {
   const URL = 'https://market-final-project.herokuapp.com/';
 
   const dataUser = {
-    email: 'johndoe@mail.com',
-    password: '123456',
+    email: 'binarianuserdev@gmail.com',
+    password: 'binarianuserdev',
   };
 
   it('Auth Register', async () => {
@@ -47,12 +47,12 @@ describe('API Integration Test', () => {
 
   it('Product Detail', async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onGet(`${URL}seller/product/1671`).reply(200, productsData);
+    mock.onGet(`${URL}seller/product/1671`).reply(200, productsData[4]);
 
-    const response = await apiClient.get(`${URL}seller/product/1671`);
+    const responses = await apiClient.get(`${URL}seller/product/1671`);
 
-    expect(response.status).toBe(200);
-    expect(response.data).toEqual(productsData.map([4]));
+    expect(responses.status).toBe(200);
+    expect(responses.data).toEqual(productsData[4]);
   });
 
   it('Get Product Name Produk Coba', async () => {

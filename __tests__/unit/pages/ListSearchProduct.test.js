@@ -23,7 +23,7 @@ describe('Unit: List Search Product', () => {
 
     const state = root.props.store.getState();
     expect(root.props.store).toBeTruthy();
-    expect(state).toHaveLength(1);
+    expect(state).toHaveLength(6);
     expect(compJSON).toMatchSnapshot();
   });
 
