@@ -29,13 +29,13 @@
       "emulator": {
         "type": "android.emulator",
         "device": {
-          "avdName": "ANDROID Q"
+          "avdName": "emulator-5554"
         }
       },
       "android.attached": {
         "type": "android.attached",
         "device": {
-          "adbName": "ANDROID Q"
+          "adbName": "emulator-5554"
         }
       }
     },
