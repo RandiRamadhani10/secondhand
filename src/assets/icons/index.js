@@ -26,13 +26,18 @@ import ICChevronDown from './ic-chevron-down.svg';
 import ICChevronUp from './ic-chevron-up.svg';
 import ICAvatarExample from './ic-avatar-example.svg';
 import ICLove from './ic-love.svg';
+import ICLoveWhite from './ic-love-white.svg';
 import ICLoveActive from './ic-love-active.svg';
+import ICLoveFill from './ic-love-fill.svg';
+import ICLoveFillActive from './ic-love-fill-active.svg';
 import ICBox from './ic-box.svg';
 import ICBoxActive from './ic-box-active.svg';
 import ICDollarSign from './ic-dollar-sign.svg';
 import ICDollarSignActive from './ic-dollar-sign-active.svg';
 import ICWhatsApp from './ic-whatsapp.svg';
 import ICClosePrimary from './ic-close-primary.svg';
+import ICHeartActive from './ic-heart-active.svg';
+import ICShopping from './ic-shopping.svg';
 
 export {
   ICArrowLeft,
@@ -70,4 +75,9 @@ export {
   ICDollarSignActive,
   ICWhatsApp,
   ICClosePrimary,
+  ICHeartActive,
+  ICLoveWhite,
+  ICLoveFillActive,
+  ICLoveFill,
+  ICShopping,
 };

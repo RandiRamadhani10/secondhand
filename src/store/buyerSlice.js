@@ -7,6 +7,10 @@ import {
   getCategory,
   getBidProductById,
   getBanners,
+  getWishlist,
+  getWishlistById,
+  postWishlist,
+  deleteWishlistById,
 } from './actions/buyer';
 
 const initialState = {
@@ -16,8 +20,11 @@ const initialState = {
   bidProductDetail: {},
   category: [],
   banners: [],
+  wishlist: [],
+  wishlistDetail: {},
   isLoading: false,
   isLoadingBid: false,
+  isLoadingWishlist: false,
   error: null,
 };
 
@@ -155,6 +162,80 @@ export const buyerSlice = createSlice({
         ...state,
         error: action.payload,
         isLoading: false,
+      };
+    },
+
+    // Get Wishlist
+    [getWishlist.pending]: state => {
+      return {...state, isLoadingWishlist: true};
+    },
+    [getWishlist.fulfilled]: (state, action) => {
+      return {
+        ...state,
+        wishlist: action.payload,
+        isLoadingWishlist: false,
+      };
+    },
+    [getWishlist.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoadingWishlist: false,
+      };
+    },
+
+    // Get Wishlist By Id
+    [getWishlistById.pending]: state => {
+      return {...state, isLoadingWishlist: true};
+    },
+    [getWishlistById.fulfilled]: (state, action) => {
+      return {
+        ...state,
+        wishlistDetail: action.payload,
+        isLoadingWishlist: false,
+      };
+    },
+    [getWishlistById.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoadingWishlist: false,
+      };
+    },
+
+    // Post Wishlist
+    [postWishlist.pending]: state => {
+      return {...state, isLoadingWishlist: true};
+    },
+    [postWishlist.fulfilled]: state => {
+      return {
+        ...state,
+        isLoadingWishlist: false,
+      };
+    },
+    [postWishlist.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoadingWishlist: false,
+      };
+    },
+
+    // Delete Wishlist
+    [deleteWishlistById.pending]: state => {
+      return {...state, isLoadingWishlist: true};
+    },
+    [deleteWishlistById.fulfilled]: state => {
+      return {
+        ...state,
+        isLoadingWishlist: false,
+      };
+    },
+    [deleteWishlistById.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoadingWishlist: false,
       };
     },
   },
