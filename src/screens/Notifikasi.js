@@ -7,7 +7,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {getNotification, patchNotificationById} from '../store/actions/notification';
 import {useIsFocused} from '@react-navigation/native';
 
-const Notif = ({navigation}) => {
+const Notifikasi = ({navigation}) => {
   const dispatch = useDispatch();
 
   const isFocused = useIsFocused();
@@ -119,4 +119,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Notif;
+export default Notifikasi;

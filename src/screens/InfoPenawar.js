@@ -5,7 +5,6 @@ import {ICArrowLeft, ICWhatsApp} from '../assets';
 import {Colors, Fonts, showError} from '../utils';
 import {moderateScale} from 'react-native-size-matters';
 import FastImage from 'react-native-fast-image';
-import {Controller, useForm} from 'react-hook-form';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import {useDispatch, useSelector} from 'react-redux';
 import NumberFormat from 'react-number-format';
