@@ -11,6 +11,8 @@ import DetailProduk from './DetailProduk';
 import InfoPenawar from './InfoPenawar';
 import PreviewJual from './PreviewJual';
 import PengaturanAkun from './PengaturanAkun';
+import Wishlist from './Wishlist';
+import History from './History';
 
 export {
   Login,
@@ -26,4 +28,6 @@ export {
   InfoPenawar,
   PreviewJual,
   PengaturanAkun,
+  Wishlist,
+  History,
 };

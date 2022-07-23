@@ -12,6 +12,8 @@ import {
   InfoPenawar,
   PreviewJual,
   PengaturanAkun,
+  Wishlist,
+  History,
 } from '../screens';
 
 import {getProductById} from '../store/actions/buyer';
@@ -44,6 +46,8 @@ const AppRoute = () => {
       <Stack.Screen name="InfoPenawar" component={InfoPenawar} />
       <Stack.Screen name="PreviewJual" component={PreviewJual} />
       <Stack.Screen name="PengaturanAkun" component={PengaturanAkun} />
+      <Stack.Screen name="Wishlist" component={Wishlist} />
+      <Stack.Screen name="History" component={History} />
     </Stack.Navigator>
   );
 };

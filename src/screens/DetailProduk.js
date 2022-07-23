@@ -14,12 +14,12 @@ import {moderateScale} from 'react-native-size-matters';
 import {Colors, showSuccess} from '../utils';
 import {Gap, BaseButton, CardUser, BaseInput} from '../components';
 import {Fonts} from '../utils';
-import {ICArrowLeft, ICEdit} from '../assets';
+import {ICArrowLeft, ICLoveWhite, ICLoveFillActive} from '../assets';
 import {Controller, useForm} from 'react-hook-form';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import FastImage from 'react-native-fast-image';
 import {useDispatch, useSelector} from 'react-redux';
-import {bidProduct} from '../store/actions/buyer';
+import {bidProduct, deleteWishlistById, postWishlist} from '../store/actions/buyer';
 import NumberFormat from 'react-number-format';
 import {deleteProductById} from '../store/actions/seller';
 
@@ -32,6 +32,8 @@ const DetailProduk = ({navigation, route}) => {
 
   const dispatch = useDispatch();
 
+  const stateUsers = useSelector(state => state.users.users);
+
   const profileUsersState = useSelector(state => state.users.profile);
 
   const stateBuyer = useSelector(state => state.buyer);
@@ -39,6 +41,8 @@ const DetailProduk = ({navigation, route}) => {
   const isLoadingSubmit = useSelector(state => state.seller.isLoading);
 
   const [isAlreadyBid, setIsAlreadyBid] = useState(false);
+
+  const [isOnWishlist, setIsOnWishlist] = useState(false);
 
   const checkStatusBid = useCallback(() => {
     const bids = [];
@@ -55,6 +59,16 @@ const DetailProduk = ({navigation, route}) => {
 
   useEffect(() => {
     checkStatusBid();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFocused]);
+
+  useEffect(() => {
+    if (stateBuyer.wishlist.length > 0) {
+      const findId = stateBuyer.wishlist.filter(item => item.product_id === id);
+      if (Array.isArray(findId) && findId?.length) {
+        setIsOnWishlist(true);
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused]);
 
@@ -83,10 +97,35 @@ const DetailProduk = ({navigation, route}) => {
     },
   });
 
+  const handleWishlist = async prodId => {
+    try {
+      const response = await dispatch(postWishlist({product_id: prodId}));
+
+      if (response?.payload.hasOwnProperty('name')) {
+        setIsOnWishlist(true);
+      }
+    } catch (err) {
+      setIsOnWishlist(false);
+    }
+  };
+
+  const handleDeleteWishList = async prodId => {
+    const findId = stateBuyer.wishlist.filter(item => item.product_id === prodId);
+
+    if (Array.isArray(findId) && findId.length) {
+      const response = await dispatch(deleteWishlistById(findId[0]?.id));
+
+      if (response?.payload.hasOwnProperty('name')) {
+        setIsOnWishlist(false);
+      }
+    }
+  };
+
   const onSubmit = async data => {
     try {
       const response = await dispatch(bidProduct({product_id: id, bid_price: Number(data?.bid_price)}));
-      if (response?.payload) {
+
+      if (response?.payload.hasOwnProperty('status')) {
         setIsAlreadyBid(true);
       }
       handleClosePress();
@@ -116,6 +155,19 @@ const DetailProduk = ({navigation, route}) => {
             <View style={styles.btnBackContainer}>
               <TouchableOpacity style={styles.btnBack} activeOpacity={0.7} onPress={() => navigation.goBack()}>
                 <ICArrowLeft />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.btnWishlist}
+                activeOpacity={0.7}
+                onPress={() => {
+                  if (isOnWishlist) {
+                    handleDeleteWishList(stateBuyer?.productDetail?.id);
+                  } else if (!isOnWishlist) {
+                    handleWishlist(stateBuyer?.productDetail?.id);
+                  }
+                }}>
+                {isOnWishlist ? <ICLoveFillActive /> : <ICLoveWhite />}
               </TouchableOpacity>
             </View>
             <View style={styles.imageContainer}>
@@ -171,6 +223,10 @@ const DetailProduk = ({navigation, route}) => {
                 disable={isAlreadyBid}
                 isLoading={stateBuyer?.isLoadingBid}
                 onPress={() => {
+                  if (!stateUsers.hasOwnProperty('access_token')) {
+                    return navigation.navigate('Login');
+                  }
+
                   handleOpenPress();
                 }}
                 title={isAlreadyBid ? 'Menunggu respon penjual' : 'Saya Tertarik dan ingin Nego'}
@@ -219,18 +275,25 @@ const DetailProduk = ({navigation, route}) => {
               </Text>
               <Gap height={moderateScale(16)} />
 
-              {/* Card For Dummy Product */}
+              {/* Card For Product */}
               <View style={styles.mainCard}>
                 <View style={styles.icon}>
                   <FastImage
-                    source={stateBuyer?.productDetail?.image_url}
+                    source={{uri: stateBuyer?.productDetail?.image_url}}
                     style={styles.imageBtmSheet}
                     resizeMode="cover"
                   />
                 </View>
                 <View style={styles.contentText}>
                   <Text style={styles.name}>{stateBuyer?.productDetail?.name}</Text>
-                  <Text>Rp {stateBuyer?.productDetail?.base_price}</Text>
+                  <NumberFormat
+                    value={stateBuyer?.productDetail?.base_price}
+                    displayType={'text'}
+                    thousandSeparator={'.'}
+                    decimalSeparator={','}
+                    prefix={'Rp. '}
+                    renderText={formattedValue => <Text>{formattedValue}</Text>}
+                  />
                 </View>
               </View>
 
@@ -279,9 +342,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: 'white',
     zIndex: 99,
-    padding: 5,
+    padding: 10,
     borderRadius: 50,
     left: 16,
+    top: 44,
+  },
+  btnWishlist: {
+    position: 'absolute',
+    backgroundColor: Colors.PRIMARY,
+    zIndex: 99,
+    padding: 10,
+    borderRadius: 50,
+    right: 16,
     top: 44,
   },
   abs: {
