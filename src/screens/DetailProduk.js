@@ -143,8 +143,6 @@ const DetailProduk = ({navigation, route}) => {
     }
   };
 
-  console.log('stateBuyer?.productDetail?', stateBuyer?.productDetail);
-
   return (
     <>
       {stateBuyer?.isLoading ? (
