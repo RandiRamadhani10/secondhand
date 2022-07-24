@@ -4,3 +4,4 @@ export * from './showMessages';
 export * from './ErrorCode';
 export * from './Navigation';
 export * from './FormatDate';
+export * from './Notification';
