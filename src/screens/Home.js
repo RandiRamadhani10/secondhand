@@ -131,7 +131,7 @@ const Home = ({navigation}) => {
           </View>
 
           <View style={styles.btnWishlistContainer}>
-            <Gap width={10} />
+            <Gap width={5} />
             <TouchableOpacity
               style={styles.btnWishlist}
               activeOpacity={0.7}
@@ -140,7 +140,7 @@ const Home = ({navigation}) => {
               }}>
               <ICLoveFill />
             </TouchableOpacity>
-            <Gap width={10} />
+            <Gap width={5} />
             <TouchableOpacity
               style={styles.btnWishlist}
               activeOpacity={0.7}

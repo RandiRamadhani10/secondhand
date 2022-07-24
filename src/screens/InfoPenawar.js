@@ -2,7 +2,7 @@ import React, {Fragment, useCallback, useEffect, useMemo, useRef, useState} from
 import {SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity, Share, Linking} from 'react-native';
 import {Gap, CardUser, BaseNotif, BaseButton, RadioButton} from '../components';
 import {ICArrowLeft, ICWhatsApp} from '../assets';
-import {Colors, Fonts, showError} from '../utils';
+import {Colors, Fonts, showError, notification} from '../utils';
 import {moderateScale} from 'react-native-size-matters';
 import FastImage from 'react-native-fast-image';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
@@ -47,6 +47,18 @@ const InfoPenawar = ({navigation, route}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  const handleNotification = (idChannel, title, description, picture) => {
+    notification.configure();
+    notification.createChannel(idChannel, title, description);
+
+    notification.sendNotification(
+      idChannel,
+      `Status Penawaran ${title} Berhasil Diperbarui!`,
+      `Status Penawaran ${title} berhasil diperbarui, kini saatnya menghubungi pembeli untuk transaksi lebih lanjut`,
+      picture,
+    );
+  };
+
   const handleDecline = async (paramsId, paramsPayload) => {
     const response = await dispatch(patchOrderById({id: paramsId, payload: paramsPayload}));
 
@@ -62,6 +74,12 @@ const InfoPenawar = ({navigation, route}) => {
 
     if (response) {
       setRenderBottomSheet('hubungi');
+      handleNotification(
+        `S_${detailProdukState?.id}`,
+        detailProdukState?.Product?.name,
+        detailProdukState?.Product?.name,
+        detailProdukState?.Product?.image_url,
+      );
       handleOpenPress(1);
     }
   };
