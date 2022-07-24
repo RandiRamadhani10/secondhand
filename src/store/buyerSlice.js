@@ -11,6 +11,8 @@ import {
   getWishlistById,
   postWishlist,
   deleteWishlistById,
+  getHistory,
+  getHistoryById,
 } from './actions/buyer';
 
 const initialState = {
@@ -22,6 +24,8 @@ const initialState = {
   banners: [],
   wishlist: [],
   wishlistDetail: {},
+  history: [],
+  historyDetail: [],
   isLoading: false,
   isLoadingBid: false,
   isLoadingWishlist: false,
@@ -236,6 +240,44 @@ export const buyerSlice = createSlice({
         ...state,
         error: action.payload,
         isLoadingWishlist: false,
+      };
+    },
+
+    //   Get All History
+    [getHistory.pending]: state => {
+      return {...state, isLoading: true};
+    },
+    [getHistory.fulfilled]: (state, action) => {
+      return {
+        ...state,
+        history: action.payload,
+        isLoading: false,
+      };
+    },
+    [getHistory.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+      };
+    },
+
+    //   Get History By Id
+    [getHistoryById.pending]: state => {
+      return {...state, isLoading: true};
+    },
+    [getHistoryById.fulfilled]: (state, action) => {
+      return {
+        ...state,
+        historyDetail: action.payload,
+        isLoading: false,
+      };
+    },
+    [getHistoryById.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
       };
     },
   },

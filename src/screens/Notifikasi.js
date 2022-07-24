@@ -49,8 +49,9 @@ const Notifikasi = ({navigation}) => {
     //   dispatch(getNotification());
     // }
 
-    // Just PatchData
+    // PatchData & Navigate
     dispatch(patchNotificationById({id: id, payload: payloadBody}));
+    navigation.navigate('DetailProduk', {id: payload?.product_id});
   };
 
   useEffect(() => {
