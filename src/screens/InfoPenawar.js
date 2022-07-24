@@ -48,7 +48,11 @@ const InfoPenawar = ({navigation, route}) => {
   }, [id]);
 
   const handleDecline = async (paramsId, paramsPayload) => {
-    dispatch(patchOrderById({id: paramsId, payload: paramsPayload}));
+    const response = await dispatch(patchOrderById({id: paramsId, payload: paramsPayload}));
+
+    if (response) {
+      dispatch(getOrderById({id}));
+    }
   };
 
   const handleAccept = async paramsId => {

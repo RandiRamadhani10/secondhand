@@ -256,7 +256,7 @@ export const deleteWishlistById = createAsyncThunk(
       }
 
       showError({
-        title: 'Gagal Menghapus Data Wishlist By Id',
+        title: 'Gagal Menghapus Data Wishlist',
         description: error.response?.data?.message,
       });
 
@@ -264,3 +264,51 @@ export const deleteWishlistById = createAsyncThunk(
     }
   },
 );
+
+export const getHistory = createAsyncThunk('buyer/history', async (id, {getState, rejectWithValue}) => {
+  const state = getState();
+  try {
+    const response = await apiClient.get('history', {
+      headers: {
+        access_token: state?.users.users?.access_token,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    if (!error.response) {
+      throw error;
+    }
+
+    showError({
+      title: 'Gagal Mendapatkan Data History',
+      description: error.response?.data?.message,
+    });
+
+    return rejectWithValue(error.response.data);
+  }
+});
+
+export const getHistoryById = createAsyncThunk('buyer/historyById', async (id, {getState, rejectWithValue}) => {
+  const state = getState();
+  try {
+    const response = await apiClient.get(`history/${id}`, {
+      headers: {
+        access_token: state?.users.users?.access_token,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    if (!error.response) {
+      throw error;
+    }
+
+    showError({
+      title: 'Gagal Mendapatkan Data History By Id',
+      description: error.response?.data?.message,
+    });
+
+    return rejectWithValue(error.response.data);
+  }
+});
