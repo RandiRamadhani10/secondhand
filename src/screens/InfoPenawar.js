@@ -75,7 +75,7 @@ const InfoPenawar = ({navigation, route}) => {
     if (response) {
       setRenderBottomSheet('hubungi');
       handleNotification(
-        `S_${detailProdukState?.id}`,
+        `S${detailProdukState?.Product?.name}`,
         detailProdukState?.Product?.name,
         detailProdukState?.Product?.name,
         detailProdukState?.Product?.image_url,

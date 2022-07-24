@@ -125,7 +125,7 @@ const DetailProduk = ({navigation, route}) => {
       if (response?.payload.hasOwnProperty('name')) {
         setIsOnWishlist(true);
         handleNotification(
-          stateBuyer.productDetail?.User?.id,
+          `W${stateBuyer?.productDetail?.name}`,
           stateBuyer?.productDetail?.name,
           stateBuyer?.productDetail?.description,
           stateBuyer?.productDetail?.image_url,
@@ -156,7 +156,7 @@ const DetailProduk = ({navigation, route}) => {
       if (response?.payload.hasOwnProperty('status')) {
         setIsAlreadyBid(true);
         handleNotification(
-          stateBuyer.productDetail?.User?.id,
+          `P${stateBuyer?.productDetail?.name}`,
           stateBuyer?.productDetail?.name,
           stateBuyer?.productDetail?.description,
           stateBuyer?.productDetail?.image_url,
