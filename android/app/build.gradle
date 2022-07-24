@@ -140,8 +140,8 @@ android {
         applicationId "com.secondhand"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "0.0.2"
+        versionCode 7
+        versionName "1.0.2"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {moderateScale} from 'react-native-size-matters';
-import {Colors, showSuccess} from '../utils';
+import {Colors, notification, showSuccess} from '../utils';
 import {Gap, BaseButton, CardUser, BaseInput, EmptyContent} from '../components';
 import {Fonts} from '../utils';
 import {ICArrowLeft, ICLoveWhite, ICLoveFillActive} from '../assets';
@@ -56,6 +56,27 @@ const DetailProduk = ({navigation, route}) => {
 
     return bids?.length ? setIsAlreadyBid(true) : setIsAlreadyBid(false);
   }, [stateBuyer?.bidProducts, id]);
+
+  const handleNotification = (idChannel, title, description, picture, type) => {
+    notification.configure();
+    notification.createChannel(idChannel, title, description);
+
+    if (type === 'penawaran') {
+      notification.sendNotification(
+        idChannel,
+        `Penawaran ${title} Berhasil Dikirim!`,
+        `Penawaran ke produk ${title} berhasil dikirim, kini kamu tinggal menunggu respon penjual saja`,
+        picture,
+      );
+    } else if (type === 'wishlist') {
+      notification.sendNotification(
+        idChannel,
+        `Wishlist ${title} Berhasil Disimpan!`,
+        `Produk ${title} berhasil ditambahkan ke dalam wishlistmu`,
+        picture,
+      );
+    }
+  };
 
   useEffect(() => {
     checkStatusBid();
@@ -103,6 +124,13 @@ const DetailProduk = ({navigation, route}) => {
 
       if (response?.payload.hasOwnProperty('name')) {
         setIsOnWishlist(true);
+        handleNotification(
+          stateBuyer.productDetail?.User?.id,
+          stateBuyer?.productDetail?.name,
+          stateBuyer?.productDetail?.description,
+          stateBuyer?.productDetail?.image_url,
+          'wishlist',
+        );
       }
     } catch (err) {
       setIsOnWishlist(false);
@@ -127,6 +155,13 @@ const DetailProduk = ({navigation, route}) => {
 
       if (response?.payload.hasOwnProperty('status')) {
         setIsAlreadyBid(true);
+        handleNotification(
+          stateBuyer.productDetail?.User?.id,
+          stateBuyer?.productDetail?.name,
+          stateBuyer?.productDetail?.description,
+          stateBuyer?.productDetail?.image_url,
+          'penawaran',
+        );
       }
       handleClosePress();
     } catch (err) {
@@ -168,18 +203,20 @@ const DetailProduk = ({navigation, route}) => {
                 <ICArrowLeft />
               </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.btnWishlist}
-                activeOpacity={0.7}
-                onPress={() => {
-                  if (isOnWishlist) {
-                    handleDeleteWishList(stateBuyer?.productDetail?.id);
-                  } else if (!isOnWishlist) {
-                    handleWishlist(stateBuyer?.productDetail?.id);
-                  }
-                }}>
-                {isOnWishlist ? <ICLoveFillActive /> : <ICLoveWhite />}
-              </TouchableOpacity>
+              {stateUsers.hasOwnProperty('access_token') ? (
+                <TouchableOpacity
+                  style={styles.btnWishlist}
+                  activeOpacity={0.7}
+                  onPress={() => {
+                    if (isOnWishlist) {
+                      handleDeleteWishList(stateBuyer?.productDetail?.id);
+                    } else if (!isOnWishlist) {
+                      handleWishlist(stateBuyer?.productDetail?.id);
+                    }
+                  }}>
+                  {isOnWishlist ? <ICLoveFillActive /> : <ICLoveWhite />}
+                </TouchableOpacity>
+              ) : null}
             </View>
             <View style={styles.imageContainer}>
               <FastImage
