@@ -1,6 +1,6 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import apiClient from '../../services/api';
-import {navigate, showError, showSuccess} from '../../utils';
+import {navigate, navigationBack, showError, showSuccess} from '../../utils';
 
 export const authRegister = createAsyncThunk('users/authRegister', async (payload, {rejectWithValue}) => {
   try {
@@ -94,7 +94,8 @@ export const putAuthUser = createAsyncThunk('auth/user', async (payload, {getSta
       showSuccess({
         title: 'Update Data Berhasil',
       });
-      navigate('Main', {screen: 'Akun'});
+
+      navigationBack();
     }
 
     return response.data;
@@ -130,7 +131,7 @@ export const authChangePassword = createAsyncThunk(
         });
 
         dispatch(authUser(response?.data?.access_token));
-        navigate('Main', {screen: 'Akun'});
+        navigationBack();
       }
 
       return response.data;

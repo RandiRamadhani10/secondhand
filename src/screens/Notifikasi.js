@@ -7,7 +7,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {getNotification, patchNotificationById} from '../store/actions/notification';
 import {useIsFocused} from '@react-navigation/native';
 
-const Notif = ({navigation}) => {
+const Notifikasi = ({navigation}) => {
   const dispatch = useDispatch();
 
   const isFocused = useIsFocused();
@@ -49,8 +49,9 @@ const Notif = ({navigation}) => {
     //   dispatch(getNotification());
     // }
 
-    // Just PatchData
+    // PatchData & Navigate
     dispatch(patchNotificationById({id: id, payload: payloadBody}));
+    navigation.navigate('DetailProduk', {id: payload?.product_id});
   };
 
   useEffect(() => {
@@ -119,4 +120,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Notif;
+export default Notifikasi;

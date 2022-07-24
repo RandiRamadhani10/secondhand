@@ -1,5 +1,5 @@
 import React, {Fragment, useCallback, useEffect, useState} from 'react';
-import {StyleSheet, Text, View, SafeAreaView, Dimensions, ScrollView, FlatList} from 'react-native';
+import {StyleSheet, Text, View, SafeAreaView, Dimensions, ScrollView, FlatList, TouchableOpacity} from 'react-native';
 
 import {Colors, Fonts} from '../utils';
 
@@ -18,10 +18,11 @@ import {SliderBox} from 'react-native-image-slider-box';
 const {width} = Dimensions.get('window');
 
 import {useDispatch, useSelector} from 'react-redux';
-import {getBanners, getCategory, getProduct} from '../store/actions/buyer';
+import {getBanners, getCategory, getProduct, getWishlist} from '../store/actions/buyer';
 import {authUser} from '../store/actions/users';
 
 import {useIsFocused} from '@react-navigation/native';
+import {ICLoveFill, ICLoveFillActive, ICShopping} from '../assets';
 
 const Home = ({navigation}) => {
   const dispatch = useDispatch();
@@ -87,6 +88,13 @@ const Home = ({navigation}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [usersState?.access_token]);
 
+  useEffect(() => {
+    if (usersState.hasOwnProperty('access_token')) {
+      dispatch(getWishlist());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFocused]);
+
   const onSubmit = data => {
     if (keyword === data.keyword) {
       return;
@@ -105,19 +113,44 @@ const Home = ({navigation}) => {
     <View>
       <LinearGradient colors={[Colors.YELLOW, Colors.WHITE]} style={styles.linerGradient}>
         <Gap height={moderateScale(8)} />
-        <Controller
-          control={control}
-          render={({field: {onChange, onBlur, value}}) => (
-            <SearchBar
-              value={value}
-              placeholder={'Cari di Disini...'}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              onSubmit={handleSubmit(onSubmit)}
+        <View style={styles.searchBarContainer}>
+          <View style={styles.search}>
+            <Controller
+              control={control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <SearchBar
+                  value={value}
+                  placeholder={'Cari di Disini...'}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  onSubmit={handleSubmit(onSubmit)}
+                />
+              )}
+              name="keyword"
             />
-          )}
-          name="keyword"
-        />
+          </View>
+
+          <View style={styles.btnWishlistContainer}>
+            <Gap width={10} />
+            <TouchableOpacity
+              style={styles.btnWishlist}
+              activeOpacity={0.7}
+              onPress={() => {
+                navigation.navigate('Wishlist');
+              }}>
+              <ICLoveFill />
+            </TouchableOpacity>
+            <Gap width={10} />
+            <TouchableOpacity
+              style={styles.btnWishlist}
+              activeOpacity={0.7}
+              onPress={() => {
+                navigation.navigate('History');
+              }}>
+              <ICShopping />
+            </TouchableOpacity>
+          </View>
+        </View>
         <Gap height={moderateScale(24)} />
         {listBanners.length > 0 ? (
           <SliderBox
@@ -205,6 +238,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.WHITE,
   },
+  searchBarContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   loading: {
     flex: 1,
     alignItems: 'center',
@@ -257,6 +296,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  btnWishlist: {
+    backgroundColor: Colors.WHITE,
+    padding: moderateScale(18),
+    borderRadius: moderateScale(16),
+  },
+  btnWishlistContainer: {
+    flex: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  search: {
+    flex: 8,
   },
 });
 

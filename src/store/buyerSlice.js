@@ -7,6 +7,12 @@ import {
   getCategory,
   getBidProductById,
   getBanners,
+  getWishlist,
+  getWishlistById,
+  postWishlist,
+  deleteWishlistById,
+  getHistory,
+  getHistoryById,
 } from './actions/buyer';
 
 const initialState = {
@@ -16,8 +22,13 @@ const initialState = {
   bidProductDetail: {},
   category: [],
   banners: [],
+  wishlist: [],
+  wishlistDetail: {},
+  history: [],
+  historyDetail: [],
   isLoading: false,
   isLoadingBid: false,
+  isLoadingWishlist: false,
   error: null,
 };
 
@@ -151,6 +162,118 @@ export const buyerSlice = createSlice({
       };
     },
     [getBanners.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+      };
+    },
+
+    // Get Wishlist
+    [getWishlist.pending]: state => {
+      return {...state, isLoadingWishlist: true};
+    },
+    [getWishlist.fulfilled]: (state, action) => {
+      return {
+        ...state,
+        wishlist: action.payload,
+        isLoadingWishlist: false,
+      };
+    },
+    [getWishlist.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoadingWishlist: false,
+      };
+    },
+
+    // Get Wishlist By Id
+    [getWishlistById.pending]: state => {
+      return {...state, isLoadingWishlist: true};
+    },
+    [getWishlistById.fulfilled]: (state, action) => {
+      return {
+        ...state,
+        wishlistDetail: action.payload,
+        isLoadingWishlist: false,
+      };
+    },
+    [getWishlistById.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoadingWishlist: false,
+      };
+    },
+
+    // Post Wishlist
+    [postWishlist.pending]: state => {
+      return {...state, isLoadingWishlist: true};
+    },
+    [postWishlist.fulfilled]: state => {
+      return {
+        ...state,
+        isLoadingWishlist: false,
+      };
+    },
+    [postWishlist.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoadingWishlist: false,
+      };
+    },
+
+    // Delete Wishlist
+    [deleteWishlistById.pending]: state => {
+      return {...state, isLoadingWishlist: true};
+    },
+    [deleteWishlistById.fulfilled]: state => {
+      return {
+        ...state,
+        isLoadingWishlist: false,
+      };
+    },
+    [deleteWishlistById.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoadingWishlist: false,
+      };
+    },
+
+    //   Get All History
+    [getHistory.pending]: state => {
+      return {...state, isLoading: true};
+    },
+    [getHistory.fulfilled]: (state, action) => {
+      return {
+        ...state,
+        history: action.payload,
+        isLoading: false,
+      };
+    },
+    [getHistory.rejected]: (state, action) => {
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+      };
+    },
+
+    //   Get History By Id
+    [getHistoryById.pending]: state => {
+      return {...state, isLoading: true};
+    },
+    [getHistoryById.fulfilled]: (state, action) => {
+      return {
+        ...state,
+        historyDetail: action.payload,
+        isLoading: false,
+      };
+    },
+    [getHistoryById.rejected]: (state, action) => {
       return {
         ...state,
         error: action.payload,

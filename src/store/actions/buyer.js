@@ -165,3 +165,150 @@ export const getBanners = createAsyncThunk('buyer/getBanners', async (id, {rejec
     return rejectWithValue(error.response.data);
   }
 });
+
+export const getWishlist = createAsyncThunk('buyer/getWishlist', async (id, {getState, rejectWithValue}) => {
+  const state = getState();
+  try {
+    const response = await apiClient.get('buyer/wishlist', {
+      headers: {
+        access_token: state?.users.users?.access_token,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    if (!error.response) {
+      throw error;
+    }
+
+    showError({
+      title: 'Gagal Mendapatkan Data Wishlist',
+      description: error.response?.data?.message,
+    });
+
+    return rejectWithValue(error.response.data);
+  }
+});
+
+export const getWishlistById = createAsyncThunk('buyer/getWishlistById', async (id, {getState, rejectWithValue}) => {
+  const state = getState();
+  try {
+    const response = await apiClient.get(`buyer/wishlist/${id}`, {
+      headers: {
+        access_token: state?.users.users?.access_token,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    if (!error.response) {
+      throw error;
+    }
+
+    showError({
+      title: 'Gagal Mendapatkan Data Wishlist By Id',
+      description: error.response?.data?.message,
+    });
+
+    return rejectWithValue(error.response.data);
+  }
+});
+
+export const postWishlist = createAsyncThunk('buyer/postWishlist', async (payload, {getState, rejectWithValue}) => {
+  const state = getState();
+  try {
+    const response = await apiClient.post('buyer/wishlist', payload, {
+      headers: {
+        access_token: state?.users.users?.access_token,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    if (!error.response) {
+      throw error;
+    }
+
+    showError({
+      title: 'Gagal Menambahkan Data Wishlist',
+      description: error.response?.data?.message,
+    });
+
+    return rejectWithValue(error.response.data);
+  }
+});
+
+export const deleteWishlistById = createAsyncThunk(
+  'buyer/deleteWishlistById',
+  async (id, {getState, rejectWithValue}) => {
+    const state = getState();
+    try {
+      const response = await apiClient.delete(`buyer/wishlist/${id}`, {
+        headers: {
+          access_token: state?.users.users?.access_token,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+
+      showError({
+        title: 'Gagal Menghapus Data Wishlist',
+        description: error.response?.data?.message,
+      });
+
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const getHistory = createAsyncThunk('buyer/history', async (id, {getState, rejectWithValue}) => {
+  const state = getState();
+  try {
+    const response = await apiClient.get('history', {
+      headers: {
+        access_token: state?.users.users?.access_token,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    if (!error.response) {
+      throw error;
+    }
+
+    showError({
+      title: 'Gagal Mendapatkan Data History',
+      description: error.response?.data?.message,
+    });
+
+    return rejectWithValue(error.response.data);
+  }
+});
+
+export const getHistoryById = createAsyncThunk('buyer/historyById', async (id, {getState, rejectWithValue}) => {
+  const state = getState();
+  try {
+    const response = await apiClient.get(`history/${id}`, {
+      headers: {
+        access_token: state?.users.users?.access_token,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    if (!error.response) {
+      throw error;
+    }
+
+    showError({
+      title: 'Gagal Mendapatkan Data History By Id',
+      description: error.response?.data?.message,
+    });
+
+    return rejectWithValue(error.response.data);
+  }
+});
