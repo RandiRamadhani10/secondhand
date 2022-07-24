@@ -22,10 +22,23 @@ import BottomTabs from './BottomTabs';
 
 import {useDispatch} from 'react-redux';
 
+import {useSelector} from 'react-redux';
+
 const Stack = createNativeStackNavigator();
 
 const AppRoute = () => {
   const dispatch = useDispatch();
+
+  const usersState = useSelector(state => state.users);
+
+  const checkAuthority = (navigation, route) => {
+    if (!usersState?.users.hasOwnProperty('access_token')) {
+      navigation.navigate('Login');
+    } else {
+      navigation.navigate(route);
+    }
+  };
+
   return (
     <Stack.Navigator initialRouteName="Splash" screenOptions={{headerShown: false}}>
       <Stack.Screen name="Splash" component={Splash} />
@@ -46,8 +59,24 @@ const AppRoute = () => {
       <Stack.Screen name="InfoPenawar" component={InfoPenawar} />
       <Stack.Screen name="PreviewJual" component={PreviewJual} />
       <Stack.Screen name="PengaturanAkun" component={PengaturanAkun} />
-      <Stack.Screen name="Wishlist" component={Wishlist} />
-      <Stack.Screen name="History" component={History} />
+      <Stack.Screen
+        name="Wishlist"
+        component={Wishlist}
+        listeners={({navigation, route}) => ({
+          focus: e => {
+            checkAuthority(navigation, route);
+          },
+        })}
+      />
+      <Stack.Screen
+        name="History"
+        component={History}
+        listeners={({navigation, route}) => ({
+          focus: e => {
+            checkAuthority(navigation, route);
+          },
+        })}
+      />
     </Stack.Navigator>
   );
 };

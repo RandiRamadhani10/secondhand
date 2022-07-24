@@ -12,7 +12,7 @@ import {
 import {useIsFocused} from '@react-navigation/native';
 import {moderateScale} from 'react-native-size-matters';
 import {Colors, showSuccess} from '../utils';
-import {Gap, BaseButton, CardUser, BaseInput} from '../components';
+import {Gap, BaseButton, CardUser, BaseInput, EmptyContent} from '../components';
 import {Fonts} from '../utils';
 import {ICArrowLeft, ICLoveWhite, ICLoveFillActive} from '../assets';
 import {Controller, useForm} from 'react-hook-form';
@@ -143,12 +143,25 @@ const DetailProduk = ({navigation, route}) => {
     }
   };
 
+  console.log('stateBuyer?.productDetail?', stateBuyer?.productDetail);
+
   return (
     <>
       {stateBuyer?.isLoading ? (
         <View style={styles.screen}>
           <ActivityIndicator style={styles.loading} size={'large'} color={Colors.PRIMARY} />
         </View>
+      ) : id && stateBuyer.productDetail === null ? (
+        <SafeAreaView style={styles.emptyScreen}>
+          <Text style={styles.header}>Oops. Terjadi Kesalahan</Text>
+          <Text style={styles.emptyText}>Produk yang anda cari sudah dihapus penjual</Text>
+          <Gap height={20} />
+          <BaseButton
+            title="Kembali ke Home"
+            style={styles.btnBackToHome}
+            onPress={() => navigation.navigate('Main', {screen: 'Home'})}
+          />
+        </SafeAreaView>
       ) : (
         <SafeAreaView style={styles.screen}>
           <ScrollView style={styles.scrollScreen}>
@@ -219,18 +232,20 @@ const DetailProduk = ({navigation, route}) => {
 
           {profileUsersState?.id !== stateBuyer.productDetail?.User?.id ? (
             <View style={styles.btnNego}>
-              <BaseButton
-                disable={isAlreadyBid}
-                isLoading={stateBuyer?.isLoadingBid}
-                onPress={() => {
-                  if (!stateUsers.hasOwnProperty('access_token')) {
-                    return navigation.navigate('Login');
-                  }
+              {stateBuyer.productDetail?.status !== 'sold' ? (
+                <BaseButton
+                  disable={isAlreadyBid}
+                  isLoading={stateBuyer?.isLoadingBid}
+                  onPress={() => {
+                    if (!stateUsers.hasOwnProperty('access_token')) {
+                      return navigation.navigate('Login');
+                    }
 
-                  handleOpenPress();
-                }}
-                title={isAlreadyBid ? 'Menunggu respon penjual' : 'Saya Tertarik dan ingin Nego'}
-              />
+                    handleOpenPress();
+                  }}
+                  title={isAlreadyBid ? 'Menunggu respon penjual' : 'Saya Tertarik dan ingin Nego'}
+                />
+              ) : null}
             </View>
           ) : null}
 
@@ -508,6 +523,27 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(10),
     color: Colors.ERROR,
     paddingBottom: moderateScale(8),
+  },
+  emptyScreen: {
+    flex: 1,
+    backgroundColor: Colors.BACKGROUND,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyText: {
+    fontFamily: Fonts.PRIMARY.REGULAR,
+    fontSize: moderateScale(12),
+    color: Colors.TEXT,
+    textAlign: 'center',
+  },
+  header: {
+    fontFamily: Fonts.PRIMARY.BOLD,
+    fontSize: moderateScale(20),
+    color: Colors.TEXT,
+  },
+  btnBackToHome: {
+    width: '50%',
+    borderRadius: moderateScale(16),
   },
 });
 

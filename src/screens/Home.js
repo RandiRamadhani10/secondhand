@@ -132,11 +132,21 @@ const Home = ({navigation}) => {
 
           <View style={styles.btnWishlistContainer}>
             <Gap width={10} />
-            <TouchableOpacity style={styles.btnWishlist} activeOpacity={0.7} onPress={() => {}}>
+            <TouchableOpacity
+              style={styles.btnWishlist}
+              activeOpacity={0.7}
+              onPress={() => {
+                navigation.navigate('Wishlist');
+              }}>
               <ICLoveFill />
             </TouchableOpacity>
             <Gap width={10} />
-            <TouchableOpacity style={styles.btnWishlist} activeOpacity={0.7} onPress={() => {}}>
+            <TouchableOpacity
+              style={styles.btnWishlist}
+              activeOpacity={0.7}
+              onPress={() => {
+                navigation.navigate('History');
+              }}>
               <ICShopping />
             </TouchableOpacity>
           </View>
