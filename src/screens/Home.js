@@ -1,5 +1,15 @@
 import React, {Fragment, useCallback, useEffect, useState} from 'react';
-import {StyleSheet, Text, View, SafeAreaView, Dimensions, ScrollView, FlatList, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  Dimensions,
+  ScrollView,
+  FlatList,
+  TouchableOpacity,
+  Button,
+} from 'react-native';
 
 import {Colors, Fonts} from '../utils';
 
@@ -14,6 +24,8 @@ import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
 
 import {SliderBox} from 'react-native-image-slider-box';
+
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const {width} = Dimensions.get('window');
 
